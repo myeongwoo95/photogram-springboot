@@ -1,0 +1,91 @@
+
+/*================================================================
+# only images 
+=================================================================*/
+.explore-container{
+    padding: 30px 5px;
+}
+.explore-container__only-images{
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 25px;
+}
+
+.only_images__image-item{
+    position: relative;
+    cursor: pointer;
+}
+
+.only_images__image-item > img{
+    width: 293px;
+    height: 293px;
+    object-fit: cover;
+}
+
+.only_images__image-item > video{
+    width: 293px;
+    height: 293px;
+    object-fit: cover;
+}
+
+.only_images__image-item > i{
+    position: absolute;
+    right: 17px;
+    top: 17px;
+    color: #fff;
+    font-size: 20px;
+}
+
+.only_images__image-item__info{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: none;
+}
+
+.only_images__image-item__info > div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 20px;
+}
+
+.only_images__image-item__info > div:last-child{
+    margin-right: 0px;
+}
+
+
+.only_images__image-item__info i{
+    color: #fff;
+    margin-right: 5px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.only_images__image-item__info span{
+    color: #fff;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+/*================================================================
+# included-video-left
+=================================================================*/
+
+/*================================================================
+# included-video-right
+=================================================================*/
+
+/*================================================================
+# 이모지
+=================================================================*/
+.emoticon-wrapper{
+    top: -390px;
+    left: 0px;
+}

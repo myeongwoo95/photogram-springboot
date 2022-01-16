@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- css -->
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/auth/sign.css">
+
+    <title>Photogram</title>
+</head>
+<body>
+<div class="body__container">
+
+    <div class="section">
+        <div class="inner">
+
+            <div class="visual">
+
+                <div class="visual__left-box">
+                    <img src="/images/phones.png" alt="phones">
+                </div>
+
+                <!-- sign-in -->
+                <div class="visual__right-box sign-in">
+
+                    <div class="visual__right-box__first-box">
+                        <img class="logo" src="/images/logo.jpg" alt="logo">
+
+                        <form action="">
+                            <input type="text" placeholder="사용자 이름">
+                            <input class="mt-5"type="password" placeholder="비밀번호">
+                            <button class="btn-blue mt-15">로그인</button>
+                        </form>
+
+                        <div class="visual__right-box__facebook-login">
+                            <i class="fab fa-facebook-square"></i>
+                            <span>Facebook으로 로그인</span>
+                            <a>비밀번호를 잊으셨나요?</a>
+                        </div>
+                    </div>
+
+                    <div class="visual__right-box__second-box mt-10">
+                        <p>계정이 없으신가요?</p>
+                        <a id="btn-signup" href="#">가입하기</a>
+                    </div>
+
+                    <div class="visual__right-box__third-box mt-25">
+                        <p>앱을 다운로드 하세요</p>
+                        <img src="/images/app-download.png" class="mt-25" alt="app-download">
+                    </div>
+                </div>
+
+                <!-- sign-up -->
+                <div class="visual__right-box sign-up">
+
+                    <div class="visual__right-box__first-box">
+                        <img class="logo" src="/images/logo.jpg" alt="logo">
+
+                        <div class="login-by-facebook">
+                            <p>친구들의 사진과 동영상을 보려면 <br> 가입하세요.</p>
+                            <button class="btn-blue mt-15 mb-15">
+                                <i class="fab fa-facebook-square"></i>
+                                Facebook으로 로그인
+                            </button>
+                        </div>
+
+                        <form action="">
+                            <input type="text" placeholder="이메일 주소">
+                            <input class="mt-5"type="text" placeholder="성명">
+                            <input class="mt-5"type="password" placeholder="비밀번호">
+                            <button class="btn-blue mt-15">가입</button>
+                        </form>
+                    </div>
+
+                    <div class="visual__right-box__second-box mt-10">
+                        <p>계정이 있으신가요?</p>
+                        <a id="btn-signin" href="#">로그인</a>
+                    </div>
+
+                    <div class="visual__right-box__third-box mt-25">
+                        <p>앱을 다운로드 하세요</p>
+                        <img src="/images/app-download.png" class="mt-25" alt="app-download">
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    {{>layout/footer}}
+
+    <script>
+        $("#btn-signup").on("click", function(){
+            $(".sign-up").show();
+            $(".sign-in").hide();
+        })
+
+        $("#btn-signin").on("click", function(){
+            $(".sign-in").show();
+            $(".sign-up").hide();
+        })
+    </script>
+</div>
+</body>
+</html>
