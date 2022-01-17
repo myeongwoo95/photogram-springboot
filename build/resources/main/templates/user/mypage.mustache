@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300&display=swap" rel="stylesheet">
+
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+    <!-- css, js -->
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/profile/my-page.css">
+
+    <title>Photogram</title>
+</head>
+<body>
+<div class="body__container">
+
+    {{>layout/header}}
+
+    <div class="section">
+        <div class="inner">
+            <div class="user-profile">
+                <img src="/images/Avatar.jpg" alt="profile">
+
+                <div class="user-profile__info-div">
+
+                    <div class="mb-20">
+                        <span class="font-thin mr-20">a_a33a</span>
+                        <button class="mr-20" onclick="location.href='/profile/update.html'">프로필 편집</button>
+                        <i class="fas fa-cog btn-edit-profile-gear"></i>
+                    </div>
+
+                    <div class="mb-20">
+                        <div class="fz-16 mr-40">게시물 <span class="fw-700">0</span></div>
+                        <div class="btn-followers-modal-open fz-16 mr-40 cursor-pointer">팔로워 <span class="fw-600">4</span></div>
+                        <div class="btn-followings-modal-open fz-16 cursor-pointer">팔로우 <span class="fw-600">5</span></div>
+                    </div>
+
+                    <div>
+                        <span class="fz-16 fw-600">walle</span>
+                        <p class="user-profile__info-div__caption mt-10">
+                            안녕하십니까~<br>
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="inner">
+
+            <ul class="tag-list">
+                <li class="btn-photo fw-700 on"><i class="fas fa-image"></i>&nbsp&nbsp게시물</li>
+                <li class="btn-save fw-700"><i class="far fa-bookmark"></i>&nbsp&nbsp저장됨</li>
+                <li class="btn-tag fw-700"><i class="fas fa-user-tag"></i>&nbsp&nbsp태그됨</li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="inner">
+
+            <div class="tab-wrapper">
+
+                <div class="my-content-tab">
+
+                    <div class="no-data">
+                        <div>
+                            <img src="/images/random-photos.png" alt="random-photos">
+                        </div>
+
+                        <div>
+                            <h3 class="fz-18 fw-700 mb-10">소중한 순간을 포착하여 공유해보세요.</h3>
+                            <p class="fz-16 mb-30">앱을 다운로드하고 첫 사진이나 동영상을 공유해보세요.</p>
+                            <img class="cursor-pointer" src="/images/app-download.png" alt="app-download">
+                        </div>
+                    </div>
+
+                    <div>
+
+                        <ul class="photo-list"  style="display: none;">
+
+                            <li class="photo-item">
+                                <img src="/images/item.jpg" alt="photo">
+
+                                <div class="photo-info">
+                                    <i class="fas fa-heart mr-10"></i>
+                                    <span class="mr-30">2</span>
+
+                                    <i class="fas fa-comment mr-10"></i>
+                                    <span>3</span>
+                                </div>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+                <div class="my-save-tab" style="display: none;">
+
+                    <div class="no-save" >
+
+                        <div class="clearfix">
+                            <span class="float--left">저장한 내용은 회원님만 볼 수 있습니다</span>
+                            <button class="btn-collection float--right">+ 새 컬렉션</button>
+                        </div>
+
+                        <div>
+                            <i class="far fa-bookmark"></i>
+                            <h3 class="font-light mt-15">저장</h3>
+                            <p class="mt-15">다시 보고 싶은 사진과 동영상을 저장하세요.<br>콘텐츠를 저장해도 다른 사람에게 알림이 전송되지 않으며,<br>저장된 콘텐츠는 회원님만 볼 수 있습니다.</p>
+                        </div>
+                    </div>
+
+                    <div class="exist-save" style="display: none;" >
+
+                        <div class="collection-list">
+
+                            <div class="collection-item">
+                                <img src="/images/insta1.jpg" alt="photo">
+                                <img src="/images/insta2.jpg" alt="photo">
+                                <img src="/images/item.jpg" alt="photo">
+                                <img src="/images/Avatar.jpg" alt="photo">
+                                <div class="gradient"></div>
+                                <span>모든 게시물</span>
+                            </div>
+
+                            <div class="collection-item">
+                                <img src="/images/insta1.jpg" alt="photo">
+                                <img src="/images/insta2.jpg" alt="photo">
+                                <img src="/images/item.jpg" alt="photo">
+
+                                <div class="gradient"></div>
+                                <span>모든 게시물</span>
+                            </div>
+
+                            <div class="collection-item">
+                                <img src="/images/insta1.jpg" alt="photo">
+                                <img src="/images/insta2.jpg" alt="photo">
+
+                                <div class="gradient"></div>
+                                <span>모든 게시물</span>
+                            </div>
+
+                            <div class="collection-item">
+
+                                <img src="/images/Avatar.jpg" alt="photo">
+                                <div class="gradient"></div>
+                                <span>모든 게시물</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="tagged-tab"  style="display: none;">
+
+                    <div class="no-data" style="display: none;">
+                        <div>
+                            <img src="/images/random-photos.png" alt="random-photos">
+                        </div>
+
+                        <div>
+                            <h3 class="fz-18 fw-700 mb-10">소중한 순간을 포착하여 공유해보세요.</h3>
+                            <p class="fz-16 mb-30">앱을 다운로드하고 첫 사진이나 동영상을 공유해보세요.</p>
+                            <img class="cursor-pointer" src="/images/app-download.png" alt="app-download">
+                        </div>
+                    </div>
+
+                    <div>
+
+                        <ul class="photo-list">
+
+                            <li class="photo-item">
+                                <img src="/images/insta1.jpg" alt="photo">
+
+                                <div class="photo-info">
+                                    <i class="fas fa-heart mr-10"></i>
+                                    <span class="mr-30">2</span>
+
+                                    <i class="fas fa-comment mr-10"></i>
+                                    <span>3</span>
+                                </div>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    {{>layout/footer}}
+
+</div>
+
+<!-- 컬렉션 step1 (모달) -->
+<div class="modal-wrapper modal-collection-step1-wrapper">
+    <div class="modal modal-collection-step1">
+        <div>
+            <i class="fas fa-times btn-close-collection1"></i>
+            <h3>새 컬렉션</h3>
+            <input class="collection-naming" type="text" placeholder="컬렉션 이름"><br>
+            <button class="btn-modal-collection-step2 disabled">다음</button>
+        </div>
+    </div>
+</div>
+
+<!-- 컬렉션 step2(모달) -->
+<div class="modal-wrapper modal-collection-step2-wrapper">
+    <div class="modal modal-collection-step2">
+
+        <div>
+            <i class="fas fa-chevron-left btn-back-from2to1"></i>
+            <i class="fas fa-times btn-close-collection2"></i>
+            <h3>저장된 항목에서 추가</h3>
+        </div>
+
+        <div class="collection-photo-list clearfix">
+            <div class="collection-photo-item float--left">
+                <img src="/images/insta1.jpg" alt="picture">
+            </div>
+
+            <div class="collection-photo-item float--left">
+                <img src="/images/insta2.jpg" alt="picture">
+            </div>
+
+            <div class="collection-photo-item float--left">
+                <img src="/images/item.jpg" alt="picture">
+            </div>
+
+            <div class="collection-photo-item float--left">
+                <img src="/images/item.jpg" alt="picture">
+            </div>
+
+        </div>
+
+        <div>
+            <button>완료</button>
+        </div>
+
+    </div>
+</div>
+
+<!-- 콘텐츠 댓글 버튼 눌렀을때 (모달) -->
+<div class="modal-wrapper modal-comment-wrapper">
+    <i class="fas fa-times cancel-comment-modal"></i>
+    <div class="modal modal-comment">
+
+        <div class="comment-modal-view">
+
+            <div class="comment-swiper">
+                <div class="swiper-wrapper">
+
+                    <div class="swiper-slide">
+                        <img src="/images/item.jpg" alt="picture">
+                    </div>
+
+                    <div class="swiper-slide">
+                        <img src="/images/insta1.jpg" alt="picture">
+                    </div>
+
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+                <div id="comment-modal-button-prev" class="swiper-button-prev"></div>
+                <div id="comment-modal-button-prev" class="swiper-button-next"></div>
+            </div>
+
+
+            <div class="comment-modal-view__comment-list">
+
+                <div class="comment-modal-view__comment-list__header">
+                    <img src="/images/insta2.jpg" alt="user">
+                    <span>walle</span>
+                    <i class="fas fa-ellipsis-h"></i>
+                </div>
+
+                <div class="comment-modal-view__comment-list__body">
+
+                    <div class="comment-modal-view__comment-list__body__user">
+                        <img src="/images/insta2.jpg" alt="user">
+                        <span>walle</span>
+                    </div>
+
+                    <div class="comment-modal-view__comment-list__body__caption">
+                        <p>
+                            Merry Christmas 😇⭐️🎄<br>
+                            메리 크리스마스 😇⭐️🎄<br>
+                        </p>
+
+                        <br>
+
+                        <p>#크리슴마스 #크리스마슽트리 #폴란드여자 #미소 #인스타 #christmas #christmastree #polishgirl</p>
+                    </div>
+
+                    <div class="comment-modal-view__comment-list__body__commentList mt-20 mb-20">
+
+                        <!-- item -->
+                        <div class="comment-modal-view__comment-list__body__commentList__item mt-20">
+                            <i class="far fa-heart comment-comment-like"></i>
+                            <img src="/images/insta1.jpg" alt="user">
+                            <p class="pl-45">
+                                <span>Gsyaw2</span>
+                                오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ
+                            </p>
+
+                            <div class="zpw pl-45 mt-10">
+                                <span class="mr-10 cursor-pointer">1일</span>
+                                <span class="mr-10 cursor-pointer">좋아요 232개</span>
+                                <span class="mr-15 cursor-pointer">답글달기</span>
+                                <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                            </div>
+
+                            <div class="wqd pl-40 mt-15">
+                                <button class="comment-deep-button">―――&nbsp&nbsp&nbsp&nbsp답글 보기(10개)</button>
+
+                                <ul style="display: none;">
+
+                                    <!-- item -->
+                                    <li>
+                                        <div class="qwers mt-25">
+                                            <i class="far fa-heart comment-comment-like"></i>
+                                            <img src="/images/insta1.jpg" alt="user">
+                                            <p class="pl-45">
+                                                <span>Gsyaw2</span>
+                                                룰루랄라라라르라라ㅣㅓㄴ야ㅐ러냐ㅐㅇ러ㅑㅐㄴㅇㄹ 소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ
+                                            </p>
+
+                                            <div class="zpw pl-45 mt-10">
+                                                <span class="mr-10 cursor-pointer">1일</span>
+                                                <span class="mr-10 cursor-pointer">좋아요 232개</span>
+                                                <span class="mr-15 cursor-pointer">답글달기</span>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- //END item -->
+
+                                    <!-- item -->
+                                    <li>
+                                        <div class="qwers mt-25">
+                                            <i class="far fa-heart comment-comment-like"></i>
+                                            <img src="/images/insta1.jpg" alt="user">
+                                            <p class="pl-45">
+                                                <span>Gsyaw2</span>
+                                                룰루랄라라라르라라ㅣㅓㄴ야ㅐ러냐ㅐㅇ러ㅑㅐㄴㅇㄹ 소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ
+                                            </p>
+
+                                            <div class="zpw pl-45 mt-10">
+                                                <span class="mr-10 cursor-pointer">1일</span>
+                                                <span class="mr-10 cursor-pointer">좋아요 232개</span>
+                                                <span class="mr-15 cursor-pointer">답글달기</span>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- //END item -->
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //END item -->
+
+                    </div>
+                    <i class="far fa-plus-square more-comment-modal"></i>
+                </div>
+
+                <div class="comment-modal-view__comment-list__footer item-list__image-item__comment-list">
+                    <div>
+                        <ul>
+                            <li><a href="#"><i class="far fa-heart content-like"></i></a></li>
+                            <li><a href="javascript:void(0);"><i class="far fa-comment content-class"></i></a></li>
+                            <li><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
+                            <li><a href="#"><i class="far fa-bookmark content-bookmark"></i></a></li>
+                        </ul>
+                    </div>
+
+                    <span class="modal-like-count">좋아요 720,123개</span>
+                    <b>3일 전</b>
+                </div>
+
+                <div class="comment-modal-view__comment-list__write-comment">
+                    <i class="far fa-smile-wink"></i>
+                    <textarea class="modal-write-comment" rows="1" placeholder="댓글 달기..."></textarea>
+                    <button>게시</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- 팔로워, 팔로우 (모달) -->
+<div class="modal-wrapper modal-mypage-following-wrapper">
+    <div class="modal modal-mypage-following">
+
+        <div>
+            <h3>팔로워</h3>
+            <i class="fas fa-times btn-close-modal-mypage-following"></i>
+        </div>
+
+        <div class="modal-mypage-following__user-list">
+            <div class="modal-mypage-following__user-list__item">
+                <img src="/images/insta2.jpg" alt="profile">
+                <div>
+                    <span>tilltofu</span>
+                    <span>Asia Chrisdosizjsk</span>
+                </div>
+
+                <button class="modal-mypage-following__user-list__btn-delete">삭제</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 톱니바퀴 (모달) -->
+<div class="modal-wrapper modal-gear-wrapper">
+    <div class="modal modal-gear">
+        <button>로그아웃</button>
+        <button>취소</button>
+    </div>
+</div>
+
+<script>
+    // btn 팔로워 모달 켜기
+    $(".btn-followers-modal-open").on("click", function(){
+        $(".modal-mypage-following-wrapper").find("h3").text("팔로워")
+        $(".modal-mypage-following-wrapper").css("display", "flex");
+    })
+
+     // btn 팔로우 모달 켜기
+     $(".btn-followings-modal-open").on("click", function(){
+        $(".modal-mypage-following-wrapper").find("h3").text("팔로우")
+        $(".modal-mypage-following-wrapper").css("display", "flex");
+    })
+
+    // btn 팔로워 모달 끄기
+    $(".btn-close-modal-mypage-following").on("click", function(){
+        $(".modal-mypage-following-wrapper").hide();
+    })
+
+    // btn 삭제
+    $(".modal-mypage-following__user-list__btn-delete").on("click", function(){
+        alert("test")
+    })
+
+    // btn 설정 톱니바퀴 모달 켜기
+    $(".btn-edit-profile-gear").on("click", function(){
+        alert("test3")
+    })
+
+    //btn 설정 톱니바퀴 모달 끄기
+
+    //btn 로그아웃 run
+</script>
+<script src="/js/profile/my-page.js"></script>
+<script src="/js/common.js"></script>
+</body>
+</html>
