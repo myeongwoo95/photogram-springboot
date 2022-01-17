@@ -1,15 +1,11 @@
 package com.photogram.domain.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Builder
-@AllArgsConstructor
+@Getter
 @NoArgsConstructor
 @Entity
 public class User {
@@ -18,7 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 20, unique = true)
+    @Column(length = 15, unique = true, nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -30,15 +26,41 @@ public class User {
     private String website;
     private String bio;
 
-    @Column(nullable = false)
+    @Column(length = 320, unique = true, nullable = false)
     private String email;
 
+    @Column(length = 15)
     private String tel;
+
+    @Column(length = 10)
     private String gender;
 
     private String profileImageUrl;
     private String role;
 
-    private LocalDateTime createDate;
-    private LocalDateTime updateDate;
+    @Builder
+    public User(
+            String username, String password, String name,
+            String website,String bio, String email, String tel,
+            String gender, String profileImageUrl, String role){
+
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.website = website;
+        this.bio = bio;
+        this.email = email;
+        this.tel = tel;
+        this.gender = gender;
+        this.profileImageUrl = profileImageUrl;
+        this.role = role;
+    }
+
+    public void updateEncodedPassword(String password) {
+        this.password = password;
+    }
+
+    public void updateRole(String role){
+        this.role = role;
+    }
 }
