@@ -49,8 +49,15 @@ $(document).ready(function(){
             alert("회원가입을 축하드립니다");
                $(".sign-in").show();
                $(".sign-up").hide();
+
+               $("#form-signup [name='username']").val("");
+               $("#form-signup [name='password']").val("");
+               $("#form-signup [name='name']").val("");
+               $("#form-signup [name='email']").val("");
+
         }).fail(error => {
-            alert("회원가입에 실패하였습니다");
+            console.log(error);
+            alert(error.responseJSON.message);
         });
 
     })

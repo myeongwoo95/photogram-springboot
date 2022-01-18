@@ -50,4 +50,46 @@ public class UserRepositoryTest extends TestCase {
         assertThat(user.getEmail()).isEqualTo(email);
     }
 
+    @Test
+    public void 아이디_중복체크() throws Exception {
+        // given
+        String username = "walle950616";
+        String password = "qwer123456";
+        String name = "홍길동";
+        String email = "qwer1234@naver.com";
+
+        // when
+        userRepository.save(User.builder()
+                .username(username)
+                .password(password)
+                .name(name)
+                .email(email)
+                .build());
+
+        // then
+        int result = userRepository.usernameCheck(username);
+        assertThat(result).isEqualTo(1);
+    }
+
+    @Test
+    public void 이메일_중복체크() throws Exception {
+        // given
+        String username = "walle950616";
+        String password = "qwer123456";
+        String name = "홍길동";
+        String email = "qwer1234@naver.com";
+
+        // when
+        userRepository.save(User.builder()
+                .username(username)
+                .password(password)
+                .name(name)
+                .email(email)
+                .build());
+
+        // then
+        int result = userRepository.emailCheck(email);
+        assertThat(result).isEqualTo(1);
+    }
+
 }

@@ -32,7 +32,7 @@ public class ValidationAdvice {
                         System.out.println(error.getDefaultMessage());
                     }
 
-                    throw new CustomValidationApiException("유효성 검사 실패함", errorMap);
+                    throw new CustomValidationApiException("유효성 검사 실패하였습니다.", errorMap);
                 }
             }
         }
@@ -55,7 +55,7 @@ public class ValidationAdvice {
                         System.out.println(error.getDefaultMessage());
                     }
 
-                    throw new CustomValidationException("유효성 검사 실패함", errorMap);
+                    throw new CustomValidationException("유효성 검사 실패하였습니다.", errorMap);
                 }
             }
         }
