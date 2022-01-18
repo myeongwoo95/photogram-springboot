@@ -2,6 +2,7 @@ package com.photogram.service;
 
 import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
+import com.photogram.web.dto.auth.SignupRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,10 +16,12 @@ public class AuthService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
-    public void 회원가입(User user) {
+    public void 회원가입(SignupRequestDto requestDto) {
+        User user = requestDto.toEntity();
+
         String rawPassword = user.getPassword();
-        String encPassowrd = bCryptPasswordEncoder.encode(rawPassword);
-        user.updateEncodedPassword(encPassowrd);
+        String encPassword = bCryptPasswordEncoder.encode(rawPassword);
+        user.updateEncodedPassword(encPassword);
         user.updateRole("ROLE_USER");
         userReposeRepository.save(user);
     }

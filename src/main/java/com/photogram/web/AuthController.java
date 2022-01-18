@@ -13,23 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
 
-@RequiredArgsConstructor
-@RequestMapping("/auth")
 @Controller
 public class AuthController {
 
-//    private final AuthService authService;
-
-    @GetMapping("/sign")
+    @GetMapping("/auth/sign")
     public String auth(){
         return "auth/sign";
     }
-//
-//    @PostMapping("/auth/signup")
-//    public String signup(@Valid SignupRequestDto signupDto, BindingResult bindingResult) {
-//        User user = signupDto.toEntity();
-//        authService.회원가입(user);
-//        return "redirect:/auth/sign";
-//    }
 
 }

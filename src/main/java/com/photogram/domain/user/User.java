@@ -1,9 +1,7 @@
 package com.photogram.domain.user;
 
 import lombok.*;
-
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -23,7 +21,10 @@ public class User {
     @Column(nullable = false)
     private String name;
 
+    @Column
     private String website;
+
+    @Column
     private String bio;
 
     @Column(length = 320, unique = true, nullable = false)
@@ -35,7 +36,10 @@ public class User {
     @Column(length = 10)
     private String gender;
 
+    @Column
     private String profileImageUrl;
+
+    @Column
     private String role;
 
     @Builder

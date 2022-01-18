@@ -13,20 +13,20 @@ spring:
     username: cos
     password: cos1234
 
-    jpa:
-      open-in-view: true
-      hibernate:
-        ddl-auto: update
-        naming:
-          physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      show-sql: true
+  jpa:
+    open-in-view: true
+    hibernate:
+      ddl-auto: create
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    show-sql: true
 
-    servlet:
-      multipart:
-        enabled: true
-        max-file-size: 5MB
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 5MB
 
-    security:
-      user:
-        name: test
-        password: 1234
+  security:
+    user:
+      name: test
+      password: 1234
