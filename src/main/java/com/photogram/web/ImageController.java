@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class ImageController {
-
     @GetMapping({"/", "/image/story"})
     public String story(){
         return "image/story";

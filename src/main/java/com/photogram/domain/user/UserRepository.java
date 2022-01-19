@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Long> {
+    User findByUsername(String username);
+
     @Query(value="SELECT COUNT(*) AS cnt FROM user WHERE username = :username", nativeQuery = true)
     int usernameCheck(String username);
 

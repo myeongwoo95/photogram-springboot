@@ -5,20 +5,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/user")
 public class UserController {
 
-    @GetMapping("/collection")
+    @GetMapping("/user/collection")
     public String collection(){
         return "user/collection";
     }
 
-    @GetMapping("/mypage")
+    @GetMapping("/user/mypage")
     public String mypage(){
         return "user/mypage";
     }
 
-    @GetMapping("/update")
+    @GetMapping("/user/update")
     public String update(){
         return "user/update";
     }
