@@ -7,6 +7,10 @@ server:
       enabled: true
 
 spring:
+  profiles:
+    include:
+      - oauth
+
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://localhost:3307/photogram2?serverTimezone=Asia/Seoul

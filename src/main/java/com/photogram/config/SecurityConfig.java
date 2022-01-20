@@ -1,6 +1,6 @@
 package com.photogram.config;
 
-import com.photogram.config.oauth.CustomOAuth2UserService;
+import com.photogram.config.oauth.OAuth2DetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,8 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final OAuth2DetailsService OAuth2DetailsService;
 
     @Bean
     public BCryptPasswordEncoder encoder() {
@@ -34,10 +33,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .defaultSuccessUrl("/")
             .and()
                 .logout()
-                    .logoutSuccessUrl("/auth/sign")
+                .logoutSuccessUrl("/auth/sign")
             .and()
                 .oauth2Login()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService);
+                .userService(OAuth2DetailsService);
     }
+
 }

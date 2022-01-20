@@ -18,8 +18,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group 'com.photogram'
 version '1.0-SNAPSHOT'
-sourceCompatibility = 11
-targetCompatibility = 11
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -33,7 +32,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-mustache')
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework.boot:spring-boot-starter-oauth2-client')
-//    compile('org.springframework.session:spring-session-jdbc')
     compile('org.springframework.boot:spring-boot-starter-validation')
     compile('org.springframework.boot:spring-boot-starter-aop')
 

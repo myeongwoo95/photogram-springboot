@@ -1,11 +1,13 @@
 package com.photogram.web.dto.auth;
 
 import com.photogram.domain.user.User;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Setter
@@ -13,7 +15,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 public class SignupRequestDto {
     @NotBlank(message = "아이디를 입력해주세요")
-    @Size(min = 5, max = 10, message = "닉네임은 5자 이상 20자 이하로 입력해주세요.")
+    @Size(min = 5, max = 20, message = "아이디는 5자 이상 20자 이하로 입력해주세요.")
     private String username;
 
     @NotBlank(message = "패스워드를 입력해주세요.")

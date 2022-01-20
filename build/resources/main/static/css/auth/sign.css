@@ -83,6 +83,7 @@ body{
 .visual__right-box__facebook-login span{
     font-weight: bold;
     cursor: pointer;
+    color: #000;
 }
 
 .visual__right-box__facebook-login a{
@@ -90,6 +91,8 @@ body{
     display: block;
     margin-top: 25px;
     cursor: pointer;
+    text-decoration: none;
+    color: #333;
 }
 
 .visual__right-box__second-box p{
