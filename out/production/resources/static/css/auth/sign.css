@@ -1,0 +1,130 @@
+body{
+    background-color: #fafafa;
+}
+
+.sign-up{
+    display: none;
+}
+
+.btn-blue{
+    width: 258px;
+    height: 36px;
+    background:rgba(0, 149, 246, 1.0);
+    font-weight: bold;
+    color: #fff;
+    margin-top: 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+/*================================================================
+# visual / sign-in
+=================================================================*/
+.visual{
+    padding-top: 80px;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    width: 800px;
+}
+
+.visual__left-box{
+    margin-right: 20px;
+}
+
+.visual__right-box{
+    width: 350px;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.visual__right-box__first-box{
+    border: 1px solid #dbdbdb;
+    background: #fff;
+    padding-bottom: 25px;
+}
+
+.visual__right-box__second-box{
+    padding: 20px;
+    border: 1px solid #dbdbdb;
+    background: #fff;
+}
+
+.visual__right-box .logo{
+    margin-top: 25px;
+    margin-bottom: 25px;
+    width: 175px;
+}
+
+.visual__right-box form input{
+    width: 258px;
+    height: 36px;
+    border-radius: 2px;
+    border: 1px solid #dbdbdb;
+    background: #fafafa;
+    padding: 9px 0 7px 8px;
+}
+
+.visual__right-box form input:focus{
+    outline: 1px solid gray;
+}
+
+.visual__right-box__facebook-login{
+    margin-top: 30px;
+    color: #385185;
+}
+
+.visual__right-box__facebook-login i{
+    font-size: 20px;
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+.visual__right-box__facebook-login span{
+    font-weight: bold;
+    cursor: pointer;
+    color: #000;
+}
+
+.visual__right-box__facebook-login a{
+    font-size: 12.5px;
+    display: block;
+    margin-top: 25px;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}
+
+.visual__right-box__second-box p{
+    display: inline-block;
+}
+
+.visual__right-box__second-box a{
+    color: #0095F6;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.visual__right-box__third-box img{
+    cursor: pointer;
+}
+
+/*================================================================
+# visual / sign-up
+=================================================================*/
+.login-by-facebook {
+    margin-top: -20px;
+}
+
+.login-by-facebook p{
+    color: #8E8E8E;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.login-by-facebook i{
+    font-size: 20px;
+    margin-right: 5px;
+}
+    
