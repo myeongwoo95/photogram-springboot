@@ -1,6 +1,5 @@
 package com.photogram.domain.user;
 
-import junit.framework.TestCase;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +13,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class UserRepositoryTest extends TestCase {
+public class UserRepositoryTest{
 
     @Autowired
     UserRepository userRepository;

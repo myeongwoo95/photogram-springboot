@@ -1,12 +1,13 @@
 package com.photogram.domain.user;
 
+import com.photogram.domain.BaseTimeEntity;
 import lombok.*;
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
