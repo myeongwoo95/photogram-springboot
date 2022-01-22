@@ -36,19 +36,30 @@ $(document).ready(function(){
            return;
        }
 
+<<<<<<< HEAD
        let data = {
            "username": $("#form-signup [name='username']").val(),
            "password": $("#form-signup [name='password']").val(),
            "name": $("#form-signup [name='name']").val(),
            "email": $("#form-signup [name='email']").val()
        };
+=======
+       let username = $("#form-signup [name='username']").val();
+       let password = $("#form-signup [name='password']").val();
+       let name = $("#form-signup [name='name']").val();
+       let email = $("#form-signup [name='email']").val();
+>>>>>>> 8769e4233744036521410b5871b37a6119a12f75
 
        $.ajax({
            type: "post",
             url: "/auth/signup",
+<<<<<<< HEAD
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(data)
+=======
+               data:{username: username, password: password, email: email, name: name},
+>>>>>>> 8769e4233744036521410b5871b37a6119a12f75
         }).done(res => {
             alert("회원가입을 축하드립니다");
                $(".sign-in").show();

@@ -83,7 +83,10 @@ body{
 .visual__right-box__facebook-login span{
     font-weight: bold;
     cursor: pointer;
+<<<<<<< HEAD
     color: #000;
+=======
+>>>>>>> 8769e4233744036521410b5871b37a6119a12f75
 }
 
 .visual__right-box__facebook-login a{
@@ -91,8 +94,11 @@ body{
     display: block;
     margin-top: 25px;
     cursor: pointer;
+<<<<<<< HEAD
     text-decoration: none;
     color: #333;
+=======
+>>>>>>> 8769e4233744036521410b5871b37a6119a12f75
 }
 
 .visual__right-box__second-box p{
