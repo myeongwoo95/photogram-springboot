@@ -44,8 +44,8 @@ public class AuthApiControllerTest {
     @Test
     public void 회원가입_BaseTimeEntity_테스트() throws Exception {
         // given
-        String username = "walle950616";
-        String password = "qwer123456123";
+        String username = "walle";
+        String password = "qwer";
         String name = "홍길동";
         String email = "qwer1234@naver.com";
         SignupRequestDto requestDto = SignupRequestDto.builder()

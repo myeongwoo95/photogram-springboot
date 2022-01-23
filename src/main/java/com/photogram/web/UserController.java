@@ -1,8 +1,10 @@
 package com.photogram.web;
 
+import com.photogram.config.auth.PrincipalDetails;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class UserController {
@@ -13,12 +15,18 @@ public class UserController {
     }
 
     @GetMapping("/user/mypage")
-    public String mypage(){
+    public String mypage(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model){
+
+        model.addAttribute("user", principalDetails.getUser());
+        model.addAttribute("usersname", principalDetails.getUser().getName());
         return "user/mypage";
     }
 
     @GetMapping("/user/update")
-    public String update(){
+    public String update(@AuthenticationPrincipal PrincipalDetails principalDetails, Model model){
+
+        model.addAttribute("user", principalDetails.getUser());
+        model.addAttribute("usersname", principalDetails.getUser().getName());
         return "user/update";
     }
 }
