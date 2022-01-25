@@ -9,9 +9,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-
 @RequiredArgsConstructor
 @Service
 public class AuthService {
@@ -21,6 +18,7 @@ public class AuthService {
 
     @Transactional
     public void 회원가입(SignupRequestDto requestDto) {
+
         if(1 <= 아이디_중복체크(requestDto)) {
             throw new CustomApiException("이미 존재하는 아이디 입니다");
         }

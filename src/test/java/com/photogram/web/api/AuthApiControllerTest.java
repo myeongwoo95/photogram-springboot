@@ -4,9 +4,10 @@ import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
 import com.photogram.web.dto.CMRespDto;
 import com.photogram.web.dto.auth.SignupRequestDto;
-import org.junit.After;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -14,13 +15,15 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class AuthApiControllerTest {
 
@@ -34,20 +37,34 @@ public class AuthApiControllerTest {
     private UserRepository userRepository;
 
     @Autowired
+    private WebApplicationContext context;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @After
+    private MockMvc mvc;
+
+    @BeforeEach
+    public void setup() {
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
+
+    @AfterEach
     public void cleanup() throws Exception{
         userRepository.deleteAll();
     }
 
     @Test
-    public void 회원가입_BaseTimeEntity_테스트() throws Exception {
+    @DisplayName("회원가입 테스트")
+    public void signup() throws Exception {
         // given
-        String username = "walle";
-        String password = "qwer";
-        String name = "홍길동";
-        String email = "qwer1234@naver.com";
+        String username = "testUserName";
+        String password = "testPassword";
+        String name = "testName";
+        String email = "testEmail@naver.com";
         SignupRequestDto requestDto = SignupRequestDto.builder()
                 .username(username)
                 .password(password)
@@ -66,13 +83,11 @@ public class AuthApiControllerTest {
 
         List<User> all = userRepository.findAll();
         assertThat(all.get(0).getUsername()).isEqualTo(username);
-//        assertThat(all.get(0).getPassword()).isEqualTo(bCryptPasswordEncoder.encode(password));
         assertThat(all.get(0).getName()).isEqualTo(name);
         assertThat(all.get(0).getEmail()).isEqualTo(email);
+        assertThat(all.get(0).getCreateDate()).isNotNull();
+        assertThat(all.get(0).getModifiedDate()).isNotNull();
 
-        System.out.println("-- BaseTimeEntity 테스트 --");
-        System.out.println(all.get(0).getCreateDate());
-        System.out.println(all.get(0).getModifiedDate());
     }
 
 }

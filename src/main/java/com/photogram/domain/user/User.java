@@ -1,7 +1,11 @@
 package com.photogram.domain.user;
 
 import com.photogram.domain.BaseTimeEntity;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 
 @Getter
@@ -78,6 +82,11 @@ public class User extends BaseTimeEntity {
         this.tel= tel;
         this.gender= gender;
 
+        return this;
+    }
+
+    public User passwordUpdate(String password){
+        this.password = password;
         return this;
     }
 }
