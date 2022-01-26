@@ -42,18 +42,15 @@ public class UserService {
             return new CustomValidationApiException("존재하지 않는 사용자입니다.");
         });
 
-        String requestRawPassword = requestDto.getCurrentPassword();
-        String requestEncPassword = bCryptPasswordEncoder.encode(requestRawPassword);
-
-        if(!user.getPassword().equals(requestEncPassword)){
+        if(!bCryptPasswordEncoder.matches(requestDto.getCurrentPassword(), user.getPassword())){
             throw new CustomValidationApiException("비밀번호가 일치하지 않습니다.");
         }
 
-        if(!requestDto.getNewPasswowrd1().equals(requestDto.getNewPasswowrd2())){
+        if(!requestDto.getNewPassword1().equals(requestDto.getNewPassword2())){
             throw new CustomValidationApiException("새로운 비밀번호를 다시 한번 확인해주시길 바랍니다.");
         }
 
-        return user.passwordUpdate(bCryptPasswordEncoder.encode(requestDto.getNewPasswowrd1()));
+        return user.passwordUpdate(bCryptPasswordEncoder.encode(requestDto.getNewPassword1()));
 
     }
 }

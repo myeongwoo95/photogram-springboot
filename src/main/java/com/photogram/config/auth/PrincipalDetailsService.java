@@ -2,6 +2,7 @@ package com.photogram.config.auth;
 
 import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
+import com.photogram.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -20,7 +21,7 @@ public class PrincipalDetailsService implements UserDetailsService {
         User userEntity  = userRepository.findByUsername(username);
 
         if(userEntity == null) {
-            return null;
+            throw new CustomApiException("존재하지 않는 아이디 입니다.");
         }else {
             return new PrincipalDetails(userEntity);
         }

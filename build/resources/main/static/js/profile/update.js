@@ -67,7 +67,7 @@ $(document).ready(function(){
 
         $.ajax({
            type: "put",
-            url: `/api/v1/users/${id}/`,
+            url: `/api/v1/users/${id}`,
             contentType: "application/json; charset=utf-8",
             dataType: "json",
             data: JSON.stringify(data)
@@ -79,15 +79,69 @@ $(document).ready(function(){
             console.log(error);
             alert(error.responseJSON.message);
         });
-
-
-
-        console.log(name,username,website,bio,email,gender);
     })
 
     // btn 이메일 확인
     $(".btn-confirm-email-check").on("click", function(e){
         alert("이메일 확인 API");
     })
+
+    // btn 비밀번호 변경
+    $(".btn-updatePassword").on("click", function(e){
+        e.preventDefault();
+
+        let id = $("#hidden-user-id").val();
+
+        if($("input[name='currentPassword']").val() == ""){
+           alert("이전 비밀번호를 입력해주세요");
+           $("input[name='currentPassword']").focus();
+           return;
+        }
+
+        if($("input[name='newPassword1']").val() == ""){
+           alert("새 비밀번호를 입력해주세요");
+           $("input-signup [name='newPassword1']").focus();
+           return;
+        }
+
+        if($("input[name='newPassword2']").val() == ""){
+           alert("새 비밀번호 확인을 입력해주세요");
+           $("input[name='newPassword2']").focus();
+           return;
+        }
+
+       if($("input[name='newPassword1']").val() != $("input[name='newPassword2']").val()){
+          alert("새 비밀번호가 일치하지 않습니다. 다시 한번 확인해주세요");
+          $("input[name='newPassword1']").focus();
+          return;
+       }
+
+        let data = {
+            "currentPassword": $("input[name='currentPassword']").val(),
+            "newPassword1": $("input[name='newPassword1']").val(),
+            "newPassword2": $("input[name='newPassword2']").val(),
+        };
+
+        $.ajax({
+            type: "put",
+            url: `/api/v1/users/${id}/attributes/password`,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            data: JSON.stringify(data)
+        }).done(res => {
+            console.log(res);
+            alert("성공적으로 비밀번호가 변경되었습니다.");
+
+            $("input[name='currentPassword']").val("");
+            $("input[name='newPassword1']").val(""),
+            $("input[name='newPassword2']").val("")
+
+        }).fail(error => {
+            console.log(error);
+            alert(error.responseJSON.message);
+        });
+
+    })
+
 
 });

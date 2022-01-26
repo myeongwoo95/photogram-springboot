@@ -7,15 +7,15 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class UserPasswordUpdateRequestDto {
-    String currentPassword;
-    String newPasswowrd1;
-    String newPasswowrd2;
+    private String currentPassword;
+    private String newPassword1;
+    private String newPassword2;
 
     @Builder
-    public UserPasswordUpdateRequestDto(String currentPassword, String newPasswowrd1, String newPasswowrd2){
+    public UserPasswordUpdateRequestDto(String currentPassword, String newPassword1, String newPassword2){
         this.currentPassword = currentPassword;
-        this.newPasswowrd1 = newPasswowrd1;
-        this.newPasswowrd2 = newPasswowrd2;
+        this.newPassword1 = newPassword1;
+        this.newPassword2 = newPassword2;
     }
 
 }

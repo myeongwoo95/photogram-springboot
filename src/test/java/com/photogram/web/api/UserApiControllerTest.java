@@ -64,7 +64,6 @@ public class UserApiControllerTest {
     }
 
     @Test
-    @WithMockUser
     @DisplayName("회원정보 수정")
     public void UpdateUser() throws Exception {
         // given
