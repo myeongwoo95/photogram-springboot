@@ -4,7 +4,6 @@ import com.photogram.domain.BaseTimeEntity;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
@@ -87,6 +86,11 @@ public class User extends BaseTimeEntity {
 
     public User passwordUpdate(String password){
         this.password = password;
+        return this;
+    }
+
+    public User updateProfileImageUrl(String profileImageUrl){
+        this.profileImageUrl = profileImageUrl;
         return this;
     }
 }

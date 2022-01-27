@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @RestController
@@ -32,6 +33,13 @@ public class UserApiController {
         principalDetails.setUser(userEntity);
         return new ResponseEntity<>
                 (new CMRespDto<>(1, "비밀번호 변경 성공", userEntity), HttpStatus.OK);
+    }
+
+    @PutMapping("/api/v1/users/{id}/attributes/image")
+    public ResponseEntity<?> imageProfileUpload(@PathVariable Long id, MultipartFile profileImageFile, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        User userEntity = userService.회원프로필사진_업로드(id, profileImageFile);
+        principalDetails.setUser(userEntity);
+        return new ResponseEntity<>(new CMRespDto<>(1, "프로필사진변경 성공", null), HttpStatus.OK);
     }
 
 

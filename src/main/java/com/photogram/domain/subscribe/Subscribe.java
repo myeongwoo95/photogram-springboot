@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table( // 복합키를 유니크로 설정할때
+@Table(
         uniqueConstraints = {
                 @UniqueConstraint(
                         name="subscribe_uk",
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class Subscribe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     @JoinColumn(name = "fromUserId")
     @ManyToOne

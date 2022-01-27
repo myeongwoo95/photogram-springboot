@@ -60,12 +60,15 @@
                         </div>
                     </li>
                     <li class="header__profile-picture">
-                        <a href="#"><img class="header__profile-picture-img" src="/images/Avatar.png" alt="profile-picture"></a>
+                        <a href="#">
+                            <img class="header__profile-picture-img" src="/upload/s_{{#user.profileImageUrl}}{{user.profileImageUrl}}{{/user.profileImageUrl}}
+                            "onerror="this.src='/images/Avatar.jpg'" alt="profile-picture">
+                        </a>
                         <ul class="header__dropdown">
                             <div class="box-bubble"></div>
-                            <li><a href="/user/mypage"><i class="far fa-user-circle"></i>프로필</a></li>
-                            <li><a href="/user/mypage"><i class="far fa-bookmark"></i>북마크</a></li>
-                            <li><a href="/user/update"><i class="fas fa-cog"></i>설정</a></li>
+                            <li><a href="/user/{{user.id}}/profile"><i class="far fa-user-circle"></i>프로필</a></li>
+                            <li><a href="/user/{{user.id}}/bookmark"><i class="far fa-bookmark"></i>북마크</a></li>
+                            <li><a href="/user/{{user.id}}/update"><i class="fas fa-cog"></i>설정</a></li>
                             <li><a href="/logout">로그아웃</a></li>
                         </ul>
                     </li>

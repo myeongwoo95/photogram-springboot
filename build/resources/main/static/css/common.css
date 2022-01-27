@@ -1177,7 +1177,6 @@ input:checked + .slider:before {
     width: 26px;
     object-fit: cover;
     border-radius: 50%;
-    border: 1.5px solid #dbdbdb;
 }
 /* header-dropdown */
 .header div:nth-child(3) > ul li:last-child{

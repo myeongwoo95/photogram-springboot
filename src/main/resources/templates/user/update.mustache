@@ -26,8 +26,10 @@
     <link rel="stylesheet" href="/css/profile/update.css">
 </head>
 <body>
+
 <div class="body__container">
-    <input type="hidden" id="hidden-user-id" value="{{#user.id}}{{user.id}}{{/user.id}}">
+
+    <input type="hidden" id="principalId" value="{{#user.id}}{{user.id}}{{/user.id}}">
     {{>layout/header}}
 
     <div class="section mt-30">
@@ -49,11 +51,15 @@
 
                         <div class="edit-profile__profile mt-30">
 
-                            <img src="/images/Avatar.jpg" alt="profile">
+                            <img src="/upload/s_{{#user.profileImageUrl}}{{user.profileImageUrl}}{{/user.profileImageUrl}} "onerror="this.src='/images/Avatar.jpg'" alt="profile" id="userProfileImage">
+
+                            <form id="userProfileImageForm">
+                                <input type="file" id="userProfileImageInput" accept="image/*" name="profileImageFile" style="display: none;">
+                            </form>
 
                             <div>
                                 <span class="mb-5">{{#user.username}}{{user.username}}{{/user.username}}</span>
-                                <span>프로필 사진 바꾸기</span>
+                                <span class="btn-profileImageChange">프로필 사진 바꾸기</span>
                             </div>
 
                         </div>
@@ -112,11 +118,11 @@
                     <div class="edit-pw">
                         <div class="edit-profile__profile mt-30">
 
-                            <img src="/images/Avatar.jpg" alt="profile">
+                            <img src="/upload/s_{{#user.profileImageUrl}}{{user.profileImageUrl}}{{/user.profileImageUrl}}
+                            "onerror="this.src='/images/Avatar.jpg' "alt="profile" id="userProfileImage2">
 
                             <div>
-                                <span class="mb-5" style="font-weight: bold;">a_a33aa</span>
-
+                                <span class="mb-5" style="font-weight: bold;">{{#user.username}}{{user.username}}{{/user.username}}</span>
                             </div>
 
                         </div>

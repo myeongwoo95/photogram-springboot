@@ -33,7 +33,7 @@
 </head>
 <body>
 <div class="body__container">
-
+    <input type="hidden" id="principalId" value="{{#user.id}}{{user.id}}{{/user.id}}">
     {{>layout/header}}
 
     <!-- 스토리 -->
@@ -228,10 +228,10 @@
 
                     <!-- my item -->
                     <div class="visual__friend-rec__first-div mb-25">
-                        <img src="/images/Avatar.png" alt="profile">
+                        <img src="/upload/s_{{#user.profileImageUrl}}{{user.profileImageUrl}}{{/user.profileImageUrl}} "onerror="this.src='/images/Avatar.jpg'">
                         <div>
-                            <span>a_a33a</span>
-                            <span>이명우</span>
+                            <span>{{#user.username}}{{user.username}}{{/user.username}}</span>
+                            <span>{{#usersname}}{{usersname}}{{/usersname}}</span>
                         </div>
                     </div>
 
