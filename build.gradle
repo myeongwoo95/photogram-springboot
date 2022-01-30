@@ -37,6 +37,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-aop')
 
     compile('net.coobird:thumbnailator:0.4.8')
+    compile('org.qlrm:qlrm:2.1.1')
 
     compile("org.mariadb.jdbc:mariadb-java-client")
     compile('org.projectlombok:lombok')

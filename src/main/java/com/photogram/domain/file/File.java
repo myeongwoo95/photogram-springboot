@@ -1,6 +1,6 @@
-package com.photogram.domain.image;
+package com.photogram.domain.file;
 
-import com.photogram.domain.user.User;
+import com.photogram.domain.image.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,17 +13,16 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Data
 @Entity
-public class ImageProfile {
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Long;
+    private Long id;
 
     @Column(unique = true, nullable = false)
-    private String imageProfileUrl;
+    private String fileUrl;
 
-    @JoinColumn(name = "userId")
-    @OneToOne
-    private User user;
-
+    @JoinColumn(name ="imageId")
+    @ManyToOne
+    private Image image;
 
 }

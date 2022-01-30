@@ -12,14 +12,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Value("${file.path.profile}")
     private String uploadFolder;
 
+    @Value("${file.path.image}")
+    private String uploadFolderImage;
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         WebMvcConfigurer.super.addResourceHandlers(registry);
 
         // 개발 시점에 사용 가능한 코드
         registry
-            .addResourceHandler("/upload/**") // url 패턴 : /upload/파일명 -> 낚아챔
-            .addResourceLocations("file:///"+uploadFolder) // 실제 물리적인 경로
+            .addResourceHandler("/upload/**", "/uploadImage/**") // url 패턴 : /upload/파일명 -> 낚아챔
+            .addResourceLocations("file:///" + uploadFolder,"file:///" + uploadFolderImage) // 실제 물리적인 경로
             .setCachePeriod(60*10*6) //1시간
             .resourceChain(true)
             .addResolver(new PathResourceResolver());

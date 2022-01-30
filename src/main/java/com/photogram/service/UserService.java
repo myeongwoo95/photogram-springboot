@@ -1,10 +1,13 @@
 package com.photogram.service;
 
+import com.photogram.domain.subscribe.SubscribeRepository;
 import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
 import com.photogram.handler.ex.CustomApiException;
+import com.photogram.handler.ex.CustomException;
 import com.photogram.handler.ex.CustomValidationApiException;
 import com.photogram.web.dto.user.UserPasswordUpdateRequestDto;
+import com.photogram.web.dto.user.UserProfilePageResponseDto;
 import com.photogram.web.dto.user.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -26,6 +29,7 @@ import java.util.UUID;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final SubscribeRepository subscribeRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Value("${file.path.profile}")
@@ -108,10 +112,36 @@ public class UserService {
             e.printStackTrace();
         }
 
-
-
         userEntity.updateProfileImageUrl(imageFileName);
 
         return userEntity;
+    }
+
+    public UserProfilePageResponseDto 회원프로필(Long pageUserId, Long principalId) {
+        UserProfilePageResponseDto responseDto = new UserProfilePageResponseDto();
+
+        User userEntity = userRepository.findById(pageUserId).orElseThrow(()->{
+            return new CustomException("해당 프로필 페이지는 없는 페이지 입니다.");
+        });
+
+        responseDto.setUser(userEntity);
+        responseDto.setPageOwnerState(pageUserId == principalId); // 1은 페이지 주인, -1은 주인이 아님
+        responseDto.setImageCount(userEntity.getImages().size());
+
+        // 이미지 존재여부
+        responseDto.setThereImage(userEntity.getImages().size() > 0 );
+        responseDto.setThereCollection(false);
+        responseDto.setThereTag(false);
+
+        // 구독관련
+        int subscribeState = subscribeRepository.mSubscribeState(principalId, pageUserId);
+        int subscribeCount = subscribeRepository.mSubscribeCount(pageUserId);
+        int followerCount = subscribeRepository.mSubscribeFollowerCount(pageUserId);
+
+        responseDto.setSubscribeState(subscribeState == 1);
+        responseDto.setSubscribeCount(subscribeCount);
+        responseDto.setFollowerCount(followerCount);
+
+        return responseDto;
     }
 }

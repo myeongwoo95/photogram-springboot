@@ -315,7 +315,10 @@
             <!-- body -->
             <div class="body-file">
                 <i class="far fa-clone btn-fileupload-multi"></i>
-                <input type="file" id="input_imgs" multiple accept="video/*, image/*"/>
+
+                <form id="filesForm">
+                    <input type="file" id="input_imgs" name="files" class="ir_su" multiple accept="video/*, image/*"/>
+                </form>
 
                 <div class="body-file__nofile-box">
                     <img class="mb-20" src="/images/file-image.png" alt="file-image-sample">
@@ -324,6 +327,7 @@
                 </div>
 
                 <div class="file-upload-wrapper">
+
                     <div class="file-upload-swiper">
                         <div class="swiper-wrapper"></div>
                         <div class="swiper-pagination"></div>
@@ -338,7 +342,7 @@
                             <span>a_a33a</span>
                         </div>
 
-                        <textarea class="file-upload-options__input-caption" name="" id="" placeholder="문구 입력..."></textarea>
+                        <textarea class="file-upload-options__input-caption" name="description" placeholder="문구 입력..."></textarea>
 
                         <div class="file-upload-options__letter-count-box">
                             <i class="far fa-smile-wink"></i>
@@ -346,7 +350,7 @@
                         </div>
 
                         <div class="file-upload-options_location">
-                            <input class="file-upload-options__input-location" type="text" placeholder="위치 추가">
+                            <input class="file-upload-options__input-location" type="text" name="location" placeholder="위치 추가">
                             <i class="fas fa-map-marker-alt"></i>
                         </div>
 
@@ -361,7 +365,7 @@
 
                                 <div>
                                     <img src="/images/insta2.jpg" alt="photo">
-                                    <input class="file-upload-options__input-alt" type="text" placeholder="대체 텍스트 추가...">
+                                    <input class="file-upload-options__input-alt" name="caption" type="text" placeholder="대체 텍스트 추가...">
                                 </div>
                             </div>
                         </div>
@@ -377,7 +381,7 @@
                                     <span>댓글 기능 해제</span>
 
                                     <label class="switch">
-                                        <input class="file-upload-options__input-switch" type="checkbox" />
+                                        <input class="file-upload-options__input-switch" name="isCommentActive" value="y" type="checkbox" />
                                         <span class="slider round"></span>
                                     </label>
                                 </div>
@@ -419,8 +423,8 @@
         </div>
 
         <div>
-            <img src="/images/cute-loading-spinner.gif" alt="loading...">
-            <h4>게시물이 공유되었습니다.</h4>
+            <img id="image-spinner" src="/images/cute-loading-spinner.gif" alt="loading...">
+            <h4>게시물이 공유되었습니다</h4>
         </div>
     </div>
 </div>

@@ -57,7 +57,7 @@ class SubscribeRepositoryTest {
 
         // then
         List<Subscribe> all = subscribeRepository.findAll();
-        assertThat(all.get(0).getFromuser().getId(), is(fromUserId));
+        assertThat(all.get(0).getFromUser().getId(), is(fromUserId));
         assertThat(all.get(0).getToUser().getId(), is(toUserId));
     }
 

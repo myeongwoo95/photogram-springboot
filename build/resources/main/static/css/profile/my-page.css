@@ -135,6 +135,7 @@ ul.photo-list{
     left: 0;
     cursor: pointer;
     z-index: 2;
+    object-fit: cover;
 }
 
 .photo-list .photo-item img:hover{

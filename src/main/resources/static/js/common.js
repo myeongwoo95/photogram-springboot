@@ -216,6 +216,10 @@ $(document).ready(function(){
         $(".btn-toggle-file-upload-options_accessibility").removeClass("fa-chevron-up");
         $(".file-upload-options_accessibility > div:nth-child(2)").hide();
         $(".file-upload-options_accessibility > div:nth-child(1)").css("border-bottom", "1px solid #dbdbdb");
+
+        // 파일업로드 성공 이미지 닫기
+        $("#image-spinner").show();
+        $("#image-spinner").next().hide();
     }
 
     // 파일 업로드 모달 끄기
@@ -285,12 +289,44 @@ $(document).ready(function(){
     // 파일 업로드 다음 버튼2(파일 업로드)
     $(".btn-fileupload-step2").on("click", function(e){
         e.preventDefault();
-        //api 로직
 
         $(".modal-fileupload-uploading-wrapper").css("display", "flex");
         $(".modal-fileupload-wrapper").hide();
 
-        //파일 업로드 모달 돌려놔야함!!!!!
+        //서버에 이미지 전송 준비
+        let filesForm = $("#filesForm")[0];
+
+        let description = $(`textarea[name="description"]`).val();
+        let location = $(`input[name="location"]`).val();
+        let caption = $(`input[name="caption"]`).val();
+        let isCommentActive = $('input:checkbox[name="isCommentActive"]').is(":checked");
+
+        let formData = new FormData(filesForm);
+        formData.append("description", description);
+        formData.append("caption", location);
+        formData.append("location", caption);
+        formData.append("isCommentActive", isCommentActive);
+
+        console.log(description, location, caption, isCommentActive);
+
+        $.ajax({
+            type: "post",
+            url: `/api/v1/images`,
+            data: formData,
+            contentType: false,
+            processData: false,
+            enctype: "multipart-form-data"
+        }).done(res => {
+            setTimeout(function() {
+                $("#image-spinner").hide();
+                $("#image-spinner").next().show();
+            }, 2000);
+
+        }).fail(error => {
+            console.log("사진 변경 오류", error);
+            alert("프로필 사진 변경에 실패하였습니다.");
+         });
+
     })
 
     // 파일 업로드 뒤로가기 버튼1 모달 켜기

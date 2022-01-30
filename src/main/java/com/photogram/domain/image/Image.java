@@ -1,5 +1,7 @@
 package com.photogram.domain.image;
 
+import com.photogram.domain.BaseTimeEntity;
+import com.photogram.domain.file.File;
 import com.photogram.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,38 +9,42 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
-public class Image {
+public class Image extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Long;
+    private Long id;
 
-//    @Column(unique = true, nullable = false)
-//    private String imageUrl;
+    @OneToMany(mappedBy = "image")
+    @Column(nullable = false)
+    private List<File> files;
 
-    @Column(length = 300)
+    @Column(length = 140)
     private String description;
 
-    @Column(length = 50)
+    @Column(length = 30)
     private String caption;
+
+    @Column(length = 50)
+    private String location;
 
     @JoinColumn(name = "userId")
     @ManyToOne
-    private User user; // 1, 1
+    private User user;
+
+    @Column(nullable = false)
+    private String isCommentActive;
 
     // 이미지 좋아요
     // 댓글
 
-    private LocalDateTime createDate;
-
-    @PrePersist // @PrePersist는 DB에 Insert 되기 직전에 실행
-    public void createDate() {
-        this.createDate = LocalDateTime.now();
+    public void updateFiles(List<File> files) {
+        this.files = files;
     }
 }
