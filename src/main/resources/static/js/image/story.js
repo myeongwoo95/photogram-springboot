@@ -1,4 +1,102 @@
 $(document).ready(function(){
+
+    function storyLoad() {
+    	$.ajax({
+    		url: "/api/v1/images",
+    		dataType: "json"
+    	}).done(res => {
+    		console.log(res);
+
+    		res.data.forEach(image =>{
+    			let storyItem = getStoryItem(image);
+    			$("#storyList").append(storyItem);
+    		})
+
+    	}).fail(error => {
+    		console.log("스토리 로드 실패", error);
+    	});
+    }storyLoad();
+
+    function getStoryItem(image){
+        let item = `<!-- item -->
+                    <div class="item-list__image-item">
+
+                        <!-- header -->
+                        <div class="item-list__image-item__header">
+                            <img src="/upload/${image.user.profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" onclick="location.href='/user/${image.user.id}/profile';" alt="user">
+                            <span onclick="location.href='/user/${image.user.id}/profile';">${image.user.username}</span>
+                            <i class="fas fa-ellipsis-h btn-content-option" onclick="btnContentOption(${image.id})"></i>
+                        </div>
+
+                        <!-- body(image) -->
+                        <div class="item-list__image-item__body">
+                            <div class="image-swiper">
+                                <div class="swiper-wrapper">`;
+
+                                image.files.forEach(data=>{
+                                    item += `<div class="swiper-slide">
+                                                 <img src="/uploadImage/${data.fileUrl}" alt="picture">
+                                             </div>`;
+                                })
+
+                            item += `</div>
+                                <div class="swiper-pagination"></div>
+
+                                <div id="content-button-prev" class="swiper-button-prev"></div>
+                                <div id="content-button-prev" class="swiper-button-next"></div>
+                            </div>
+                        </div>
+
+                        <!-- footer (comment written)-->
+                        <div class="item-list__image-item__comment-list">
+                            <div>
+                                <ul>
+                                    <li><a href="#"><i class="far fa-heart content-like"></i></a></li>
+                                    <li><a href="#"><i class="far fa-comment content-class"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
+                                    <li><a href="#"><i class="far fa-bookmark content-bookmark"></i></a></li>
+                                </ul>
+                            </div>
+
+                            <span class="like-count">좋아요 0개</span>
+
+                            <div class="image-caption">
+                                <span class="user">${image.user.username}</span>
+                                <div class="caption">${image.description}</div>
+                            </div>
+
+                            <div class="comments mt-15">
+                                <span class="comment-count cursor-pointer">댓글 10개 모두 보기</span>
+
+                                <!-- 댓글리스트 -->
+                                <div class="comments-list">
+
+                                    <!-- item -->
+                                    <div class="comment-items mt-5">
+                                        <b class="fw-900">walle</b>
+                                        <span>동해물과 백두산이 마르고 닳도록</span>
+                                            <i class="far fa-heart content-comment-like"></i>
+                                    </div>
+                                    <!-- item -->
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- footer2 (comment write)-->
+                        <div class="item-list__image-item__comment-write">
+                            <div class="emoticon-container">
+                                <i class="far fa-smile-wink btn-emoticon-icon"></i>
+                            </div>
+                            <textarea id="content-comment-textarea" rows="1" placeholder="댓글 달기..."></textarea>
+                            <button class="upload-comment">게시</button>
+                        </div>
+
+                    </div>
+                    <!-- item -->`;
+        return item;
+    }
+
     // 스토리 이미지 swiper
     const swiperImage = new Swiper('.image-swiper', {
         // Optional parameters
@@ -15,6 +113,10 @@ $(document).ready(function(){
             nextEl: '.swiper-button-next',
             prevEl: '.swiper-button-prev',
         },
+
+        observer: true,
+        observeParents: true,
+        watchOverflow : true
     });
 
     // 친구 추천 swiper
@@ -109,11 +211,8 @@ $(document).ready(function(){
         }
     });
 
-
-   
-
     // 좋아요, 좋아요 취소
-    $(".content-like").on("click", function(e){
+    $(document).on("click", ".content-like", function(e){
         e.preventDefault();
 
         if($(this).hasClass("far")){

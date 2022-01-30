@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-     let principalId = $("#principalId").val();
+    let principalId = $("#principalId").val();
 
     $(".btn-edit-profile").on("click", function(){
         $(this).addClass("active");

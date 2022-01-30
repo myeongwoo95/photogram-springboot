@@ -1,6 +1,7 @@
 package com.photogram.web.api;
 
 import com.photogram.config.auth.PrincipalDetails;
+import com.photogram.domain.image.Image;
 import com.photogram.handler.ex.CustomValidationException;
 import com.photogram.service.ImageService;
 import com.photogram.web.dto.CMRespDto;
@@ -9,8 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -28,6 +32,13 @@ public class ImageApiController {
         imageService.이미지_업로드(requestDto, principalDetails);
         return new ResponseEntity<>(new CMRespDto<>(1, "이미지 업로드 성공", null), HttpStatus.OK);
     }
+
+    @GetMapping("/api/v1/images")
+    public ResponseEntity<?> imageStory(@AuthenticationPrincipal PrincipalDetails principalDetails){
+        List<Image> images = imageService.이미지스토리(principalDetails.getUser().getId());
+        return new ResponseEntity<>(new CMRespDto<>(1, "성공", images), HttpStatus.OK);
+    }
+
 
 
 

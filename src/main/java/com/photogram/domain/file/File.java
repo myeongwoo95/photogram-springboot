@@ -1,5 +1,6 @@
 package com.photogram.domain.file;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.photogram.domain.image.Image;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,6 +22,7 @@ public class File {
     @Column(unique = true, nullable = false)
     private String fileUrl;
 
+    @JsonIgnoreProperties({"user", "files"})
     @JoinColumn(name ="imageId")
     @ManyToOne
     private Image image;

@@ -58,6 +58,12 @@ public class ImageService {
         }
         imageEntity.updateFiles(files);
     }
+
+    @Transactional(readOnly = true)
+    public List<Image> 이미지스토리(Long principalId) {
+        List<Image> images = imageRepository.mStory(principalId);
+        return images;
+    }
 }
 
 

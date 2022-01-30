@@ -41,16 +41,20 @@
         <div class="inner">
 
             <div class="flex">
-                <div class="item-list">
+
+                <div class="item-list" id="storyList">
 
                     <!-- item -->
                     <div class="item-list__image-item">
+
+                        <!-- header -->
                         <div class="item-list__image-item__header">
                             <img src="/images/Avatar.png" alt="user">
                             <span>walle</span>
                             <i class="fas fa-ellipsis-h btn-content-option"></i>
                         </div>
 
+                        <!-- body(image) -->
                         <div class="item-list__image-item__body">
 
                             <div class="image-swiper">
@@ -78,6 +82,7 @@
 
                         </div>
 
+                        <!-- footer (comment written)-->
                         <div class="item-list__image-item__comment-list">
                             <div>
                                 <ul>
@@ -135,6 +140,7 @@
                             </div>
                         </div>
 
+                        <!-- footer2 (comment write)-->
                         <div class="item-list__image-item__comment-write">
                             <div class="emoticon-container">
                                 <i class="far fa-smile-wink btn-emoticon-icon"></i>
@@ -146,8 +152,9 @@
                     </div>
                     <!-- item -->
 
-                    <!-- 스토리 라인에 친구추천  -->
+                    <!-- 스토리 item 밑에 친구추천 -->
                     <div class="visual__image-list__friend-rec mb-30" style="overflow: hidden;">
+
                         <div class="visual__image-list__friend-rec__header mb-20">
                             <span>회원님을 위한 추천</span>
                             <span>모두 보기</span>
@@ -223,7 +230,7 @@
 
                 </div>
 
-                <!-- 오른쪽에 친구추천 -->
+                <!-- 스토리 오른쪽에 친구추천 -->
                 <div class="visual__friend-rec ml-30">
 
                     <!-- my item -->
@@ -289,6 +296,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
 
         </div>
@@ -684,7 +692,7 @@
 </div>
 
 <script src="/js/common.js"></script>
-<script src="/js/images/story.js"></script>
+<script src="/js/image/story.js"></script>
 
 </body>
 </html>

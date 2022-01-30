@@ -94,8 +94,9 @@ $(document).ready(function(){
     })
 
     // 스토리 게시글 (모달) 켜기
-    $(".content-class, .comment-count").on("click", function(){
-        saveScroll();
+    $(document).on("click", ".content-class, .comment-count", function(e){
+        e.preventDefault();
+
         $("body").addClass("stopScroll");
         $(".modal-comment-wrapper").css("display", "flex");
         
@@ -104,7 +105,9 @@ $(document).ready(function(){
     })
 
     // btn 스토리 게시글 (모달) 닫기 
-    $(".cancel-comment-modal").on("click", function(){
+    $(".cancel-comment-modal").on("click", function(e){
+        e.preventDefault();
+
         $(".modal-comment-wrapper").hide();
         $("body").removeClass("stopScroll");
 
@@ -113,12 +116,10 @@ $(document).ready(function(){
        
         // 이모지 박스 닫아주기
         $(".emoticon-wrapper").remove();
-
-        scroll();
     });
 
     // 댓글 좋아요, 좋아요 취소
-    $(".content-comment-like").on("click", function(e){
+    $(document).on("click", ".content-comment-like", function(e){
         e.preventDefault();
 
         if($(this).hasClass("far")){
@@ -148,7 +149,7 @@ $(document).ready(function(){
     })
 
     // 북마크, 북마크 취소
-    $(".content-bookmark").on("click", function(e){
+    $(document).on("click", ".content-bookmark", function(e){
         e.preventDefault();
 
         if($(this).hasClass("far")){
@@ -855,9 +856,8 @@ $(document).ready(function(){
         $(".emoticon-wrapper").remove();
     })
 
-    // 스토리 게시물 옵션
     // 콘텐츠 dotdotdot 옵션 모달 켜기
-    $(".btn-content-option").on("click", function(){
+    $(document).on("click", ".btn-content-option", function(){
         $("body").addClass("stopScroll");
         $(".modal-content-option-wrapper").css("display", "flex");
     });

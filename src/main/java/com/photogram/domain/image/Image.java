@@ -1,5 +1,6 @@
 package com.photogram.domain.image;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.photogram.domain.BaseTimeEntity;
 import com.photogram.domain.file.File;
 import com.photogram.domain.user.User;
@@ -34,6 +35,7 @@ public class Image extends BaseTimeEntity {
     @Column(length = 50)
     private String location;
 
+    @JsonIgnoreProperties({"images"})
     @JoinColumn(name = "userId")
     @ManyToOne
     private User user;
