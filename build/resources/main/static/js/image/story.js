@@ -1,8 +1,10 @@
 $(document).ready(function(){
 
+    let pageNumOfStory = 0;
+
     function storyLoad() {
     	$.ajax({
-    		url: "/api/v1/images",
+    		url: `/api/v1/images?page=${pageNumOfStory}`,
     		dataType: "json"
     	}).done(res => {
     		console.log(res);
@@ -10,12 +12,47 @@ $(document).ready(function(){
     		res.data.forEach(image =>{
     			let storyItem = getStoryItem(image);
     			$("#storyList").append(storyItem);
+    			swiper_fn();
     		})
 
     	}).fail(error => {
     		console.log("스토리 로드 실패", error);
     	});
     }storyLoad();
+
+    $(window).scroll(() => {
+        let checkNum = $(window).scrollTop() - ($(document).height() - $(window).height()) // 스크롤탑 - 문서의 높이 - 윈도우 높이
+
+        if(checkNum < 1 && checkNum > -1){ // 대략 스크롤이 끝까지 다 내려갔다면…~
+            pageNumOfStory++;
+            storyLoad()
+        }
+    });
+
+    function swiper_fn(){
+
+        // 스토리 이미지 swiper
+        const swiperImage = new Swiper('.image-swiper', {
+            // Optional parameters
+            direction: 'horizontal',
+            loop: false,
+
+            // If we need pagination
+            pagination: {
+                el: '.swiper-pagination',
+            },
+
+            // Navigation arrows
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            observer: true,
+            observeParents: true,
+            watchOverflow : true
+        });
+    }
 
     function getStoryItem(image){
         let item = `<!-- item -->
@@ -50,15 +87,22 @@ $(document).ready(function(){
                         <!-- footer (comment written)-->
                         <div class="item-list__image-item__comment-list">
                             <div>
-                                <ul>
-                                    <li><a href="#"><i class="far fa-heart content-like"></i></a></li>
+                                <ul>`;
+
+                                 if(image.likeState){
+                                     item += `<li><a href="#"><i class="fas fa-heart content-like" data-id="${image.id}" style="color: rgb(237, 73, 86)"></i></a></li>`;
+                                 }else{
+                                     item += `<li><a href="#"><i class="far fa-heart content-like" data-id="${image.id}"></i></a></li>`;
+                                 }
+
+                           item += `
                                     <li><a href="#"><i class="far fa-comment content-class"></i></a></li>
                                     <li><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
                                     <li><a href="#"><i class="far fa-bookmark content-bookmark"></i></a></li>
                                 </ul>
                             </div>
 
-                            <span class="like-count">좋아요 0개</span>
+                            <span class="like-count" id="imageLikeCount-${image.id}" data-like="${image.likeCount}">좋아요 ${image.likeCount}개</span>
 
                             <div class="image-caption">
                                 <span class="user">${image.user.username}</span>
@@ -66,7 +110,7 @@ $(document).ready(function(){
                             </div>
 
                             <div class="comments mt-15">
-                                <span class="comment-count cursor-pointer">댓글 10개 모두 보기</span>
+                                <span class="comment-count cursor-pointer">댓글 0개 모두 보기</span>
 
                                 <!-- 댓글리스트 -->
                                 <div class="comments-list">
@@ -96,28 +140,6 @@ $(document).ready(function(){
                     <!-- item -->`;
         return item;
     }
-
-    // 스토리 이미지 swiper
-    const swiperImage = new Swiper('.image-swiper', {
-        // Optional parameters
-        direction: 'horizontal',
-        loop: false,
-
-        // If we need pagination
-        pagination: {
-            el: '.swiper-pagination',
-        },
-
-        // Navigation arrows
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-
-        observer: true,
-        observeParents: true,
-        watchOverflow : true
-    });
 
     // 친구 추천 swiper
     const swiperFriendsRecommendation = new Swiper('.friend-recommentation-swiper', {
@@ -215,15 +237,50 @@ $(document).ready(function(){
     $(document).on("click", ".content-like", function(e){
         e.preventDefault();
 
-        if($(this).hasClass("far")){
-            $(this).css("color", "#ED4956");
-            $(this).addClass("fas");
-            $(this).removeClass("far");
-        }else{
-            $(this).css("color", "");
-            $(this).addClass("far");
-            $(this).removeClass("fas");
-        }
+        let imageId = $(this).data("id");
+
+        	if ($(this).hasClass("far")) { // 좋아요
+
+        		$.ajax({
+        			type: "post",
+        			url: `/api/v1/images/${imageId}/likes`,
+        			dataType: "json"
+        		}).done(res => {
+        			// likeCount 증가
+        			let likeCountStr = $(`#imageLikeCount-${imageId}`).data("like");
+        			let likeCount = Number(likeCountStr) + 1;
+        			$(`#imageLikeCount-${imageId}`).data("like", likeCount);
+        			$(`#imageLikeCount-${imageId}`).text("좋아요 " + likeCount + "개");
+
+        			// .. .하트색깔 변경 작업
+        			$(this).css("color", "#ED4956");
+                    $(this).addClass("fas");
+                    $(this).removeClass("far");
+        		}).fail(error => {
+        			console.log("좋아요 에러", error);
+        		});
+
+        	} else { // 좋아요 취소
+        		$.ajax({
+        			type: "delete",
+        			url: `/api/v1/images/${imageId}/likes`,
+        			dataType: "json"
+        		}).done(res => {
+        			//likeCount 감소
+        			let likeCountStr = $(`#imageLikeCount-${imageId}`).data("like");
+        			let likeCount = Number(likeCountStr) - 1;
+        			$(`#imageLikeCount-${imageId}`).data("like", likeCount);
+        			$(`#imageLikeCount-${imageId}`).text("좋아요 " + likeCount + "개");
+
+        			// .. .하트색깔 변경 작업
+        			$(this).css("color", "");
+                    $(this).addClass("far");
+                    $(this).removeClass("fas");
+        		}).fail(error => {
+        			console.log("좋아요 취소 에러", error);
+        		});
+        	}
+
     });
 
     // 친구추천에서 팔로잉 눌렀을 때

@@ -27,4 +27,7 @@ public class File {
     @ManyToOne
     private Image image;
 
+    @Column
+    private String type;
+
 }
