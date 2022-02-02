@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+    <!-- css, js -->
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/image/story.css">
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
+
+    <title>Photogram</title>
+</head>
+<body>
+<div class="body__container">
+    <input type="hidden" id="principalId" value="{{#user.id}}{{user.id}}{{/user.id}}">
+    {{>layout/header}}
+
+    <!-- 스토리 -->
+    <div class="section section--story mt-30">
+        <div class="inner">
+
+            <div class="flex">
+
+                <div class="item-list" id="storyList">
+
+                    <!-- item -->
+                    <div class="item-list__image-item">
+
+                        <!-- header -->
+                        <div class="item-list__image-item__header">
+                            <img src="/images/Avatar.png" alt="user">
+                            <span>walle</span>
+                            <i class="fas fa-ellipsis-h btn-content-option"></i>
+                        </div>
+
+                        <!-- body(image) -->
+                        <div class="item-list__image-item__body">
+
+                            <div class="image-swiper">
+                                <div class="swiper-wrapper">
+
+                                    <div class="swiper-slide">
+                                        <img src="/images/item.jpg" alt="picture">
+                                    </div>
+
+                                    <div class="swiper-slide">
+                                        <img src="/images/insta1.jpg" alt="picture">
+                                    </div>
+
+                                    <div class="swiper-slide">
+                                        <img src="/images/insta2.jpg" alt="picture">
+                                    </div>
+
+                                </div>
+
+                                <div class="swiper-pagination"></div>
+
+                                <div id="content-button-prev" class="swiper-button-prev"></div>
+                                <div id="content-button-prev" class="swiper-button-next"></div>
+                            </div>
+
+                        </div>
+
+                        <!-- footer (comment written)-->
+                        <div class="item-list__image-item__comment-list">
+                            <div>
+                                <ul>
+
+                                    <li><a href="#"><i class="far fa-heart content-like"></i></a></li>
+                                    <li><a href="#"><i class="far fa-comment content-class"></i></a></li>
+                                    <li><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
+                                    <li><a href="#"><i class="far fa-bookmark content-bookmark"></i></a></li>
+                                </ul>
+                            </div>
+
+                            <span class="like-count">좋아요 30개</span>
+
+                            <div class="image-caption">
+                                <span class="user">walle</span>
+                                <span class="caption">
+                                Merry Christmas Merry<br>
+                                Merry Christmas Merry<br>
+                                Merry Christmas Merry<br>
+                                Merry Christmas Merry<br>
+                                Merry Christmas Merry<br>
+                                </span>
+                            </div>
+
+                            <div class="comments mt-15">
+                                <span class="comment-count cursor-pointer">댓글 10개 모두 보기</span>
+
+                                <div class="comments-list">
+
+                                    <!-- item -->
+                                    <div class="comment-items mt-5">
+                                        <b class="fw-900">walle</b>
+                                        <span>동해물과 백두산이 마르고 닳도록</span>
+                                            <i class="far fa-heart content-comment-like"></i>
+                                    </div>
+                                    <!-- item -->
+
+                                    <!-- item -->
+                                    <div class="comment-items mt-5">
+                                        <b class="fw-900">walle</b>
+                                        <span>동해물과 백두산이 마르고 닳도록</span>
+                                            <i class="far fa-heart content-comment-like"></i>
+                                    </div>
+                                    <!-- item -->
+
+                                    <!-- item -->
+                                    <div class="comment-items mt-5">
+                                        <b class="fw-900">walle</b>
+                                        <span>동해물과 백두산이 마르고 닳도록</span>
+                                            <i class="far fa-heart content-comment-like"></i>
+                                    </div>
+                                    <!-- item -->
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- footer2 (comment write)-->
+                        <div class="item-list__image-item__comment-write">
+                            <div class="emoticon-container">
+                                <i class="far fa-smile-wink btn-emoticon-icon"></i>
+                            </div>
+                            <textarea id="content-comment-textarea" rows="1" placeholder="댓글 달기..."></textarea>
+                            <button class="upload-comment">게시</button>
+                        </div>
+
+                    </div>
+                    <!-- item -->
+
+                    <!-- 스토리 item 밑에 친구추천 -->
+                    <div class="visual__image-list__friend-rec mb-30" style="overflow: hidden;">
+
+                        <div class="visual__image-list__friend-rec__header mb-20">
+                            <span>회원님을 위한 추천</span>
+                            <span>모두 보기</span>
+                        </div>
+
+                        <div class="modal-item-list-wrapper">
+
+                            <div class="friend-recommentation-swiper">
+                                <div class="swiper-wrapper">
+
+                                    <div class="swiper-slide">
+
+                                        <div class="modal-item-list">
+                                            <div class="modal-item">
+                                                <img src="/images/item.jpg">
+                                                <p class="name mt-15">JISOO</p>
+                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <button class="btn-blue">팔로우</button>
+                                            </div>
+
+                                            <div class="modal-item">
+                                                <img src="/images/item.jpg">
+                                                <p class="name mt-15">JISOO</p>
+                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <button class="btn-blue">팔로우</button>
+                                            </div>
+
+                                            <div class="modal-item">
+                                                <img src="/images/item.jpg">
+                                                <p class="name mt-15">JISOO</p>
+                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <button class="btn-blue">팔로우</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="swiper-slide">
+
+                                        <div class="modal-item-list">
+                                            <div class="modal-item">
+                                                <img src="/images/item.jpg">
+                                                <p class="name mt-15">JISOO</p>
+                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <button class="btn-blue">팔로우</button>
+                                            </div>
+
+                                            <div class="modal-item">
+                                                <img src="/images/item.jpg">
+                                                <p class="name mt-15">JISOO</p>
+                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <button class="btn-blue">팔로우</button>
+                                            </div>
+
+                                            <div class="modal-item">
+                                                <img src="/images/item.jpg">
+                                                <p class="name mt-15">JISOO</p>
+                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <button class="btn-blue">팔로우</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div id="friend-rec-custom-button-prev" class="swiper-button-prev"></div>
+                                <div id="friend-rec-custom-button-next" class="swiper-button-next"></div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- 스토리 오른쪽에 친구추천 -->
+                <div class="visual__friend-rec ml-30">
+
+                    <!-- my item -->
+                    <div class="visual__friend-rec__first-div mb-25">
+                        <img src="/upload/s_{{#user.profileImageUrl}}{{user.profileImageUrl}}{{/user.profileImageUrl}} "onerror="this.src='/images/Avatar.jpg'">
+                        <div>
+                            <span>{{#user.username}}{{user.username}}{{/user.username}}</span>
+                            <span>{{#usersname}}{{usersname}}{{/usersname}}</span>
+                        </div>
+                    </div>
+
+                    <div class="visual__friend-rec__second-div">
+
+                        <div class="rec-caption mb-20">
+                            <span>회원님을 위한 추천</span>
+                            <span>모두 보기</span>
+                        </div>
+
+                        <div class="rec-list">
+                            <!-- item -->
+                            <div class="rec-item mb-15">
+                                <img src="/images/Avatar.png" alt="recommentation-item">
+                                <div>
+                                    <span>songkang_b</span>
+                                    <span>차영준</span>
+                                </div>
+                                <span class="btn-friend-rec-following float--right false">팔로우</span>
+                            </div>
+                            <!-- item -->
+
+                            <!-- item -->
+                            <div class="rec-item mb-15">
+                                <img src="/images/Avatar.png" alt="recommentation-item">
+                                <div>
+                                    <span>songkang_b</span>
+                                    <span>차영준</span>
+                                </div>
+                                <span class="btn-friend-rec-following float--right false">팔로우</span>
+                            </div>
+                            <!-- item -->
+
+                            <!-- item -->
+                            <div class="rec-item mb-15">
+                                <img src="/images/Avatar.png" alt="recommentation-item">
+                                <div>
+                                    <span>songkang_b</span>
+                                    <span>차영준</span>
+                                </div>
+                                <span class="btn-friend-rec-following float--right false">팔로우</span>
+                            </div>
+                            <!-- item -->
+
+                            <!-- item -->
+                            <div class="rec-item mb-15">
+                                <img src="/images/Avatar.png" alt="recommentation-item">
+                                <div>
+                                    <span>songkang_b</span>
+                                    <span>차영준</span>
+                                </div>
+                                <span class="btn-friend-rec-following float--right false">팔로우</span>
+                            </div>
+                            <!-- item -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- @@파일 업로드 관련@@ -->
+<!-- 파일 업로드 모달-->
+<div class="modal-wrapper modal-fileupload-wrapper">
+    <i class="fas fa-times btn-close-fileUploadModal"></i>
+    <div class="modal modal-fileupload">
+
+        <div class="fileupload-wrapper">
+
+            <!-- header -->
+            <div class="header-file">
+                <i class="fas fa-arrow-left back-step1"></i>
+                <i class="fas fa-arrow-left back-step2"></i>
+                <h3>새 게시물 만들기</h3>
+                <button class="btn-fileupload-step1">다음</button>
+                <button class="btn-fileupload-step2">공유하기</button>
+            </div>
+
+            <!-- body -->
+            <div class="body-file">
+                <i class="far fa-clone btn-fileupload-multi"></i>
+
+                <form id="filesForm">
+                    <input type="file" id="input_imgs" name="files" class="ir_su" multiple accept="video/*, image/*"/>
+                </form>
+
+                <div class="body-file__nofile-box">
+                    <img class="mb-20" src="/images/file-image.png" alt="file-image-sample">
+                    <h3 class="mb-25">사진과 동영상을 여기에 끌어다 놓으세요</h3>
+                    <button class="btn-fileupload-multi-first-click">컴퓨터에서 선택</button>
+                </div>
+
+                <div class="file-upload-wrapper">
+
+                    <div class="file-upload-swiper">
+                        <div class="swiper-wrapper"></div>
+                        <div class="swiper-pagination"></div>
+                        <div class="swiper-button-prev"></div>
+                        <div class="swiper-button-next"></div>
+                    </div>
+
+                    <div class="file-upload-options">
+
+                        <div class="file-upload-options__profile">
+                            <img src="/images/Avatar.png" alt="profile">
+                            <span>a_a33a</span>
+                        </div>
+
+                        <textarea class="file-upload-options__input-caption" name="description" placeholder="문구 입력..."></textarea>
+
+                        <div class="file-upload-options__letter-count-box">
+                            <i class="far fa-smile-wink"></i>
+                            <span>0/2,000</span>
+                        </div>
+
+                        <div class="file-upload-options_location">
+                            <input class="file-upload-options__input-location" type="text" name="location" placeholder="위치 추가">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+
+                        <div class="file-upload-options_accessibility">
+                            <div>
+                                <span>접근성</span>
+                                <i class="fas fa-chevron-down btn-toggle-file-upload-options_accessibility"></i>
+                            </div>
+
+                            <div>
+                                <p>대체 텍스트는 시각적으로 사진을 보기 어려운 사람들에게 사진 내용을 설명하는 텍스트입니다. 대체 텍스트는 회원님의 사진에 대해 자동으로 생성되며, 직접 입력할 수도 있습니다.</p>
+
+                                <div>
+                                    <img src="/images/insta2.jpg" alt="photo">
+                                    <input class="file-upload-options__input-alt" name="caption" type="text" placeholder="대체 텍스트 추가...">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="file-upload-options_option">
+                            <div>
+                                <span>고급 설정</span>
+                                <i class="fas fa-chevron-down btn-toggle-file-upload-options_option"></i>
+                            </div>
+
+                            <div>
+                                <div>
+                                    <span>댓글 기능 해제</span>
+
+                                    <label class="switch">
+                                        <input class="file-upload-options__input-switch" name="isCommentActive" value="y" type="checkbox" />
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+
+                                <p>나중에 게시물 상단의 메뉴(···)에서 이 설정을 변경할 수 있습니다.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 파일 업로드 뒤로가기 (모달) -->
+<div class="modal-wrapper modal-fileupload-undo-wrapper">
+    <div class="modal modal-fileupload-undo">
+        <div>
+            <h3>게시물을 삭제하시겠어요?</h3>
+            <p>지금 나가면 수정 내용이 저장되지 않습니다.</p>
+        </div>
+
+        <div>
+            <button class="btn-fileupload-undo">삭제</button>
+            <button class="btn-fileupload-undo-cancel">취소</button>
+        </div>
+    </div>
+</div>
+
+<!-- 파일 업로드 중 (모달) -->
+<div class="modal-wrapper modal-fileupload-uploading-wrapper">
+    <i class="fas fa-times btn-close-fileupload-loading-modal"></i>
+    <div class="modal modal-fileupload-uploading">
+        <div>
+            <h3>공유 중입니다</h3>
+        </div>
+
+        <div>
+            <img id="image-spinner" src="/images/cute-loading-spinner.gif" alt="loading...">
+            <h4>게시물이 공유되었습니다</h4>
+        </div>
+    </div>
+</div>
+
+<!-- @@이미지 관련@@ -->
+<!-- 컨텐츠 옵션 (모달) -->
+<div class="modal-wrapper modal-content-option-wrapper">
+    <div class="modal modal-content-option">
+        <ul>
+            <li><button class="report">신고</button></li>
+            <li><button class="cancel-following">팔로우 취소</button></li>
+            <li><button class="btn-link-copy">링크 복사</button></li>
+            <li><button class="cancle-content-option">취소</button></li>
+        </ul>
+    </div>
+</div>
+
+<!-- 신고 사유 선택 (모달) -->
+<div class="modal-wrapper modal-reportList-wrapper">
+    <div class="modal modal-reportList">
+        <i class="fas fa-times cancel-reportList"></i>
+
+        <h1>신고</h1>
+        <h2>이 게시물을 신고하는 이유</h2>
+        <ul>
+            <li>
+                <button>스팸</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>나체 이미지 또는 성적 행위</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>혐오 발언 또는 상징</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>폭력 또는 위험한 단체</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>불법 또는 규제 상품 판매</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>따돌림 또는 괴롭힘</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>지적 재산권 침해</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>자살 또는 자해</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>섭식 장애</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>사기 또는 거짓</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>거짓 정보</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>마음에 들지 않습니다</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 신고 완료 (모달)-->
+<div class="modal-wrapper modal-reported-wrapper">
+    <div class="modal modal-reported">
+        <i class="far fa-check-circle"></i>
+        <h1>알려주셔서 고맙습니다</h1>
+        <p>회원님의 소중한 의견은 Instagram 커뮤니티를<br>안전하게 유지하는 데 도움이 됩니다</p>
+        <ul>
+            <li><button class="modal-reported__btn-block-user" style="color: #ED4956;">walle님 차단</button></li>
+            <li><button class="modal-reported__btn-cancel-following">walle님 팔로우 취소</button></li>
+            <li><button class="btn-close-reported">닫기</button></li>
+        </ul>
+
+    </div>
+</div>
+
+<!-- 팔로우 취소하시겠습니까? (모달) -->
+<div class="modal-wrapper modal-requestCancelFollowing-wrapper">
+    <div class="modal modal-requestCancelFollowing">
+
+        <img class="mt-40 mb-25" src="/images/item.jpg" alt="profile">
+
+        <p class="mb-30">@blahdi_jk님의 팔로우를 취소하시겠습니까?</p>
+
+        <button class="btn-cancel-following">팔로우 취소</button>
+        <button class="btn-close-requestCancelFollowing">취소</button>
+
+    </div>
+</div>
+
+<!-- 스토리 이미지 (모달)-->
+<div class="modal-wrapper modal-comment-wrapper">
+    <i class="fas fa-times cancel-comment-modal"></i>
+    <div class="modal modal-comment">
+
+        <div class="comment-modal-view">
+
+            <div class="comment-swiper">
+                <div class="swiper-wrapper">
+
+                    <div class="swiper-slide">
+                        <img src="/images/item.jpg" alt="picture">
+
+                    </div>
+
+                    <div class="swiper-slide">
+                        <img src="/images/insta1.jpg" alt="picture">
+                    </div>
+
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+                <div id="comment-modal-button-prev" class="swiper-button-prev"></div>
+                <div id="comment-modal-button-prev" class="swiper-button-next"></div>
+            </div>
+
+            <div class="comment-modal-view__comment-list">
+
+                <div class="comment-modal-view__comment-list__header">
+                    <img src="/images/insta2.jpg" alt="user">
+                    <span>walle</span>
+                    <i class="fas fa-ellipsis-h btn-content-option"></i>
+                </div>
+
+                <div class="comment-modal-view__comment-list__body">
+
+                    <div class="comment-modal-view__comment-list__body__user">
+                        <img src="/images/insta2.jpg" alt="user">
+                        <span>walle</span>
+                    </div>
+
+                    <div class="comment-modal-view__comment-list__body__caption">
+                        <p>
+                            Merry Christmas 😇⭐️🎄<br>
+                            메리 크리스마스 😇⭐️🎄<br>
+                        </p>
+
+                        <br>
+
+                        <p>#크리슴마스 #크리스마슽트리 #폴란드여자 #미소 #인스타 #christmas #christmastree #polishgirl</p>
+                    </div>
+
+                    <div class="comment-modal-view__comment-list__body__commentList mt-20 mb-20">
+
+                        <!-- item -->
+                        <div class="comment-modal-view__comment-list__body__commentList__item mt-20">
+                            <i class="far fa-heart comment-comment-like"></i>
+                            <img src="/images/insta1.jpg" alt="user">
+                            <p class="pl-45">
+                                <span>Gsyaw2</span>
+                                오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ
+                            </p>
+
+                            <div class="zpw pl-45 mt-10">
+                                <span class="mr-10 cursor-pointer">1일</span>
+                                <span class="mr-10 cursor-pointer">좋아요 232개</span>
+                                <span class="mr-15 cursor-pointer">답글달기</span>
+                                <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                            </div>
+
+                            <div class="wqd pl-40 mt-15">
+                                <button class="comment-deep-button">―――&nbsp&nbsp&nbsp&nbsp답글 보기(10개)</button>
+
+                                <ul style="display: none;">
+
+                                    <!-- item -->
+                                    <li>
+                                        <div class="qwers mt-25">
+                                            <i class="far fa-heart comment-comment-like"></i>
+                                            <img src="/images/insta1.jpg" alt="user">
+                                            <p class="pl-45">
+                                                <span>Gsyaw2</span>
+                                                룰루랄라라라르라라ㅣㅓㄴ야ㅐ러냐ㅐㅇ러ㅑㅐㄴㅇㄹ 소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ
+                                            </p>
+
+                                            <div class="zpw pl-45 mt-10">
+                                                <span class="mr-10 cursor-pointer">1일</span>
+                                                <span class="mr-10 cursor-pointer">좋아요 232개</span>
+                                                <span class="mr-15 cursor-pointer">답글달기</span>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- //END item -->
+
+                                    <!-- item -->
+                                    <li>
+                                        <div class="qwers mt-25">
+                                            <i class="far fa-heart comment-comment-like"></i>
+                                            <img src="/images/insta1.jpg" alt="user">
+                                            <p class="pl-45">
+                                                <span>Gsyaw2</span>
+                                                룰루랄라라라르라라ㅣㅓㄴ야ㅐ러냐ㅐㅇ러ㅑㅐㄴㅇㄹ 소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ 오빠 같이 보고있는거죠? 오빠 목소리에 설레 죽어요ㅠㅠㅠㅠㅠ
+                                            </p>
+
+                                            <div class="zpw pl-45 mt-10">
+                                                <span class="mr-10 cursor-pointer">1일</span>
+                                                <span class="mr-10 cursor-pointer">좋아요 232개</span>
+                                                <span class="mr-15 cursor-pointer">답글달기</span>
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <!-- //END item -->
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- //END item -->
+
+                    </div>
+                    <i class="far fa-plus-square more-comment-modal"></i>
+                </div>
+
+                <div class="comment-modal-view__comment-list__footer item-list__image-item__comment-list">
+                    <div>
+                        <ul>
+                            <li><a href="#"><i class="far fa-heart content-like"></i></a></li>
+                            <li><a href="javascript:void(0);"><i class="far fa-comment content-class"></i></a></li>
+                            <li><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
+                            <li><a href="#"><i class="far fa-bookmark content-bookmark"></i></a></li>
+                        </ul>
+                    </div>
+
+                    <span class="modal-like-count">좋아요 720,123개</span>
+                    <b>3일 전</b>
+                </div>
+
+                <div class="comment-modal-view__comment-list__write-comment">
+                    <div class="emoticon-container">
+                        <i class="far fa-smile-wink btn-emoticon-icon"></i>
+                    </div>
+                    <textarea class="modal-write-comment" rows="2" placeholder="댓글 달기..."></textarea>
+                    <button class="btn-comment-upload">게시</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/image/story.js"></script>
+
+</body>
+</html>

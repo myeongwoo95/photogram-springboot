@@ -30,6 +30,17 @@ public class ImageService {
     @Value("${file.path.image}")
     private String uploadFolder;
 
+    @Transactional(readOnly = true)
+    public List<Image> 인기사진(Pageable pageable) {
+        List<Image> images = imageRepository.mPopular(pageable);
+
+        images.forEach(image -> {
+            image.setLikeCount(image.getLikes().size()); // like count
+        });
+
+        return images;
+    }
+
     @Transactional
     public void 이미지_업로드(ImageUploadRequestDto requestDto, PrincipalDetails principalDetails) {
 
@@ -80,6 +91,8 @@ public class ImageService {
 
         return images;
     }
+
+
 }
 
 

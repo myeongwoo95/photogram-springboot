@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+    <!-- css, js -->
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/chat/chat.css">
+
+    <!-- favicon -->
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="icon" href="/favicon.ico">
+
+    <title>Photogram</title>
+</head>
+<body>
+<div class="body__container">
+
+   {{>layout/header}}
+
+    <div class="section">
+        <div class="inner">
+
+            <div class="chat-wrapper">
+
+                <div class="chat-wrapper__left">
+
+                    <div>
+                        <span>a_a33a</span>
+                        <i class="btn-newMessage float--right far fa-edit"></i>
+                    </div>
+
+                    <div class="chat-list pt">
+
+                        <div class="chat-item">
+                            <img src="/images/insta1.jpg" alt="profile">
+                            <div>
+                                <span>Asia posdifjw 님</span>
+                                <span>잘자~! </span>
+                                <span>· 3분 전</span>
+                            </div>
+                        </div>
+
+                        <div class="chat-item">
+                            <img src="/images/insta1.jpg" alt="profile">
+                            <div>
+                                <span>Asia posdifjw 님</span>
+                                <span>잘자~! </span>
+                                <span>· 3분 전</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="chat-wrapper__right">
+
+                    <!-- new message -->
+                    <div class="chat-wrapper__right__new-message">
+                        <i class="fab fa-telegram-plane mb-15"></i>
+                        <h3 class="mb-15">내 메세지</h3>
+                        <p class="mb-25">친구나 그룹에 비공개 사진과 메세지를 보내세요.</p>
+                        <button class="btn-newMessage">메세지 보내기</button>
+                    </div>
+
+                    <!-- exist-message -->
+                    <div class="chat-wrapper__right__exist-message" style="display: none;">
+
+                        <div class="chat-target-profile">
+                            <img src="/images/insta2.jpg" alt="profile">
+                            <span>Euria chealsid 님</span>
+                            <i class="fas fa-exclamation-circle btn-change-details-info"></i>
+                        </div>
+
+                        <div class="chat-box">
+
+                            <div class="chat-box__timeline">
+                                <span>1일전 오전 1:05</span>
+                            </div>
+
+                            <div class="chat-item-box chat-box__opponent-chat">
+                                <img src="/images/insta1.jpg" alt="profile">
+                                <span>상대방 메세지</span>
+
+                                <div class="content-option-box-wrapper">
+                                    <i class="fas fa-ellipsis-h btn-content-options"></i>
+
+                                    <div class="content-option-box">
+                                        <span class="btn-message-like">좋아요</span>
+                                        <span class="btn-message-copy">복사</span>
+                                        <span class="btn-message-report">신고</span>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="chat-item-box chat-box__my-chat last-my-message">
+                                <img src="/images/insta2.jpg" alt="profile">
+                                <span>나의 메세지</span>
+
+                                <div class="content-option-box-wrapper">
+                                    <i class="fas fa-ellipsis-h btn-content-options"></i>
+
+                                    <div class="content-option-box">
+                                        <span class="btn-message-like">좋아요</span>
+                                        <span class="btn-message-copy">복사</span>
+                                        <span class="btn-message-report">신고</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="text-box">
+                            <div>
+                                <div class="emoticon-container">
+                                    <i class="far fa-smile-wink btn-emoticon-icon"></i>
+                                </div>
+
+                                <i class="far fa-image emoji-image"></i>
+                                <i class="far fa-heart emoji-heart"></i>
+                                <textarea class="text-box__textarea" rows="1" name="" placeholder="메세지 입력..."></textarea>
+                                <button class="btn-sending-message">보내기</button>
+                                <input class="text-box__input-file" type="file">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- chat-info -->
+                    <div class="details-info" style="display: none;">
+
+                        <div class="details-info__header">
+                            <span>상세 정보</span>
+                            <i class="fas fa-exclamation-circle btn-change-exist-message"></i>
+                        </div>
+
+                        <div class="details-info__message-notice-box">
+                            <input type="checkbox">
+                            <label for="">메세지 알림 해제</label>
+                        </div>
+
+                        <div class="details-info__member-box">
+                            <h3>멤머</h3>
+
+                            <div class="member-list">
+
+                                <div class="member-item mb-15">
+                                    <img src="/images/insta2.jpg" alt="profile">
+                                    <div>
+                                        <span>tilltofu</span>
+                                        <span>Asia shocivsdofe</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="details-info__sue">
+                            <div class="btn-delete-chatting">채팅 삭제</div>
+                            <div class="btn-block-user">차단</div>
+                            <div class="btn-sue">신고</div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 새 메세지 보내기 모달 -->
+<div class="modal-wrapper modal-newMessage-wrapper">
+    <div class="modal modal-newMessage">
+
+        <div>
+            <i class="fas fa-times btn-close-modal-newMessage"></i>
+            <h3>새로운 메세지</h3>
+            <button class="btn-make-newMessage">확인</button>
+        </div>
+
+        <div class="invite-member-list">
+            <h3 class="mb-10">받는 사람:</h3>
+
+            <!-- <div class="invite-member-item">
+                <span>walle</span>
+                <i class="btn-cancel-chat-member fas fa-times"></i>
+            </div> -->
+        </div>
+
+        <input class="search-friend-input" type="text" placeholder="검색...">
+
+        <div class="user-list searched-users" style="display: none;">
+
+            <div class="user-item">
+                <img src="/images/insta1.jpg" alt="profile">
+                <div>
+                    <span class="user-item__id">walle</span>
+                    <span>왈레</span>
+                </div>
+                <input data-id="walle" class="red-friend-item" type="checkbox">
+            </div>
+
+            <div class="user-item">
+                <img src="/images/insta2.jpg" alt="profile">
+                <div>
+                    <span class="user-item__id">xxz32323</span>
+                    <span>sowS_do</span>
+                </div>
+                <input data-id="xxz32323" class="red-friend-item" type="checkbox">
+            </div>
+
+        </div>
+
+        <div class="user-list rec-users">
+            <h3>추천</h3>
+
+            <div class="user-item">
+                <img src="/images/insta2.jpg" alt="profile">
+                <div>
+                    <span class="user-item__id">zeus</span>
+                    <span>최우제</span>
+                </div>
+                <input data-id="zeus" class="red-friend-item" type="checkbox">
+            </div>
+
+            <div class="user-item">
+                <img src="/images/insta1.jpg" alt="profile">
+                <div>
+                    <span class="user-item__id">faker</span>
+                    <span>페이커</span>
+                </div>
+                <input data-id="faker" class="red-friend-item" type="checkbox">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- 채팅 삭제 모달 -->
+<div class="modal-wrapper modal-deleteChat-wrapper">
+    <div class="modal modal-deleteChat">
+        <div>
+            <h3>채팅을 삭제하시겠어요?</h3>
+            <p>삭제하면 회원님의 받은 메시지함에서 채팅이 삭제됩니다. 다른 사람의 받은 메시지함에는 계속 표시됩니다.</p>
+        </div>
+
+        <div>
+            <button class="btn-chat-delete">삭제</button>
+            <button class="btn-close-modal-deleteChat">취소</button>
+        </div>
+    </div>
+</div>
+
+<!-- 사용자 차단 모달 -->
+<div class="modal-wrapper modal-blockUser-wrapper">
+    <div class="modal modal-blockUser">
+        <div>
+            <h3>tilltofu님을 차단하시겠어요?</h3>
+            <p>상대방은 Instagram에서 회원님의 프로필, 게시물 또는 스토리를 찾을 수 없습니다. Instagram은 회원님이 차단한 사실을 상대방에게 알리지 않습니다.</p>
+        </div>
+
+        <div>
+            <button class="btn-blockUser">차단</button>
+            <button class="btn-close-blockUser">취소</button>
+        </div>
+    </div>
+</div>
+
+<!-- 신고 모달 -->
+<div class="modal-wrapper modal-reportList-wrapper">
+    <div class="modal modal-reportList">
+        <i class="fas fa-times cancel-reportList"></i>
+
+        <h1>신고</h1>
+        <p class="mt-20">이 계정을 신고하는 이유를 선택하세요.<br>
+            신고자 정보는 OO님에게 공개되지 않습니다.</p>
+
+        <ul>
+            <li>
+                <button>스팸</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>나체 이미지 또는 성적 행위</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>혐오 발언 또는 상징</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>폭력 또는 위험한 단체</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>불법 또는 규제 상품 판매</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>따돌림 또는 괴롭힘</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>지적 재산권 침해</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>자살 또는 자해</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>사기 또는 거짓</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+            <li>
+                <button>마음에 들지 않습니다</button>
+                <i class="fas fa-chevron-right"></i>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 신고 완료 모달-->
+<div class="modal-wrapper modal-reported-wrapper">
+    <div class="modal modal-reported">
+        <i class="far fa-check-circle"></i>
+        <h1>알려주셔서 고맙습니다</h1>
+        <p>회원님의 소중한 의견은 Instagram 커뮤니티를<br>안전하게 유지하는 데 도움이 됩니다</p>
+        <ul>
+            <li><button style="color: #ED4956;">walle님 차단</button></li>
+            <li><button>walle님 팔로우 취소</button></li>
+            <li><button class="btn-close-reported">닫기</button></li>
+        </ul>
+
+    </div>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/chat/chat.js"></script>
+</body>
+</html>

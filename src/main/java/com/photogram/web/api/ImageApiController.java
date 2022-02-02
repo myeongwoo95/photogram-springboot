@@ -25,6 +25,12 @@ public class ImageApiController {
     private final ImageService imageService;
     private final LikeService likeService;
 
+    @GetMapping("/api/v1/images/popular")
+        public ResponseEntity<?> imagePopular(@PageableDefault(size=9, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+        List<Image> images = imageService.인기사진(pageable);
+        return new ResponseEntity<>(new CMRespDto<>(1, "성공", images), HttpStatus.OK);
+    }
+
     @PostMapping("/api/v1/images")
     public ResponseEntity<?> imageUpload(ImageUploadRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails) {
 

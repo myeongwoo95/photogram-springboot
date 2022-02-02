@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jquery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+
+    <!-- Swiper -->
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
+
+    <!-- css, js -->
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/common.css">
+    <link rel="stylesheet" href="/css/profile/update.css">
+</head>
+<body>
+
+<div class="body__container">
+
+    <input type="hidden" id="principalId" value="{{#user.id}}{{user.id}}{{/user.id}}">
+    {{>layout/header}}
+
+    <div class="section mt-30">
+        <div class="inner">
+
+            <div class="edit">
+
+                <div>
+                    <ul class="edit__list-div">
+                        <li class="btn-edit-profile active">프로필 편집</li>
+                        <li class="btn-edit-pw">비밀번호 변경</li>
+                        <li class="btn-edit-push">푸쉬 알림</li>
+                    </ul>
+                </div>
+
+                <div>
+
+                    <div class="edit-profile">
+
+                        <div class="edit-profile__profile mt-30">
+
+                            <img src="/upload/s_{{#user.profileImageUrl}}{{user.profileImageUrl}}{{/user.profileImageUrl}} "onerror="this.src='/images/Avatar.jpg'" alt="profile" id="userProfileImage">
+
+                            <form id="userProfileImageForm">
+                                <input type="file" id="userProfileImageInput" accept="image/*" name="profileImageFile" style="display: none;">
+                            </form>
+
+                            <div>
+                                <span class="mb-5">{{#user.username}}{{user.username}}{{/user.username}}</span>
+                                <span class="btn-profileImageChange">프로필 사진 바꾸기</span>
+                            </div>
+
+                        </div>
+
+                        <div class="edit-profile__info mt-20" >
+                            <div class="mb-15">
+                                <label for="name">이름</label>
+                                <input class="input--text" type="text" name="name" id="name" placeholder="이름" value="{{#usersname}}{{usersname}}{{/usersname}}">
+                                <p>사람들이 이름, 별명 또는 비즈니스 이름 등 회원님의 알려진 이름을 사용하여 회원님의 계정을 찾을 수 있도록 도와주세요.</p>
+                                <p>이름은 14일 안에 두 번만 변경할 수 있습니다.</p>
+                            </div>
+
+                            <div class="mb-15">
+                                <label for="username">사용자 이름</label>
+                                <input class="input--text" type="text" name="username" id="username" placeholder="사용자 이름" readonly value="{{#user.username}}{{user.username}}{{/user.username}}">
+                            </div>
+
+                            <div class="mb-15">
+                                <label for="website">웹사이트</label>
+                                <input class="input--text" type="text" name="website" id="website" placeholder="웹사이트" value="{{#user.website}}{{user.website}}{{/user.website}}">
+                            </div>
+
+                            <div class="mb-15">
+                                <label class="mt-10" for="bio">소개</label>
+                                <textarea class="input--text" name="bio" id="bio" cols="23" rows="5" maxlength="255">{{#user.bio}}{{user.bio}}{{/user.bio}}</textarea>
+                                <p>
+                                    비즈니스나 반려동물 등에 사용된 계정인 경우에도 회원님의 개인정보를 입력하세요. 공개 프로필에는 포함되지 않습니다.
+                                </p>
+                            </div>
+
+                            <div class="mb-15">
+                                <label for="email">이메일</label>
+                                <input class="input--text" type="email" name="email" id="email" placeholder="이메일" value="{{#user.email}}{{user.email}}{{/user.email}}">
+                                <button class="btn-confirm-email-check mt-15">이메일 확인</button>
+                            </div>
+
+                            <div class="mb-15">
+                                <label for="tel">전화번호</label>
+                                <input class="input--text" type="tel" name="tel" id="tel" placeholder="전화번호" value="{{#user.tel}}{{user.tel}}{{/user.tel}}">
+                            </div>
+
+                            <div class="mb-15">
+                                <label for="gender">성별</label>
+                                <input class="input--text" type="text" name="gender" id="gender" placeholder="성별" value="{{#user.gender}}{{user.gender}}{{/user.gender}}">
+                            </div>
+
+                            <div class="edit-profile__info__last-div mb-15">
+                                <button class="btn-submit-edit-infos">제출</button>
+                                <span class="btn-disable-account">계정을 일시적으로 비활성화</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="edit-pw">
+                        <div class="edit-profile__profile mt-30">
+
+                            <img src="/upload/s_{{#user.profileImageUrl}}{{user.profileImageUrl}}{{/user.profileImageUrl}}
+                            "onerror="this.src='/images/Avatar.jpg' "alt="profile" id="userProfileImage2">
+
+                            <div>
+                                <span class="mb-5" style="font-weight: bold;">{{#user.username}}{{user.username}}{{/user.username}}</span>
+                            </div>
+
+                        </div>
+
+                        <div class="edit-profile__info mt-20">
+                            <div class="mb-15">
+                                <label for="pre-pw">이전 비밀번호</label>
+                                <input class="input--text" type="password" name="currentPassword" style="width: 440px; background:#fafafa;" >
+                            </div>
+
+                            <div class="mb-15">
+                                <label for="new-pw1">새 비밀번호</label>
+                                <input class="input--text" type="password" name="newPassword1" style="width: 440px; background:#fafafa;" >
+                            </div>
+
+                            <div class="mb-15">
+                                <label for="new-pw2">새 비밀번호 확인</label>
+                                <input class="input--text" type="password" name="newPassword2" style="width: 440px; background:#fafafa;">
+                                <button class="mt-25 btn-updatePassword" style="width: 110px;">비밀번호 변경</button>
+
+                                <p class="cursor-pointer" style="font-weight: bold;">비밀번호를 잊으셨나요?</p>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="edit-push">
+
+                        <div>
+                            <h3>좋아요</h3>
+                            <div>
+                                <input type="radio" id="" name="" value="">
+                                <label for="huey">해제</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" >
+                                <label for="">내가 팔로우하는 사람</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" checked>
+                                <label for="">모든 사람</label>
+                            </div>
+
+                            <p class="mt-20">johnappleseed님이 회원님의 사진을 좋아합니다.</p>
+                        </div>
+
+                        <div>
+                            <h3>댓글</h3>
+                            <div>
+                                <input type="radio" id="" name="" value="">
+                                <label for="huey">해제</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" >
+                                <label for="">내가 팔로우하는 사람</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" checked>
+                                <label for="">모든 사람</label>
+                            </div>
+                            <p class="mt-20">johnappleseed님이 댓글을 남겼습니다: "멋지네요!"</p>
+                        </div>
+
+                        <div>
+                            <h3>댓글 좋아요</h3>
+                            <div>
+                                <input type="radio" id="" name="" value="">
+                                <label for="huey">해제</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" >
+                                <label for="">내가 팔로우하는 사람</label>
+                            </div>
+                            <p class="mt-20">johnappleseed님이 회원님의 댓글을 좋아합니다: "멋지네요!"</p>
+                        </div>
+
+                        <div>
+                            <h3>회원님이 나온 사진의 좋아요 및 댓글</h3>
+                            <div>
+                                <input type="radio" id="" name="" value="">
+                                <label for="huey">해제</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" >
+                                <label for="">내가 팔로우하는 사람</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" checked>
+                                <label for="">모든 사람</label>
+                            </div>
+                            <p class="mt-20">johnappleseed님이 회원님이 태그된 게시물에 댓글을 남겼습니다.</p>
+                        </div>
+
+                        <div>
+                            <h3>수락한 팔로우 요청</h3>
+                            <div>
+                                <input type="radio" id="" name="" value="">
+                                <label for="huey">해제</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" checked>
+                                <label for="">모든 사람</label>
+                            </div>
+                            <p class="mt-20">John Appleseed(@johnappleseed)님이 팔로우 요청을 수락했습니다.</p>
+                        </div>
+
+                        <div>
+                            <h3>Instagram Direct</h3>
+                            <div>
+                                <input type="radio" id="" name="" value="">
+                                <label for="huey">해제</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" checked>
+                                <label for="">모든 사람</label>
+                            </div>
+                            <p class="mt-20">johnappleseed님이 메시지를 보냈습니다.</p>
+                        </div>
+
+                        <div>
+                            <h3>동영상 조회수</h3>
+                            <div>
+                                <input type="radio" id="" name="" value="">
+                                <label for="huey">해제</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" checked>
+                                <label for="">모든 사람</label>
+                            </div>
+                            <p class="mt-20">회원님의 동영상 조회수가 10만회를 넘었습니다.</p>
+                        </div>
+
+                        <div>
+                            <h3>라이브 방송</h3>
+                            <div>
+                                <input type="radio" id="" name="" value="">
+                                <label for="huey">해제</label>
+                            </div>
+
+                            <div>
+                                <input type="radio" id="" name="" value="" checked>
+                                <label for="">모든 사람</label>
+                            </div>
+                            <p class="mt-20">johnappleseed님이 라이브 방송을 시작했습니다. 지금 바로 시청해보세요!</p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal-wrapper modal-disable-acount-wrapper">
+    <div class="modal modal-disable-acount">
+        <img class="mt-40 mb-25" src="/images/item.jpg" alt="profile">
+
+        <p class="mb-30">@blahdi_jk 계정을 비활성화 하시겠습니까?</p>
+
+        <button class="btn-disable-account-run">계정 비활성화</button>
+        <button class="btn-cancel-disable-account">취소</button>
+    </div>
+</div>
+
+<script src="/js/common.js"></script>
+<script src="/js/profile/update.js"></script>
+</body>
+</html>
