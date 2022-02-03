@@ -2,6 +2,7 @@ package com.photogram.domain.image;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.photogram.domain.BaseTimeEntity;
+import com.photogram.domain.comment.Comment;
 import com.photogram.domain.file.File;
 import com.photogram.domain.like.Likes;
 import com.photogram.domain.user.User;
@@ -44,18 +45,23 @@ public class Image extends BaseTimeEntity {
     @Column(nullable = false)
     private String isCommentActive;
 
-    // 댓글
     @JsonIgnoreProperties({"image"})
     @OneToMany(mappedBy = "image")
     private List<Likes> likes;
 
-    //DB에 컬럼이 만들어지지 않는다.
-    @Transient // javax.Persistence
+    @Transient
     private boolean likeState;
 
     @Transient
     private int likeCount;
-    // 댓글
+
+    @OrderBy("id DESC") // javax.persistence
+    @JsonIgnoreProperties({"image"}) // 무한참조 방지
+    @OneToMany(mappedBy = "image")
+    private List<Comment> comments;
+
+    @Transient
+    private int commentCount;
 
     public void updateFiles(List<File> files) {
         this.files = files;

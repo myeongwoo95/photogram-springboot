@@ -124,6 +124,10 @@ public class UserService {
             return new CustomException("해당 프로필 페이지는 없는 페이지 입니다.");
         });
 
+        userEntity.getImages().forEach(image->{
+            image.setLikeCount(image.getLikes().size());
+        });
+
         responseDto.setUser(userEntity);
         responseDto.setPageOwnerState(pageUserId == principalId); // 1은 페이지 주인, -1은 주인이 아님
         responseDto.setImageCount(userEntity.getImages().size());
