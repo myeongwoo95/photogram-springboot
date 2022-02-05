@@ -830,31 +830,62 @@ $(document).ready(function(){
 
     // 이모지 클릭 시 해당 이모지 textarea에 삽입
     $(document).on("click", ".emoticon-item", function(){
-        let data = $(this).text();
-        let dataTextArea = $(".modal-write-comment").val();
-     
-        $(".modal-write-comment").val(dataTextArea+data)
+//        let data = $(this).text();
+//        let dataTextArea = $(this).parent().parent().parent().next().val();
+//        $(this).parent().parent().parent().next().val(dataTextArea+data);
+        alert("인코딩 문제로 현재 사용 불가능합니다.");
+        $(this).parent().parent().remove();
     })
 
-    // textarea에 focus시 이모지 박스 닫기
-    $(".modal-write-comment").on("focus", function(){
+    $(document).on("focus", ".content-comment-textarea", function(){
         $(".emoticon-wrapper").remove();
     })
 
-    // 스토리 모달 댓글 업로드
-    $(".btn-comment-upload").on("click", function(){
+    // 댓글 업로드
+    $(document).on("click", ".upload-comment", function(e){
+        e.preventDefault();
 
-        if($(".modal-write-comment").val() == ""){
+        if($(this).prev().val() == ""){
             alert("내용이 없습니다.")
             return;
         }
-      
-        alert("로직")
-        $(".modal-write-comment").val("");
 
-        //이모지 닫기   
+        addComment($(this).data("id"), $(this).prev().val());
+
+        //textarea 초기화, 이모지 닫기
+        $(this).prev().val("");
         $(".emoticon-wrapper").remove();
     })
+
+    function addComment(imageId, content){
+
+    	let commentList = $(`.comments-list-${imageId}`);
+
+    	let data = {
+    		imageId: imageId,
+    		content: content
+    	}
+
+    	$.ajax({
+    		type: "post",
+    		url: `/api/v1/comment`,
+    		data: JSON.stringify(data),
+    		contentType: "application/json; charset=utf-8",
+    		dataType: "json"
+    	}).done(res => {
+    		console.log("댓글등록 성공", res);
+
+            let content = `<div class="comment-items mt-5">
+                               <b class="fw-900">${res.data.user.username}</b>
+                               <span>${res.data.content}</span>
+                                   <i class="far fa-heart content-comment-like"></i>
+                           </div>`;
+
+            commentList.prepend(content);
+    	}).fail(error => {
+    		console.log("댓글등록 에러", error);
+    	});
+    };
 
     // 콘텐츠 dotdotdot 옵션 모달 켜기
     $(document).on("click", ".btn-content-option", function(){

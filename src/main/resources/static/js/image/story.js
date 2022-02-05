@@ -113,17 +113,19 @@ $(document).ready(function(){
                                 <span class="comment-count cursor-pointer">댓글 0개 모두 보기</span>
 
                                 <!-- 댓글리스트 -->
-                                <div class="comments-list">
+                                <div class="comments-list-${image.id}">`;
 
-                                    <!-- item -->
-                                    <div class="comment-items mt-5">
-                                        <b class="fw-900">walle</b>
-                                        <span>동해물과 백두산이 마르고 닳도록</span>
-                                            <i class="far fa-heart content-comment-like"></i>
-                                    </div>
-                                    <!-- item -->
 
-                                </div>
+                                image.comments.forEach((comment) => {
+                                    item += `<div class="comment-items mt-5">
+                                                 <b class="fw-900">${comment.user.username}</b>
+                                                 <span>${comment.content}</span>
+                                                     <i class="far fa-heart content-comment-like"></i>
+                                             </div>`;
+                                });
+
+
+                                item += `</div>
                             </div>
                         </div>
 
@@ -132,8 +134,8 @@ $(document).ready(function(){
                             <div class="emoticon-container">
                                 <i class="far fa-smile-wink btn-emoticon-icon"></i>
                             </div>
-                            <textarea id="content-comment-textarea" rows="1" placeholder="댓글 달기..."></textarea>
-                            <button class="upload-comment">게시</button>
+                            <textarea class="content-comment-textarea" rows="1" placeholder="댓글 달기..."></textarea>
+                            <button class="upload-comment" data-id="${image.id}">게시</button>
                         </div>
 
                     </div>
