@@ -93,15 +93,44 @@ $(document).ready(function(){
         }
     })
 
-    // 스토리 게시글 (모달) 켜기
+    //스토리 게시글 (모달) 켜기
     $(document).on("click", ".content-class, .comment-count", function(e){
         e.preventDefault();
+        const imageId = $(this).data("id");
+        console.log(imageId);
 
-        $("body").addClass("stopScroll");
+        $.ajax({
+            url: `/api/v1/images/${imageId}`,
+            dataType: "json"
+        }).done(res => {
+            console.log("이미지 모달 로드 성공", res);
+
+
+            $(".modal-comment-wrapper .swiper-wrapper").empty();
+
+            res.data.files.forEach(data=>{
+                let item = "";
+
+                if(data.type.includes("video")){
+                    item += `<div class="swiper-slide">
+                                <video src="/uploadImage/${data.fileUrl}"></video>
+                            </div>`;
+
+
+                }else{
+                    item += `<div class="swiper-slide">
+                                <img src="/uploadImage/${data.fileUrl}" alt="picture">
+                            </div>`;
+                }
+
+                $(".modal-comment-wrapper .swiper-wrapper").append(item);
+            });
+
+        }).fail(error => {
+            console.log("이미지 모달 로드 실패", error);
+        });
+
         $(".modal-comment-wrapper").css("display", "flex");
-        
-        // 모달 밖에서 emoji item을 누르면 모달 textarea에 emoji가 채워져서 비워줘야함
-        $(".modal-write-comment").val("");
     })
 
     // btn 스토리 게시글 (모달) 닫기 
@@ -109,7 +138,6 @@ $(document).ready(function(){
         e.preventDefault();
 
         $(".modal-comment-wrapper").hide();
-        $("body").removeClass("stopScroll");
 
         // 댓글 창 비워주기
         $(".modal-write-comment").val("");
@@ -828,7 +856,7 @@ $(document).ready(function(){
         }
     })
 
-    // 이모지 클릭 시 해당 이모지 textarea에 삽입
+    // 이모지 클릭 시 해당 이모지 textarea에 삽입 (인코딩 문제로 비활성화)
     $(document).on("click", ".emoticon-item", function(){
 //        let data = $(this).text();
 //        let dataTextArea = $(this).parent().parent().parent().next().val();
@@ -860,6 +888,7 @@ $(document).ready(function(){
     function addComment(imageId, content){
 
     	let commentList = $(`.comments-list-${imageId}`);
+    	let commentCount = $(`.comment-count-${imageId}`);
 
     	let data = {
     		imageId: imageId,
@@ -875,13 +904,19 @@ $(document).ready(function(){
     	}).done(res => {
     		console.log("댓글등록 성공", res);
 
-            let content = `<div class="comment-items mt-5">
-                               <b class="fw-900">${res.data.user.username}</b>
-                               <span>${res.data.content}</span>
-                                   <i class="far fa-heart content-comment-like"></i>
-                           </div>`;
+    		commentList.empty();
 
-            commentList.prepend(content);
+            res.data.content.forEach(comment => {
+                let content = `<div class="comment-items mt-5">
+                                   <b class="fw-900">${comment.user.username}</b>
+                                   <span>${comment.content}</span>
+                                       <i class="far fa-heart content-comment-like"></i>
+                               </div>`;
+                commentList.append(content);
+            });
+
+            commentCount.text(res.data.totalElements);
+
     	}).fail(error => {
     		console.log("댓글등록 에러", error);
     	});

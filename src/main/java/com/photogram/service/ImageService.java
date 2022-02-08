@@ -5,6 +5,7 @@ import com.photogram.domain.file.File;
 import com.photogram.domain.file.FileRepository;
 import com.photogram.domain.image.Image;
 import com.photogram.domain.image.ImageRepository;
+import com.photogram.handler.ex.CustomApiException;
 import com.photogram.web.dto.image.ImageUploadRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -92,7 +93,14 @@ public class ImageService {
         return images;
     }
 
+    @Transactional(readOnly = true)
+    public Image 이미지(Long imageId) {
+        Image image = imageRepository.findById(imageId).orElseThrow(()->{
+            return new CustomApiException("존재하지 않는 이미지입니다.");
+        });
 
+        return image;
+    }
 }
 
 

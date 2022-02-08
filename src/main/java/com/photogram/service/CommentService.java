@@ -7,6 +7,8 @@ import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
 import com.photogram.handler.ex.CustomApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,7 +20,7 @@ public class CommentService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Comment 댓글쓰기(String content, Long imageId, Long userId) {
+    public Page<Comment> 댓글쓰기(String content, Long imageId, Long userId, Pageable pageable) {
 
         Image image = new Image();
         image.setId(imageId);
@@ -33,7 +35,9 @@ public class CommentService {
         comment.setImage(image);
         comment.setUser(userEntity);
 
-        return commentRepository.save(comment);
+        commentRepository.save(comment);
+        Page<Comment> comments = commentRepository.commentList(imageId, pageable);
+        return comments;
     }
 
     @Transactional

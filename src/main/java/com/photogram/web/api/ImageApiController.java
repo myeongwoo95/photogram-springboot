@@ -49,6 +49,12 @@ public class ImageApiController {
         return new ResponseEntity<>(new CMRespDto<>(1, "성공", images), HttpStatus.OK);
     }
 
+    @GetMapping("/api/v1/images/{imageId}")
+    public ResponseEntity<?> getImageById(@PathVariable Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        Image image = imageService.이미지(imageId);
+        return new ResponseEntity<>(new CMRespDto<>(1, "성공", image), HttpStatus.OK);
+    }
+
     @PostMapping("/api/v1/images/{imageId}/likes")
     public ResponseEntity<?> likes(@PathVariable Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){
         likeService.좋아요(imageId, principalDetails.getUser().getId());

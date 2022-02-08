@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+    const principalId = $("#principalId").val();
     let pageNumOfStory = 0;
 
     function storyLoad() {
@@ -55,6 +56,8 @@ $(document).ready(function(){
     }
 
     function getStoryItem(image){
+        let commentCount = 1;
+
         let item = `<!-- item -->
                     <div class="item-list__image-item">
 
@@ -95,9 +98,7 @@ $(document).ready(function(){
                                      item += `<li><a href="#"><i class="far fa-heart content-like" data-id="${image.id}"></i></a></li>`;
                                  }
 
-                           item += `
-                                    <li><a href="#"><i class="far fa-comment content-class"></i></a></li>
-                                    <li><a href="#"><i class="fab fa-telegram-plane"></i></a></li>
+                           item += `<li><a href="#"><i class="far fa-comment content-class" data-id="${image.id}"></i></a></li>
                                     <li><a href="#"><i class="far fa-bookmark content-bookmark"></i></a></li>
                                 </ul>
                             </div>
@@ -110,20 +111,26 @@ $(document).ready(function(){
                             </div>
 
                             <div class="comments mt-15">
-                                <span class="comment-count cursor-pointer">댓글 0개 모두 보기</span>
+                                <span class="comment-count cursor-pointer" data-id="${image.id}">댓글
+                                    <span class="comment-count-${image.id}">${image.comments.length}</span>개 모두 보기
+                                </span>
 
                                 <!-- 댓글리스트 -->
                                 <div class="comments-list-${image.id}">`;
 
+                                for(let i=0; i<5; i++){
+                                    if(image.comments[i] != null){
+                                        item += `<div class="comment-items mt-5">
+                                                     <b class="fw-900">${image.comments[i].user.username}</b>
+                                                     <span>${image.comments[i].content}</span>`;
+//                                        댓글 삭제버튼
+//                                        if(principalId == image.comments[i].user.id){ // 로그인 유저와 comment 작성자의 유저가 동일하면 x버튼을 그려줌
+//                                            item+=`<i class="fas fa-times" data-id="${image.comments[i].id}"></i>`;
+//                                        }
 
-                                image.comments.forEach((comment) => {
-                                    item += `<div class="comment-items mt-5">
-                                                 <b class="fw-900">${comment.user.username}</b>
-                                                 <span>${comment.content}</span>
-                                                     <i class="far fa-heart content-comment-like"></i>
-                                             </div>`;
-                                });
-
+                                        item += `<i class="far fa-heart content-comment-like"></i></div>`;
+                                    }
+                                }
 
                                 item += `</div>
                             </div>
@@ -220,7 +227,7 @@ $(document).ready(function(){
         }
     });
     
-    // Textarea 높이 자동조절
+    // Textarea 높이 자동조절 (수정 필요)
     $('#content-comment-textarea').keyup(function(e) {
         $(this).css('height', 'auto');
         $(this).height(this.scrollHeight);
