@@ -74,9 +74,18 @@ $(document).ready(function(){
                                 <div class="swiper-wrapper">`;
 
                                 image.files.forEach(data=>{
-                                    item += `<div class="swiper-slide">
-                                                 <img src="/uploadImage/${data.fileUrl}" alt="picture">
-                                             </div>`;
+
+                                    if(data.type.includes("video")){
+                                        item += `<div class="swiper-slide">
+                                                    <video src="/uploadImage/${data.fileUrl}" controls></video>
+                                                </div>`;
+
+
+                                    }else{
+                                        item += `<div class="swiper-slide">
+                                                    <img src="/uploadImage/${data.fileUrl}" alt="picture">
+                                                </div>`;
+                                    }
                                 })
 
                             item += `</div>

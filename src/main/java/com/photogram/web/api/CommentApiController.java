@@ -16,6 +16,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -29,9 +30,22 @@ public class CommentApiController {
         return new ResponseEntity<>(new CMRespDto<>(1, "댓글쓰기 성공", comments), HttpStatus.CREATED);
     }
 
-    @DeleteMapping("api/comment/{id}")
+    @DeleteMapping("api/v1/comment/{id}")
     public ResponseEntity<?> commentDelete(@PathVariable Long id){
         return null;
+    }
+
+    @GetMapping("api/v1/comments/images/{imageId}/users/{userId}")
+    public ResponseEntity<?> getMyComment(@PathVariable Long imageId, @PathVariable Long userId){
+        List<Comment> comments = commentService.나의_댓글_불러오기(imageId, userId);
+        return new ResponseEntity<>(new CMRespDto<>(1, "나의 댓글 불러오기 성공", comments), HttpStatus.CREATED);
+    }
+
+    @GetMapping("api/v1/comments/images/{imageId}/users/except/{userId}")
+    public ResponseEntity<?> getAllCommentWithoutMine(@PathVariable Long imageId, @PathVariable Long userId,
+                                                      @PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+        List<Comment> comments = commentService.모든댓글_불러오기(imageId, userId, pageable);
+        return new ResponseEntity<>(new CMRespDto<>(1, "모든 댓글 불러오기 성공", comments), HttpStatus.CREATED);
     }
 
 }

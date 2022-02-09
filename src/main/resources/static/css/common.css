@@ -843,7 +843,7 @@ input:checked + .slider:before {
 .comment-swiper {
     position: relative;
     overflow: hidden;
-} 
+}
 
 .modal-comment{
     background: white;
@@ -866,6 +866,14 @@ input:checked + .slider:before {
     height: 100%;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+}
+
+.comment-modal-view .comment-swiper .swiper-wrapper video{
+    width: 100%;
+    height: 100%;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    object-fit: cover;
 }
 
 .comment-modal-view__comment-list{

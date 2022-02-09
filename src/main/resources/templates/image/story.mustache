@@ -546,6 +546,7 @@
 
         <div class="comment-modal-view">
 
+            <!-- 이미지 swiper -->
             <div class="comment-swiper">
                 <div class="swiper-wrapper">
 
@@ -567,8 +568,9 @@
 
             <div class="comment-modal-view__comment-list">
 
+                <!-- 프로파일 -->
                 <div class="comment-modal-view__comment-list__header">
-                    <img src="/images/insta2.jpg" alt="user">
+                    <img src="/images/insta2.jpg" onerror="this.src='/images/Avatar.jpg'" alt="user">
                     <span>walle</span>
                     <i class="fas fa-ellipsis-h btn-content-option"></i>
                 </div>
@@ -576,21 +578,17 @@
                 <div class="comment-modal-view__comment-list__body">
 
                     <div class="comment-modal-view__comment-list__body__user">
-                        <img src="/images/insta2.jpg" alt="user">
+                        <img src="/images/insta2.jpg" onerror="this.src='/images/Avatar.jpg'" alt="user">
                         <span>walle</span>
                     </div>
 
                     <div class="comment-modal-view__comment-list__body__caption">
-                        <p>
-                            Merry Christmas 😇⭐️🎄<br>
-                            메리 크리스마스 😇⭐️🎄<br>
-                        </p>
-
+                        <p class="comment-modal-view__comment-list__body__caption__description">Merry Christmas 😇⭐🎄</p>
                         <br>
-
-                        <p>#크리슴마스 #크리스마슽트리 #폴란드여자 #미소 #인스타 #christmas #christmastree #polishgirl</p>
+                        <p class="comment-modal-view__comment-list__body__caption__tags">#크리슴마스 #크리스마슽트리 #폴란드여자 #미소 #인스타 #christmas #christmastree #polishgirl</p>
                     </div>
 
+                    <!-- 댓글리스트 -->
                     <div class="comment-modal-view__comment-list__body__commentList mt-20 mb-20">
 
                         <!-- item -->

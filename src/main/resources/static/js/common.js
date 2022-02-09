@@ -7,6 +7,10 @@ function scroll(){
     $(document).scrollTop(scrollTop);
 }
 
+const principalId = $("#principalId").val();
+
+let pageNumOfStoryModalComment = 0;
+
 $(document).ready(function(){
     // 파일 업로드 swiper
     var mySwiper = new Swiper ('.file-upload-swiper', {
@@ -24,21 +28,6 @@ $(document).ready(function(){
         },
         
         observer: true
-    });
-
-    // 사진 상세보기 swiper
-    const swiperComment = new Swiper('.comment-swiper', {
-        direction: 'horizontal',
-        loop: false,
-
-        pagination: {
-            el: '.swiper-pagination',
-        },
-
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
     });
 
     // 영역 외 클릭
@@ -97,7 +86,6 @@ $(document).ready(function(){
     $(document).on("click", ".content-class, .comment-count", function(e){
         e.preventDefault();
         const imageId = $(this).data("id");
-        console.log(imageId);
 
         $.ajax({
             url: `/api/v1/images/${imageId}`,
@@ -105,7 +93,7 @@ $(document).ready(function(){
         }).done(res => {
             console.log("이미지 모달 로드 성공", res);
 
-
+            //swiper 이미지 변경
             $(".modal-comment-wrapper .swiper-wrapper").empty();
 
             res.data.files.forEach(data=>{
@@ -113,7 +101,7 @@ $(document).ready(function(){
 
                 if(data.type.includes("video")){
                     item += `<div class="swiper-slide">
-                                <video src="/uploadImage/${data.fileUrl}"></video>
+                                <video src="/uploadImage/${data.fileUrl}" controls></video>
                             </div>`;
 
 
@@ -125,6 +113,93 @@ $(document).ready(function(){
 
                 $(".modal-comment-wrapper .swiper-wrapper").append(item);
             });
+            comment_swiper_fn();
+
+            //프로파일 변경
+            $(".comment-modal-view__comment-list__header img").attr("src", "/upload/" + res.data.user.profileImageUrl);
+            $(".comment-modal-view__comment-list__header span").text(res.data.user.username);
+
+            //description 프로파일 변경
+            $(".comment-modal-view__comment-list__body__user img").attr("src", "/upload/" + res.data.user.profileImageUrl);
+            $(".comment-modal-view__comment-list__body__user span").text(res.data.user.username);
+
+            $(".comment-modal-view__comment-list__body__caption__description").text(res.data.description);
+            $(".comment-modal-view__comment-list__body__caption__tags").text("");
+
+            //댓글 변경
+            $(".comment-modal-view__comment-list__body__commentList").empty();
+
+            //나의 댓글 먼저 출력 후
+            $.ajax({
+                url: `api/v1/comments/images/${imageId}/users/${principalId}`,
+                dataType: "json"
+            }).done(res => {
+                console.log("나의 댓글 불러오기 성공", res);
+
+                res.data.forEach(comment=> {
+
+                    let profileImageUrl = comment.user.profileImageUrl;
+                    let username = comment.user.username;
+                    let content = comment.content;
+                    let date = (comment.createDate).substr(0,10);
+                    let likeCount = comment.likeCount;
+
+                    let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">
+                                     <i class="far fa-heart comment-comment-like"></i>
+                                     <img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
+                                     <p class="pl-45">
+                                         <span>${username}</span>
+                                         ${content}
+                                     </p>
+
+                                     <div class="zpw pl-45 mt-10">
+                                         <span class="mr-5 cursor-pointer">${date}</span>
+                                         <span class="cursor-pointer">좋아요 ${likeCount}개</span>
+                                         <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                                     </div>
+                                 </div>`;
+                    $(".comment-modal-view__comment-list__body__commentList").prepend(item);
+                });
+
+            }).fail(error => {
+                console.log("나의 댓글 불러오기 실패", error);
+            });
+
+            //모든 댓글 출력(10개씩, 나의 댓글 제외)
+            $.ajax({
+                url: `api/v1/comments/images/${imageId}/users/except/${principalId}?page=${pageNumOfStoryModalComment}`,
+                dataType: "json"
+            }).done(res => {
+                console.log("나의 댓글 불러오기 성공", res);
+
+                res.data.forEach(comment=> {
+
+                    let profileImageUrl = comment.user.profileImageUrl;
+                    let username = comment.user.username;
+                    let content = comment.content;
+                    let date = (comment.createDate).substr(0,10);
+                    let likeCount = comment.likeCount;
+
+                    let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">
+                                     <i class="far fa-heart comment-comment-like"></i>
+                                     <img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
+                                     <p class="pl-45">
+                                         <span>${username}</span>
+                                         ${content}
+                                     </p>
+
+                                     <div class="zpw pl-45 mt-10">
+                                         <span class="mr-5 cursor-pointer">${date}</span>
+                                         <span class="cursor-pointer">좋아요 ${likeCount}개</span>
+                                         <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                                     </div>
+                                 </div>`;
+                    $(".comment-modal-view__comment-list__body__commentList").append(item);
+                });
+
+            }).fail(error => {
+                console.log("모든 댓글 불러오기 실패", error);
+            });
 
         }).fail(error => {
             console.log("이미지 모달 로드 실패", error);
@@ -132,6 +207,27 @@ $(document).ready(function(){
 
         $(".modal-comment-wrapper").css("display", "flex");
     })
+
+    function comment_swiper_fn(){
+        // 사진 상세보기 swiper
+        const swiperComment = new Swiper('.comment-swiper', {
+            direction: 'horizontal',
+            loop: false,
+
+            pagination: {
+                el: '.swiper-pagination',
+            },
+
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+
+            observer: true,
+            observeParents: true,
+            watchOverflow : true
+        });
+    }
 
     // btn 스토리 게시글 (모달) 닫기 
     $(".cancel-comment-modal").on("click", function(e){
@@ -162,7 +258,7 @@ $(document).ready(function(){
     })
 
     // 대댓글 좋아요, 좋아요 취소
-    $(".comment-comment-like").on("click", function(e){
+    $(document).on("click", ".comment-comment-like", function(e){
         e.preventDefault();
 
         if($(this).hasClass("far")){

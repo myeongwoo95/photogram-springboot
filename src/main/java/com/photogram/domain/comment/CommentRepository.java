@@ -5,10 +5,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+import java.util.List;
+import java.util.Optional;
 
+public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query(value = "SELECT * FROM comment WHERE imageId = :imageId", nativeQuery = true)
     Page<Comment> commentList(Long imageId, Pageable pageable);
+
+    @Query(value = "SELECT * FROM comment WHERE imageId = :imageId AND userId = :userId", nativeQuery = true)
+    Optional<List<Comment>> myCommentList(Long imageId, Long userId);
+
+    @Query(value = "SELECT * FROM comment WHERE imageId = :imageId AND userId != :userId", nativeQuery = true)
+    Optional<List<Comment>> CommentListWithoutMine(Long imageId, Long userId, Pageable pageable);
 
 }
