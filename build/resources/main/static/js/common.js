@@ -85,7 +85,9 @@ $(document).ready(function(){
     //스토리 게시글 (모달) 켜기
     $(document).on("click", ".content-class, .comment-count", function(e){
         e.preventDefault();
+
         const imageId = $(this).data("id");
+        pageNumOfStoryModalComment = 0;
 
         $.ajax({
             url: `/api/v1/images/${imageId}`,
@@ -170,7 +172,7 @@ $(document).ready(function(){
                 url: `api/v1/comments/images/${imageId}/users/except/${principalId}?page=${pageNumOfStoryModalComment}`,
                 dataType: "json"
             }).done(res => {
-                console.log("나의 댓글 불러오기 성공", res);
+                console.log("모든 댓글 불러오기 성공", res);
 
                 res.data.forEach(comment=> {
 
@@ -194,19 +196,177 @@ $(document).ready(function(){
                                          <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
                                      </div>
                                  </div>`;
+
                     $(".comment-modal-view__comment-list__body__commentList").append(item);
+
                 });
+
+                if(res.data.length == 10){
+                    $(".modal-comment-wrapper .more-comment-modal").data("id", imageId);
+                    $(".modal-comment-wrapper .more-comment-modal").show();
+                }else{
+                    $(".modal-comment-wrapper .more-comment-modal").hide();
+                }
 
             }).fail(error => {
                 console.log("모든 댓글 불러오기 실패", error);
+                $(".modal-comment-wrapper .more-comment-modal").hide();
             });
+
+
+            // 좋아요 관련
+            $(".modal-comment-wrapper .content-like-modal").data("id", imageId);
+            $(".modal-comment-wrapper .modal-like-count").data("like", res.data.likeCount);
+            $(".modal-comment-wrapper .modal-like-count").text("좋아요 " + res.data.likeCount + "개")
+
+            if(res.data.likeState){
+                $(".modal-comment-wrapper .content-like-modal").removeClass("far");
+                $(".modal-comment-wrapper .content-like-modal").addClass("fas");
+                $(".modal-comment-wrapper .content-like-modal").css("color", "#ED4956");
+            }else{
+                $(".modal-comment-wrapper .content-like-modal").removeClass("fas");
+                $(".modal-comment-wrapper .content-like-modal").addClass("far");
+                $(".modal-comment-wrapper .content-like-modal").css("color", "#111");
+            }
+
+            // 게시글 등록날짜 수정
+            $(".modal-comment-wrapper .modal-storyDate").text(res.data.createDate.substr(0, 10));
+
+            // 모달 켜기
+            $(".modal-comment-wrapper").css("display", "flex");
 
         }).fail(error => {
             console.log("이미지 모달 로드 실패", error);
         });
 
-        $(".modal-comment-wrapper").css("display", "flex");
-    })
+    });
+
+    // 모달 좋아요, 좋아요 취소
+    $(document).on("click", ".content-like-modal", function(e){
+        e.preventDefault();
+
+        let imageId = $(this).data("id");
+
+        if($(this).hasClass("far")){
+            $.ajax({
+                type: "post",
+                url: `/api/v1/images/${imageId}/likes`,
+                dataType: "json"
+            }).done(res => {
+                // likeCount 증가
+                let likeCountStr = $(".modal-like-count").data("like");
+                let likeCount = Number(likeCountStr) + 1;
+                $(".modal-like-count").data("like", likeCount);
+                $(".modal-like-count").text("좋아요 " + likeCount + "개");
+
+                // 모달 하트색깔 변경 작업
+                $(this).css("color", "#ED4956");
+                $(this).addClass("fas");
+                $(this).removeClass("far");
+
+                // 외부 likeCount 증가
+                let likeCountStr2 = $(`#imageLikeCount-${imageId}`).data("like");
+                let likeCount2 = Number(likeCountStr) + 1;
+                $(`#imageLikeCount-${imageId}`).data("like", likeCount);
+                $(`#imageLikeCount-${imageId}`).text("좋아요 " + likeCount + "개");
+
+                // 외부 하트색깔 변경 작업
+                $(`.content-like[data-id="${imageId}"]`).css("color", "#ED4956");
+                $(`.content-like[data-id="${imageId}"]`).addClass("fas");
+                $(`.content-like[data-id="${imageId}"]`).removeClass("far");
+
+            }).fail(error => {
+                console.log("스토리 모달 좋아요 에러", error);
+            });
+
+        }else{
+            $.ajax({
+                type: "delete",
+                url: `/api/v1/images/${imageId}/likes`,
+                dataType: "json"
+            }).done(res => {
+                //likeCount 감소
+                let likeCountStr = $(".modal-like-count").data("like");
+                let likeCount = Number(likeCountStr) - 1;
+                $(".modal-like-count").data("like", likeCount);
+                $(".modal-like-count").text("좋아요 " + likeCount + "개");
+
+                // .. .하트색깔 변경 작업
+                $(this).css("color", "#111");
+                $(this).addClass("far");
+                $(this).removeClass("fas");
+
+                // 외부 likeCount 증가
+                let likeCountStr2 = $(`#imageLikeCount-${imageId}`).data("like");
+                let likeCount2 = Number(likeCountStr) - 1;
+                $(`#imageLikeCount-${imageId}`).data("like", likeCount);
+                $(`#imageLikeCount-${imageId}`).text("좋아요 " + likeCount + "개");
+
+                // 외부 하트색깔 변경 작업
+                $(`.content-like[data-id="${imageId}"]`).css("color", "#111");
+                $(`.content-like[data-id="${imageId}"]`).addClass("far");
+                $(`.content-like[data-id="${imageId}"]`).removeClass("fas");
+
+
+            }).fail(error => {
+                console.log("스토리 모달 좋아요 취소 에러", error);
+            });
+        }
+    });
+
+
+    $(document).on("click", ".modal-comment-wrapper .more-comment-modal", function(e){
+        e.preventDefault();
+
+        const imageId = $(this).data("id");
+        pageNumOfStoryModalComment++;
+
+        $.ajax({
+            url: `api/v1/comments/images/${imageId}/users/except/${principalId}?page=${pageNumOfStoryModalComment}`,
+            dataType: "json"
+        }).done(res => {
+            console.log("댓글 더 불러오기 성공", res);
+
+            res.data.forEach(comment=> {
+
+                let profileImageUrl = comment.user.profileImageUrl;
+                let username = comment.user.username;
+                let content = comment.content;
+                let date = (comment.createDate).substr(0,10);
+                let likeCount = comment.likeCount;
+
+                let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">
+                                 <i class="far fa-heart comment-comment-like"></i>
+                                 <img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
+                                 <p class="pl-45">
+                                     <span>${username}</span>
+                                     ${content}
+                                 </p>
+
+                                 <div class="zpw pl-45 mt-10">
+                                     <span class="mr-5 cursor-pointer">${date}</span>
+                                     <span class="cursor-pointer">좋아요 ${likeCount}개</span>
+                                     <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                                 </div>
+                             </div>`;
+
+                $(".comment-modal-view__comment-list__body__commentList").append(item);
+
+            });
+
+            if(res.data.length == 10){
+                $(".modal-comment-wrapper .more-comment-modal").data("id", imageId);
+                $(".modal-comment-wrapper .more-comment-modal").show();
+            }else{
+                $(".modal-comment-wrapper .more-comment-modal").hide();
+            }
+
+        }).fail(error => {
+            console.log("댓글 더 불러오기 실패", error);
+            $(".modal-comment-wrapper .more-comment-modal").hide();
+        });
+
+    });
 
     function comment_swiper_fn(){
         // 사진 상세보기 swiper

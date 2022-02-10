@@ -94,10 +94,18 @@ public class ImageService {
     }
 
     @Transactional(readOnly = true)
-    public Image 이미지(Long imageId) {
+    public Image 이미지(Long imageId, Long principalId) {
         Image image = imageRepository.findById(imageId).orElseThrow(()->{
             return new CustomApiException("존재하지 않는 이미지입니다.");
         });
+
+        image.setLikeCount(image.getLikes().size());
+        image.getLikes().forEach(like ->{
+            if(like.getUser().getId() == principalId) {  // 현재 로그인한 유저가 이 이미지를 좋아요를 했는지 안했는지 찾는것
+                image.setLikeState(true);
+            }
+        });
+
 
         return image;
     }

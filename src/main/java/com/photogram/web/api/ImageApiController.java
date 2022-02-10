@@ -51,7 +51,7 @@ public class ImageApiController {
 
     @GetMapping("/api/v1/images/{imageId}")
     public ResponseEntity<?> getImageById(@PathVariable Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){
-        Image image = imageService.이미지(imageId);
+        Image image = imageService.이미지(imageId, principalDetails.getUser().getId());
         return new ResponseEntity<>(new CMRespDto<>(1, "성공", image), HttpStatus.OK);
     }
 
