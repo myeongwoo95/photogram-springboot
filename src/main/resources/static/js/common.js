@@ -314,6 +314,32 @@ $(document).ready(function(){
         }
     });
 
+    // 모달 댓글 달기
+    $(document).on("click", ".content-like-modal", function(e){
+         $.ajax({
+             type: "post",
+             url: `/api/v1/images/${imageId}/likes`,
+             dataType: "json"
+         }).done(res => {
+
+         }).fail(error => {
+             console.log("스토리 모달 좋아요 에러", error);
+         });
+    });
+
+    // 모달 저장하기, 저장하기 취소
+    $(document).on("click", ".content-like-modal", function(e){
+         $.ajax({
+             type: "post",
+             url: `/api/v1/images/${imageId}/likes`,
+             dataType: "json"
+         }).done(res => {
+
+         }).fail(error => {
+             console.log("스토리 모달 좋아요 에러", error);
+         });
+    });
+
 
     $(document).on("click", ".modal-comment-wrapper .more-comment-modal", function(e){
         e.preventDefault();
