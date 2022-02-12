@@ -175,81 +175,27 @@ $(document).ready(function(){
     });
 
     // 이모지 클릭 시 해당 이모지 textarea에 삽입
-    $(document).on("click", ".emoticon-item", function(){
-        let data = $(this).text();
-        let dataTextArea = $("#content-comment-textarea").val();
-     
-        $("#content-comment-textarea").val(dataTextArea+data)
-    })
+//    $(document).on("click", ".emoticon-item", function(){
+//        let data = $(this).text();
+//        let dataTextArea = $(".content-comment-textarea").val();
+//
+//        $(".content-comment-textarea").val(dataTextArea+data)
+//    })
 
-    // textarea에 focus시 이모지 박스 닫기
-    $("#content-comment-textarea").on("focus", function(){
-        $(".emoticon-wrapper").remove();
-    })
 
-    // btn 게시글 업로드
-    $(".upload-comment").on("click", function(e){
-        e.preventDefault();
-        
-        if($("#content-comment-textarea").val() === ""){
-            alert("내용이 없습니다.")
-            return;
-        }
-
-        alert("로직")
-        $("#content-comment-textarea").val("");
-
-        //이모지 닫기
-        $(".emoticon-wrapper").remove();
-    });
-
-    // 콘텐츠 caption 더보기 (수정 필요)
-    $('.image-caption').each(function(){
-        var content = $(this).children('.caption');
-        var content_txt = content.text();
-        var content_txt_short = content_txt.substring(0,100)+"...";
-        var btn_more = $('<a href="javascript:void(0)" class="more"> 더 보기</a>');
-    
-        $(this).append(btn_more);
-        
-        if(content_txt.length >= 100){
-            content.html(content_txt_short)
-        }else{
-            btn_more.hide()
-        }
-        
-        btn_more.click(toggle_content);
-      
-        function toggle_content(){
-            if($(this).hasClass('short')){
-                // 접기 상태
-                $(this).html('더보기');
-                content.html(content_txt_short)
-                $(this).removeClass('short');
-            }else{
-                // 더보기 상태
-                $(this).html('접기');
-                content.text(content_txt);
-                $(this).addClass('short');
-    
-            }
-        }
-    });
-    
-    // Textarea 높이 자동조절 (수정 필요)
-    $('#content-comment-textarea').keyup(function(e) {
-        $(this).css('height', 'auto');
-        $(this).height(this.scrollHeight);
-    });
-    
     //Textarea onchange 버튼 활성화
-    $('#content-comment-textarea').bind('input propertychange', function() {
+    $(document).on("input propertychange", ".content-comment-textarea", function(){
         $(".upload-comment").css("opacity", 0.3);
     
         if(this.value.length){
             $(".upload-comment").css("opacity", 1.);
         }
     });
+
+    //Textarea focus시 emoji 닫기
+    $(document).on("focus", ".content-comment-textarea", function(){
+        $(".emoticon-wrapper").remove();
+    })
 
     // 좋아요, 좋아요 취소
     $(document).on("click", ".content-like", function(e){
@@ -315,5 +261,58 @@ $(document).ready(function(){
             $(this).css("color", "#0095f6")
         }
     })
+
+    // 댓글 업로드
+    $(document).on("click", ".upload-comment", function(e){
+        e.preventDefault();
+
+        if($(this).prev().val() == ""){
+            alert("내용이 없습니다.")
+            return;
+        }
+
+        addComment($(this).data("id"), $(this).prev().val());
+
+        //textarea 초기화, 이모지 닫기
+        $(this).prev().val("");
+        $(".emoticon-wrapper").remove();
+    })
+
+    function addComment(imageId, content){
+
+        let commentList = $(`.comments-list-${imageId}`);
+        let commentCount = $(`.comment-count-${imageId}`);
+
+        let data = {
+            imageId: imageId,
+            content: content
+        }
+
+        $.ajax({
+            type: "post",
+            url: `/api/v1/comment`,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).done(res => {
+            console.log("댓글등록 성공", res);
+
+            commentList.empty();
+
+            res.data.content.forEach(comment => {
+                let content = `<div class="comment-items mt-5">
+                                   <b class="fw-900">${comment.user.username}</b>
+                                   <span>${comment.content}</span>
+                                       <i class="far fa-heart content-comment-like"></i>
+                               </div>`;
+                commentList.append(content);
+            });
+
+            commentCount.text(res.data.totalElements);
+
+        }).fail(error => {
+            console.log("댓글등록 에러", error);
+        });
+    };
     
 });

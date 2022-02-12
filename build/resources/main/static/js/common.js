@@ -117,18 +117,18 @@ $(document).ready(function(){
             });
             comment_swiper_fn();
 
-            //프로파일 변경
+            // 프로파일 변경
             $(".comment-modal-view__comment-list__header img").attr("src", "/upload/" + res.data.user.profileImageUrl);
             $(".comment-modal-view__comment-list__header span").text(res.data.user.username);
 
-            //description 프로파일 변경
+            // description 프로파일 변경
             $(".comment-modal-view__comment-list__body__user img").attr("src", "/upload/" + res.data.user.profileImageUrl);
             $(".comment-modal-view__comment-list__body__user span").text(res.data.user.username);
 
             $(".comment-modal-view__comment-list__body__caption__description").text(res.data.description);
             $(".comment-modal-view__comment-list__body__caption__tags").text("");
 
-            //댓글 변경
+            // 댓글 변경
             $(".comment-modal-view__comment-list__body__commentList").empty();
 
             //나의 댓글 먼저 출력 후
@@ -213,7 +213,6 @@ $(document).ready(function(){
                 $(".modal-comment-wrapper .more-comment-modal").hide();
             });
 
-
             // 좋아요 관련
             $(".modal-comment-wrapper .content-like-modal").data("id", imageId);
             $(".modal-comment-wrapper .modal-like-count").data("like", res.data.likeCount);
@@ -234,6 +233,9 @@ $(document).ready(function(){
 
             // 모달 켜기
             $(".modal-comment-wrapper").css("display", "flex");
+
+            // 댓글 업로드 btn에 imageId 값 넣어주기
+            $(".btn-comment-upload").data("id", imageId);
 
         }).fail(error => {
             console.log("이미지 모달 로드 실패", error);
@@ -312,6 +314,133 @@ $(document).ready(function(){
                 console.log("스토리 모달 좋아요 취소 에러", error);
             });
         }
+    });
+
+    // 모달 댓글 달기
+    $(document).on("click", ".btn-comment-upload", function(e){
+        e.preventDefault();
+
+        let imageId = $(this).data("id");
+        let content = $(this).prev().val();
+
+        if($(this).prev().val() == ""){
+           alert("내용이 없습니다.")
+           return;
+        }
+
+        let data = {
+            imageId: imageId,
+            content: content
+        }
+
+        $.ajax({
+            type: "post",
+            url: `/api/v1/comment`,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).done(res => {
+            console.log("스토리 모달 댓글 업로드 성공", res);
+
+            let profileImageUrl = res.data.content[0].user.profileImageUrl;
+            let username = res.data.content[0].user.username;
+            let content = res.data.content[0].content;
+            let date = (res.data.content[0].createDate).substr(0,10);
+            let likeCount = res.data.content[0].likeCount;
+
+            // 모달창에 댓글 추가 및 후속 작업 처리
+            let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">
+                             <i class="far fa-heart comment-comment-like"></i>
+                             <img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
+                             <p class="pl-45">
+                                 <span>${username}</span>
+                                 ${content}
+                             </p>
+
+                             <div class="zpw pl-45 mt-10">
+                                 <span class="mr-5 cursor-pointer">${date}</span>
+                                 <span class="cursor-pointer">좋아요 ${likeCount}개</span>
+                                 <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                             </div>
+                         </div>`;
+
+            $(".comment-modal-view__comment-list__body__commentList").prepend(item);
+
+            $(".modal-write-comment").val("");
+
+            // index page 일 경우
+            if($(document).find("title").text() == "Photogram"){
+                itemStoryComment = `<div class="comment-items mt-5">
+                             <b class="fw-900">${username}</b>
+                             <span>${content}</span>
+                             <i class="far fa-heart content-comment-like"></i>
+                         </div>`;
+
+                $(`.comments-list-${imageId}`).prepend(itemStoryComment);
+                let commentCountStr = $(`.comment-count-${imageId}`).text();
+                let commentCount = Number(commentCountStr) + 1;
+                $(`.comment-count-${imageId}`).text(commentCount);
+            }
+
+            // explore page 일 경우
+
+            // profile page 일 경우
+
+        }).fail(error => {
+            console.log("스토리 모달 댓글 업로드 에러", error);
+        });
+    });
+
+    // 북마크, 북마크 취소
+    $(document).on("click", ".content-bookmark", function(e){
+         e.preventDefault();
+
+         const imageId = $(this).data("id");
+
+         if($(this).hasClass("far")){
+            $.ajax({
+                type: "post",
+                url: `/api/v1/images/${imageId}/bookmarks`,
+                dataType: "json"
+            }).done(res => {
+               console.log("북마크 성공", res);
+
+               $(this).css("color", "#333");
+               $(this).addClass("fas");
+               $(this).removeClass("far");
+
+               // index page 라면
+               if($(document).find("title").text() == "Photogram"){
+
+               }
+
+            }).fail(error => {
+                console.log("북마크 에러", error);
+            });
+
+
+         }else{
+
+            $.ajax({
+                type: "delete",
+                url: `/api/v1/images/${imageId}/bookmarks`,
+                dataType: "json"
+            }).done(res => {
+               console.log("북마크 취소 성공", res);
+
+               $(this).css("color", "");
+               $(this).addClass("far");
+               $(this).removeClass("fas");
+
+               // index page 라면
+               if($(document).find("title").text() == "Photogram"){
+
+               }
+            }).fail(error => {
+                console.log("북마크 취소 에러", error);
+            });
+
+         }
     });
 
 
@@ -430,26 +559,6 @@ $(document).ready(function(){
             $(this).addClass("far");
             $(this).removeClass("fas");
         }
-    })
-
-    // 북마크, 북마크 취소
-    $(document).on("click", ".content-bookmark", function(e){
-        e.preventDefault();
-
-        if($(this).hasClass("far")){
-            $(this).css("color", "#333");
-            $(this).addClass("fas");
-            $(this).removeClass("far");
-        }else{
-            $(this).css("color", "");
-            $(this).addClass("far");
-            $(this).removeClass("fas");
-        }
-    });
-
-    // 댓글의 댓글 확인 버튼
-    $(".comment-deep-button").on("click", function(){
-        $(this).next().toggle();
     })
 
     // ---------- 파일 업로드 -------------
@@ -1120,63 +1229,6 @@ $(document).ready(function(){
         alert("인코딩 문제로 현재 사용 불가능합니다.");
         $(this).parent().parent().remove();
     })
-
-    $(document).on("focus", ".content-comment-textarea", function(){
-        $(".emoticon-wrapper").remove();
-    })
-
-    // 댓글 업로드
-    $(document).on("click", ".upload-comment", function(e){
-        e.preventDefault();
-
-        if($(this).prev().val() == ""){
-            alert("내용이 없습니다.")
-            return;
-        }
-
-        addComment($(this).data("id"), $(this).prev().val());
-
-        //textarea 초기화, 이모지 닫기
-        $(this).prev().val("");
-        $(".emoticon-wrapper").remove();
-    })
-
-    function addComment(imageId, content){
-
-    	let commentList = $(`.comments-list-${imageId}`);
-    	let commentCount = $(`.comment-count-${imageId}`);
-
-    	let data = {
-    		imageId: imageId,
-    		content: content
-    	}
-
-    	$.ajax({
-    		type: "post",
-    		url: `/api/v1/comment`,
-    		data: JSON.stringify(data),
-    		contentType: "application/json; charset=utf-8",
-    		dataType: "json"
-    	}).done(res => {
-    		console.log("댓글등록 성공", res);
-
-    		commentList.empty();
-
-            res.data.content.forEach(comment => {
-                let content = `<div class="comment-items mt-5">
-                                   <b class="fw-900">${comment.user.username}</b>
-                                   <span>${comment.content}</span>
-                                       <i class="far fa-heart content-comment-like"></i>
-                               </div>`;
-                commentList.append(content);
-            });
-
-            commentCount.text(res.data.totalElements);
-
-    	}).fail(error => {
-    		console.log("댓글등록 에러", error);
-    	});
-    };
 
     // 콘텐츠 dotdotdot 옵션 모달 켜기
     $(document).on("click", ".btn-content-option", function(){

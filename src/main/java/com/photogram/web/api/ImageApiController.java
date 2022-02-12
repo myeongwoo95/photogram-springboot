@@ -3,6 +3,7 @@ package com.photogram.web.api;
 import com.photogram.config.auth.PrincipalDetails;
 import com.photogram.domain.image.Image;
 import com.photogram.handler.ex.CustomValidationException;
+import com.photogram.service.BookmarkService;
 import com.photogram.service.ImageService;
 import com.photogram.service.LikeService;
 import com.photogram.web.dto.CMRespDto;
@@ -24,6 +25,19 @@ public class ImageApiController {
 
     private final ImageService imageService;
     private final LikeService likeService;
+    private final BookmarkService bookmarkService;
+
+    @PostMapping("/api/v1/images/{imageId}/bookmarks")
+    public ResponseEntity<?> bookmarks(@PathVariable Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        bookmarkService.북마크(principalDetails.getUser().getId(), imageId);
+        return new ResponseEntity<>(new CMRespDto<>(1, "북마크 성공", null), HttpStatus.CREATED); // 201번 데이터를 넣었다는 뜻
+    }
+
+    @DeleteMapping("/api/v1/images/{imageId}/bookmarks")
+    public ResponseEntity<?> unBookmarks(@PathVariable Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        bookmarkService.북마크취소(principalDetails.getUser().getId(), imageId);
+        return new ResponseEntity<>(new CMRespDto<>(1, "북마크 취소 성공", null), HttpStatus.OK);
+    }
 
     @GetMapping("/api/v1/images/popular")
         public ResponseEntity<?> imagePopular(@PageableDefault(size=9, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
