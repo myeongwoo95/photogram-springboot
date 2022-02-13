@@ -23,6 +23,18 @@ import java.util.List;
 public class CommentApiController {
     private final CommentService commentService;
 
+    @PostMapping("/api/v1/comments/{commentId}/likes")
+    public ResponseEntity<?> likes(@PathVariable Long commentId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        commentService.댓글_좋아요(commentId, principalDetails.getUser().getId());
+        return new ResponseEntity<>(new CMRespDto<>(1, "댓글 좋아요 성공", null), HttpStatus.CREATED); // 201번 데이터를 넣었다는 뜻
+    }
+
+    @DeleteMapping("/api/v1/comments/{commentId}/likes")
+    public ResponseEntity<?> unLikes(@PathVariable Long commentId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        commentService.댓글_좋아요취소(commentId, principalDetails.getUser().getId());
+        return new ResponseEntity<>(new CMRespDto<>(1, "댓글 좋아요 취소 성공", null), HttpStatus.OK);
+    }
+
     @PostMapping("api/v1/comment")
     public ResponseEntity<?> commentSave(@Valid @RequestBody CommentPostRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails,
                                          @PageableDefault(size=5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){

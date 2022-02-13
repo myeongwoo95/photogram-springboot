@@ -107,9 +107,16 @@ $(document).ready(function(){
                                      item += `<li><a href="#"><i class="far fa-heart content-like" data-id="${image.id}"></i></a></li>`;
                                  }
 
-                           item += `<li><a href="#"><i class="far fa-comment content-class" data-id="${image.id}"></i></a></li>
-                                    <li><a href="#"><i class="far fa-bookmark content-bookmark"></i></a></li>
-                                </ul>
+                           item += `<li><a href="#"><i class="far fa-comment content-class" data-id="${image.id}"></i></a></li>`;
+
+                                 if(image.bookmarkState){
+                                    item += `<li><a href="#"><i class="fas fa-bookmark content-bookmark" data-id="${image.id}" style="color: rgb(51, 51, 51)"></i></a></li>`
+                                 }else{
+                                    item += `<li><a href="#"><i class="far fa-bookmark content-bookmark" data-id="${image.id}"></i></a></li>`
+                                 }
+
+
+                           item += `</ul>
                             </div>
 
                             <span class="like-count" id="imageLikeCount-${image.id}" data-like="${image.likeCount}">좋아요 ${image.likeCount}개</span>
@@ -137,7 +144,12 @@ $(document).ready(function(){
 //                                            item+=`<i class="fas fa-times" data-id="${image.comments[i].id}"></i>`;
 //                                        }
 
-                                        item += `<i class="far fa-heart content-comment-like"></i></div>`;
+                                        if(image.comments[i].likeCommentState){
+                                            item += `<i class="fas fa-heart content-comment-like" data-id="${image.comments[i].id}" style="color: rgb(237, 73, 86)"></i></div>`;
+                                        }else{
+                                            item += `<i class="far fa-heart content-comment-like" data-id="${image.comments[i].id}"></i></div>`;
+                                        }
+
                                     }
                                 }
 
@@ -303,7 +315,7 @@ $(document).ready(function(){
                 let content = `<div class="comment-items mt-5">
                                    <b class="fw-900">${comment.user.username}</b>
                                    <span>${comment.content}</span>
-                                       <i class="far fa-heart content-comment-like"></i>
+                                       <i class="far fa-heart content-comment-like" data-id="${comment.id}"></i>
                                </div>`;
                 commentList.append(content);
             });

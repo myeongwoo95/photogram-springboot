@@ -3,6 +3,7 @@ package com.photogram.service;
 import com.photogram.domain.comment.Comment;
 import com.photogram.domain.comment.CommentRepository;
 import com.photogram.domain.image.Image;
+import com.photogram.domain.like.LikeCommentRespository;
 import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
 import com.photogram.handler.ex.CustomApiException;
@@ -20,6 +21,17 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final LikeCommentRespository likeCommentRespository;
+
+    @Transactional
+    public void 댓글_좋아요(Long commentId, Long id) {
+        likeCommentRespository.mLikes(commentId, id);
+    }
+
+    @Transactional
+    public void 댓글_좋아요취소(Long commentId, Long id) {
+        likeCommentRespository.mUnLikes(commentId, id);
+    }
 
     @Transactional
     public Page<Comment> 댓글쓰기(String content, Long imageId, Long userId, Pageable pageable) {
@@ -52,15 +64,38 @@ public class CommentService {
             return new CustomApiException("등록된 정보가 존재하지 않습니다");
         });
 
+        myComments.forEach((comment)->{
+            comment.setLikeCommentCount(comment.getCommentLikes().size());
+
+            comment.getCommentLikes().forEach((commentLike)->{
+                if(commentLike.getUser().getId() == userId){
+                    comment.setLikeCommentState(true);
+                }
+            });
+        });
+
+
         return myComments;
     }
 
     public List<Comment> 모든댓글_불러오기(Long imageId, Long userId, Pageable pageable) {
 
-        List<Comment> myComments = commentRepository.CommentListWithoutMine(imageId, userId, pageable).orElseThrow(()->{
+        List<Comment> allComments = commentRepository.CommentListWithoutMine(imageId, userId, pageable).orElseThrow(()->{
             return new CustomApiException("등록된 정보가 존재하지 않습니다");
         });
 
-        return myComments;
+        allComments.forEach((comment)->{
+            comment.setLikeCommentCount(comment.getCommentLikes().size());
+
+            comment.getCommentLikes().forEach((commentLike)->{
+                if(commentLike.getUser().getId() == userId){
+                    comment.setLikeCommentState(true);
+                }
+            });
+        });
+
+        return allComments;
     }
+
+
 }

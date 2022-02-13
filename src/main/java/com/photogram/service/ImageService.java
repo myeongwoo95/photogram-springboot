@@ -1,6 +1,7 @@
 package com.photogram.service;
 
 import com.photogram.config.auth.PrincipalDetails;
+import com.photogram.domain.bookmark.BookmarkRepository;
 import com.photogram.domain.file.File;
 import com.photogram.domain.file.FileRepository;
 import com.photogram.domain.image.Image;
@@ -27,6 +28,7 @@ public class ImageService {
 
     private final ImageRepository imageRepository;
     private final FileRepository fileRepository;
+    private final BookmarkRepository bookmarkRepository;
 
     @Value("${file.path.image}")
     private String uploadFolder;
@@ -80,12 +82,31 @@ public class ImageService {
 
         images.forEach(image -> {
 
+            // 이미지 좋아요 관련
             image.setLikeCount(image.getLikes().size()); // like count
-
             image.getLikes().forEach(like ->{  // 해당 이미지에 좋아요한 사람들을 모두 찾아서
                 if(like.getUser().getId() == principalId) {  // 현재 로그인한 유저가 이 이미지를 좋아요를 했는지 안했는지 찾는것
                     image.setLikeState(true);
                 }
+            });
+
+            // 북마크 관련
+            if(bookmarkRepository.mBookmarkState(principalId, image.getId()) >= 1){
+                image.setBookmarkState(true);
+            }
+
+            // 댓글 좋아요 관련
+            image.getComments().forEach(comment -> {
+                comment.setLikeCommentCount(comment.getCommentLikes().size());
+
+                comment.getCommentLikes().forEach((commentLike)->{
+                    if(commentLike.getUser().getId() == principalId){
+                        comment.setLikeCommentState(true);
+                    }
+
+                });
+
+
             });
 
         });
@@ -99,6 +120,7 @@ public class ImageService {
             return new CustomApiException("존재하지 않는 이미지입니다.");
         });
 
+        // 이미지 좋아요 관련
         image.setLikeCount(image.getLikes().size());
         image.getLikes().forEach(like ->{
             if(like.getUser().getId() == principalId) {  // 현재 로그인한 유저가 이 이미지를 좋아요를 했는지 안했는지 찾는것
@@ -106,6 +128,20 @@ public class ImageService {
             }
         });
 
+        // 북마크 관련
+        if(bookmarkRepository.mBookmarkState(principalId, image.getId()) >= 1){
+            image.setBookmarkState(true);
+        }
+
+        // 댓글 좋아요 관련
+        image.getComments().forEach((comment)->{
+            comment.setLikeCommentCount(comment.getCommentLikes().size());
+            comment.getCommentLikes().forEach((commentLike)->{
+                if(commentLike.getUser().getId() == principalId){
+                    comment.setLikeCommentState(true);
+                }
+            });
+        });
 
         return image;
     }

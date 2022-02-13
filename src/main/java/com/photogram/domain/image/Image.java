@@ -55,6 +55,9 @@ public class Image extends BaseTimeEntity {
     @Transient
     private int likeCount;
 
+    @Transient
+    private boolean bookmarkState;
+
     @OrderBy("id DESC") // javax.persistence
     @JsonIgnoreProperties({"image"}) // 무한참조 방지
     @OneToMany(mappedBy = "image")

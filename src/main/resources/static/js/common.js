@@ -144,11 +144,18 @@ $(document).ready(function(){
                     let username = comment.user.username;
                     let content = comment.content;
                     let date = (comment.createDate).substr(0,10);
-                    let likeCount = comment.likeCount;
+                    let likeCount = comment.likeCommentCount;
+                    let commentId = comment.id;
 
-                    let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">
-                                     <i class="far fa-heart comment-comment-like"></i>
-                                     <img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
+                    let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">`;
+
+                                if(comment.likeCommentState){
+                                    item += `<i class="fas fa-heart content-comment-like-modal" data-id="${comment.id}" style="color: rgb(237, 73, 86)"></i>`;
+                                }else{
+                                    item += `<i class="far fa-heart content-comment-like-modal" data-id="${comment.id}"></i>`
+                                }
+
+                                item += `<img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
                                      <p class="pl-45">
                                          <span>${username}</span>
                                          ${content}
@@ -180,11 +187,18 @@ $(document).ready(function(){
                     let username = comment.user.username;
                     let content = comment.content;
                     let date = (comment.createDate).substr(0,10);
-                    let likeCount = comment.likeCount;
+                    let likeCount = comment.likeCommentCount;
+                    let commentId = comment.id;
 
-                    let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">
-                                     <i class="far fa-heart comment-comment-like"></i>
-                                     <img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
+                    let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">`;
+
+                                    if(comment.likeCommentState){
+                                        item += `<i class="fas fa-heart content-comment-like-modal" data-id="${comment.id}" style="color: rgb(237, 73, 86)"></i>`;
+                                    }else{
+                                        item += `<i class="far fa-heart content-comment-like-modal" data-id="${comment.id}"></i>`
+                                    }
+
+                                    item += `<img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
                                      <p class="pl-45">
                                          <span>${username}</span>
                                          ${content}
@@ -226,6 +240,18 @@ $(document).ready(function(){
                 $(".modal-comment-wrapper .content-like-modal").removeClass("fas");
                 $(".modal-comment-wrapper .content-like-modal").addClass("far");
                 $(".modal-comment-wrapper .content-like-modal").css("color", "#111");
+            }
+
+            // 북마크관련
+            $(".modal-comment-wrapper .content-bookmark").data("id", imageId);
+
+            if(res.data.bookmarkState){
+                $(".modal-comment-wrapper .content-bookmark").removeClass("far");
+                $(".modal-comment-wrapper .content-bookmark").addClass("fas");
+                $(".modal-comment-wrapper .content-bookmark").css("color", "rgb(51, 51, 51)");
+            }else{
+                $(".modal-comment-wrapper .content-bookmark").removeClass("fas");
+                $(".modal-comment-wrapper .content-bookmark").addClass("far");
             }
 
             // 게시글 등록날짜 수정
@@ -411,13 +437,14 @@ $(document).ready(function(){
 
                // index page 라면
                if($(document).find("title").text() == "Photogram"){
-
+                   $(`.content-bookmark[data-id="${imageId}"]`).css("color", "#333");
+                   $(`.content-bookmark[data-id="${imageId}"]`).addClass("fas");
+                   $(`.content-bookmark[data-id="${imageId}"]`).removeClass("far");
                }
 
             }).fail(error => {
                 console.log("북마크 에러", error);
             });
-
 
          }else{
 
@@ -434,8 +461,11 @@ $(document).ready(function(){
 
                // index page 라면
                if($(document).find("title").text() == "Photogram"){
-
+                   $(`.content-bookmark[data-id="${imageId}"]`).css("color", "");
+                   $(`.content-bookmark[data-id="${imageId}"]`).addClass("far");
+                   $(`.content-bookmark[data-id="${imageId}"]`).removeClass("fas");
                }
+
             }).fail(error => {
                 console.log("북마크 취소 에러", error);
             });
@@ -443,7 +473,7 @@ $(document).ready(function(){
          }
     });
 
-
+    // 모달 댓글 더보기
     $(document).on("click", ".modal-comment-wrapper .more-comment-modal", function(e){
         e.preventDefault();
 
@@ -532,34 +562,69 @@ $(document).ready(function(){
     });
 
     // 댓글 좋아요, 좋아요 취소
-    $(document).on("click", ".content-comment-like", function(e){
+    $(document).on("click", ".content-comment-like, .content-comment-like-modal", function(e){
         e.preventDefault();
 
-        if($(this).hasClass("far")){
-            $(this).css("color", "#ED4956");
-            $(this).addClass("fas");
-            $(this).removeClass("far");
-        }else{
-            $(this).css("color", "");
-            $(this).addClass("far");
-            $(this).removeClass("fas");
-        }
-    })
-
-    // 대댓글 좋아요, 좋아요 취소
-    $(document).on("click", ".comment-comment-like", function(e){
-        e.preventDefault();
+        const commentId = $(this).data("id");
 
         if($(this).hasClass("far")){
-            $(this).css("color", "#ED4956");
-            $(this).addClass("fas");
-            $(this).removeClass("far");
+            $.ajax({
+                type: "post",
+                url: `/api/v1/comments/${commentId}/likes`,
+                dataType: "json"
+            }).done(res => {
+               console.log("댓글 좋아요 성공", res);
+
+               $(this).css("color", "#ED4956");
+               $(this).addClass("fas");
+               $(this).removeClass("far");
+
+               if($(this).hasClass("content-comment-like-modal")){
+                   // 좋아요 갯수 수정
+               }
+
+               // index page 라면
+               if($(document).find("title").text() == "Photogram"){
+                   // modal의 좋아요를 눌렀다면
+                   if($(this).hasClass("content-comment-like-modal")){
+                      // story 좋아요 수정
+
+                   }
+               }
+
+            }).fail(error => {
+                console.log("댓글 좋아요 실패", error);
+            });
+
+
         }else{
-            $(this).css("color", "");
-            $(this).addClass("far");
-            $(this).removeClass("fas");
+
+            $.ajax({
+                type: "delete",
+                url: `/api/v1/comments/${commentId}/likes`,
+                dataType: "json"
+            }).done(res => {
+               console.log("댓글 좋아요 취소 성공", res);
+
+               $(this).css("color", "");
+               $(this).addClass("far");
+               $(this).removeClass("fas");
+
+               if($(this).hasClass("content-comment-like-modal")){
+                   // 좋아요 갯수 수정
+               }
+
+               // index page 라면
+               if($(document).find("title").text() == "Photogram"){
+
+               }
+
+            }).fail(error => {
+                console.log("댓글 좋아요 취소 실패", error);
+            });
+
         }
-    })
+    });
 
     // ---------- 파일 업로드 -------------
     // 파일 업로드 모달 켜기

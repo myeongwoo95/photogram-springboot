@@ -3,7 +3,7 @@ package com.photogram.domain.comment;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.photogram.domain.BaseTimeEntity;
 import com.photogram.domain.image.Image;
-import com.photogram.domain.like.Likes;
+import com.photogram.domain.like.LikeComment;
 import com.photogram.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -36,14 +36,13 @@ public class Comment extends BaseTimeEntity {
     @ManyToOne
     private Image image;
 
-    @JsonIgnoreProperties({"image"})
-    @OneToMany(mappedBy = "image")
-    private List<Likes> likes;
+    @OneToMany(mappedBy = "comment")
+    private List<LikeComment> commentLikes;
 
     @Transient
-    private boolean likeState;
+    private boolean likeCommentState;
 
     @Transient
-    private int likeCount;
+    private int likeCommentCount;
 
 }
