@@ -76,6 +76,44 @@ body{
 }
 
 /*================================================================
+# 공통 모달 - 스토리 모달 댓글 dotdotdot
+=================================================================*/
+.modal-comment-dotdotdot-wrapper{
+    z-index: 11;
+}
+
+.comment-dotdotdot-modal{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-comment-dotdotdot-wrapper button{
+    background: 0;
+    border: 0;
+    width: 400px;
+    height: 48px;
+    cursor: pointer;
+    text-align: center;
+    padding-left: 15px;
+    border-bottom: 1px solid #dbdbdb;
+}
+
+.modal-comment-dotdotdot-wrapper button.report-modal-comment-btn{
+    color: #ED4956;
+    font-weight: bold;
+}
+
+.modal-comment-dotdotdot-wrapper button.cancel-modal-comment-delete-btn{
+    color: #ED4956;
+    font-weight: bold;
+}
+
+.modal-comment-dotdotdot-wrapper button:last-child{
+    border-bottom: 0;
+}
+
+/*================================================================
 # 공통 모달 - 파일 업로드
 =================================================================*/
 .modal-fileupload-wrapper > i.fa-times{
@@ -1036,7 +1074,9 @@ input:checked + .slider:before {
 .comment-modal-view__comment-list__body__commentList__item div.zpw i{
     font-size: 12px;
     color: #8e8e8e;
+    position: revert;
     display: none;
+    padding-left: 5px;
 }
 
 .comment-modal-view__comment-list__body__commentList__item div.wqd button{

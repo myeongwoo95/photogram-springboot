@@ -163,8 +163,10 @@ $(document).ready(function(){
 
                                      <div class="zpw pl-45 mt-10">
                                          <span class="mr-5 cursor-pointer">${date}</span>
-                                         <span class="cursor-pointer">좋아요 ${likeCount}개</span>
-                                         <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                                         <span class="cursor-pointer story-modal-comment-like-count"
+                                          data-likecount="${likeCount}" data-id="${comment.id}">좋아요 ${likeCount}개</span>
+                                         <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"
+                                         data-id="${commentId}" data-commentowner="true"></i>
                                      </div>
                                  </div>`;
                     $(".comment-modal-view__comment-list__body__commentList").prepend(item);
@@ -206,8 +208,10 @@ $(document).ready(function(){
 
                                      <div class="zpw pl-45 mt-10">
                                          <span class="mr-5 cursor-pointer">${date}</span>
-                                         <span class="cursor-pointer">좋아요 ${likeCount}개</span>
-                                         <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                                         <span class="cursor-pointer story-modal-comment-like-count"
+                                         data-likecount="${likeCount}" data-id="${comment.id}">좋아요 ${likeCount}개</span>
+                                         <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"
+                                         data-id="${commentId}" data-commentowner="false"></i>
                                      </div>
                                  </div>`;
 
@@ -374,9 +378,11 @@ $(document).ready(function(){
             let date = (res.data.content[0].createDate).substr(0,10);
             let likeCount = res.data.content[0].likeCount;
 
+            let commentId = res.data.content[0].id;
+
             // 모달창에 댓글 추가 및 후속 작업 처리
             let item = `<div class="comment-modal-view__comment-list__body__commentList__item mt-20">
-                             <i class="far fa-heart comment-comment-like"></i>
+                             <i class="far fa-heart content-comment-like-modal" data-id="${commentId}"></i>
                              <img src="/upload/${profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="user">
                              <p class="pl-45">
                                  <span>${username}</span>
@@ -385,8 +391,10 @@ $(document).ready(function(){
 
                              <div class="zpw pl-45 mt-10">
                                  <span class="mr-5 cursor-pointer">${date}</span>
-                                 <span class="cursor-pointer">좋아요 ${likeCount}개</span>
-                                 <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                                 <span class="cursor-pointer story-modal-comment-like-count"
+                                 data-likecount="0" data-id="${commentId}">좋아요 0개</span>
+                                 <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"
+                                 data-id="${commentId}" data-commentowner="true"></i>
                              </div>
                          </div>`;
 
@@ -399,7 +407,7 @@ $(document).ready(function(){
                 itemStoryComment = `<div class="comment-items mt-5">
                              <b class="fw-900">${username}</b>
                              <span>${content}</span>
-                             <i class="far fa-heart content-comment-like"></i>
+                             <i class="far fa-heart content-comment-like" data-id="${commentId}"></i>
                          </div>`;
 
                 $(`.comments-list-${imageId}`).prepend(itemStoryComment);
@@ -505,7 +513,8 @@ $(document).ready(function(){
                                  <div class="zpw pl-45 mt-10">
                                      <span class="mr-5 cursor-pointer">${date}</span>
                                      <span class="cursor-pointer">좋아요 ${likeCount}개</span>
-                                     <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"></i>
+                                     <i class="fas fa-ellipsis-h modal-comment-dotdotdot cursor-pointer"
+                                     data-id="${commentId}" data-commentowner="false"></i>
                                  </div>
                              </div>`;
 
@@ -579,16 +588,23 @@ $(document).ready(function(){
                $(this).addClass("fas");
                $(this).removeClass("far");
 
+               // 모달이라면
                if($(this).hasClass("content-comment-like-modal")){
-                   // 좋아요 갯수 수정
+                   let likeCountStr = $(`.story-modal-comment-like-count[data-id="${commentId}"]`).data("likecount");
+                   let likeCount = Number(likeCountStr) + 1;
+                   $(`.story-modal-comment-like-count[data-id="${commentId}"]`).data("likecount", likeCount);
+                   $(`.story-modal-comment-like-count[data-id="${commentId}"]`).text(`좋아요 ${likeCount}개`);
                }
 
                // index page 라면
                if($(document).find("title").text() == "Photogram"){
+
                    // modal의 좋아요를 눌렀다면
                    if($(this).hasClass("content-comment-like-modal")){
                       // story 좋아요 수정
-
+                      $(`.content-comment-like[data-id="${commentId}"]`).css("color", "#ED4956");
+                      $(`.content-comment-like[data-id="${commentId}"]`).addClass("fas");
+                      $(`.content-comment-like[data-id="${commentId}"]`).removeClass("far");
                    }
                }
 
@@ -610,12 +626,24 @@ $(document).ready(function(){
                $(this).addClass("far");
                $(this).removeClass("fas");
 
+               // 모달이라면
                if($(this).hasClass("content-comment-like-modal")){
-                   // 좋아요 갯수 수정
+                   let likeCountStr = $(`.story-modal-comment-like-count[data-id="${commentId}"]`).data("likecount");
+                   let likeCount = Number(likeCountStr) - 1;
+                   $(`.story-modal-comment-like-count[data-id="${commentId}"]`).data("likecount", likeCount);
+                   $(`.story-modal-comment-like-count[data-id="${commentId}"]`).text(`좋아요 ${likeCount}개`);
                }
 
                // index page 라면
                if($(document).find("title").text() == "Photogram"){
+
+                   // modal의 좋아요를 눌렀다면
+                   if($(this).hasClass("content-comment-like-modal")){
+                      // story 좋아요 수정
+                      $(`.content-comment-like[data-id="${commentId}"]`).css("color", "");
+                      $(`.content-comment-like[data-id="${commentId}"]`).addClass("far");
+                      $(`.content-comment-like[data-id="${commentId}"]`).removeClass("fas");
+                   }
 
                }
 
@@ -624,6 +652,80 @@ $(document).ready(function(){
             });
 
         }
+    });
+
+    // 댓글 신고 -- 스토리 모달 댓글 dotdotdot 클릭 시
+    $(document).on("click", ".report-modal-comment-btn", function(e){
+        e.preventDefault();
+
+        const commentId = $(this).data("id");
+
+        $.ajax({
+            type: "post",
+            url: `/api/v1/comments/${commentId}/report`,
+            dataType: "json"
+        }).done(res => {
+           console.log("댓글 신고 성공", res);
+           alert("정상적으로 신고되었습니다 감사합니다.");
+
+
+        }).fail(error => {
+            console.log("댓글 신고  실패", error);
+        });
+
+    })
+
+    // 댓글 삭제 -- 스토리 모달 댓글 dotdotdot 클릭 시
+    $(document).on("click", ".cancel-modal-comment-delete-btn", function(e){
+        e.preventDefault();
+
+        const commentId = $(this).data("id");
+
+        $.ajax({
+            type: "delete",
+            url: `/api/v1/comments/${commentId}`,
+            dataType: "json"
+        }).done(res => {
+           console.log("댓글 삭제 성공", res);
+
+           alert("정상적으로 댓글이 삭제되었습니다.");
+
+        }).fail(error => {
+            console.log("댓글 삭제  실패", error);
+        });
+
+    })
+
+
+    // 스토리 모달 댓글 dotdotdot 클릭 시
+    $(document).on("click", ".modal-comment-dotdotdot", function(e){
+        e.preventDefault();
+
+        const commentId = $(this).data("id");
+        const commentOwnerState = $(this).data("commentowner");
+
+        if(commentOwnerState == true){
+
+            if(!$(".report-modal-comment-btn").next().hasClass("cancel-modal-comment-delete-btn")){
+                let item = `<button class="cancel-modal-comment-delete-btn">삭제</button>`;
+                $(".report-modal-comment-btn").after(item);
+            }
+
+        }else{
+            $(".cancel-modal-comment-delete-btn").remove();
+        }
+
+        $(".report-modal-comment-btn").data("id", commentId);
+        if($(".cancel-modal-comment-delete-btn")){
+            $(".cancel-modal-comment-delete-btn").data("id", commentId);
+        }
+
+        $(".modal-comment-dotdotdot-wrapper").css("display", "flex");
+    });
+
+    $(document).on("click", ".cancel-modal-comment-dotdotdot-option-btn", function(e){
+        e.preventDefault();
+        $(".modal-comment-dotdotdot-wrapper").hide();
     });
 
     // ---------- 파일 업로드 -------------

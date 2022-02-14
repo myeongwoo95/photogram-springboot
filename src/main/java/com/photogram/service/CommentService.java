@@ -4,6 +4,8 @@ import com.photogram.domain.comment.Comment;
 import com.photogram.domain.comment.CommentRepository;
 import com.photogram.domain.image.Image;
 import com.photogram.domain.like.LikeCommentRespository;
+import com.photogram.domain.report.ReportComment;
+import com.photogram.domain.report.ReportCommentRepository;
 import com.photogram.domain.user.User;
 import com.photogram.domain.user.UserRepository;
 import com.photogram.handler.ex.CustomApiException;
@@ -22,6 +24,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final LikeCommentRespository likeCommentRespository;
+    private final ReportCommentRepository reportCommentRepository;
 
     @Transactional
     public void 댓글_좋아요(Long commentId, Long id) {
@@ -55,10 +58,6 @@ public class CommentService {
     }
 
     @Transactional
-    public void 댓글삭제() {
-
-    }
-
     public List<Comment> 나의_댓글_불러오기(Long imageId, Long userId) {
         List<Comment> myComments = commentRepository.myCommentList(imageId, userId).orElseThrow(()->{
             return new CustomApiException("등록된 정보가 존재하지 않습니다");
@@ -78,6 +77,7 @@ public class CommentService {
         return myComments;
     }
 
+    @Transactional
     public List<Comment> 모든댓글_불러오기(Long imageId, Long userId, Pageable pageable) {
 
         List<Comment> allComments = commentRepository.CommentListWithoutMine(imageId, userId, pageable).orElseThrow(()->{
@@ -98,4 +98,42 @@ public class CommentService {
     }
 
 
+    @Transactional
+    public void 댓글_신고(Long commentId, Long userId) {
+        User userEntity = userRepository.findById(userId).orElseThrow(()->{
+            return new CustomApiException("등록된 유저정보가 없습니다.");
+        });
+
+        Comment commentEntity = commentRepository.findById(commentId).orElseThrow(()->{
+            return new CustomApiException("등록된 댓글정보가 없습니다.");
+        });
+
+        ReportComment reportCommentEntity = new ReportComment();
+        reportCommentEntity.setUser(userEntity);
+        reportCommentEntity.setComment(commentEntity);
+
+        reportCommentRepository.save(reportCommentEntity);
+    }
+
+    @Transactional
+    public void 댓글_삭제(Long commentId, Long userId) {
+        User userEntity = userRepository.findById(userId).orElseThrow(()->{
+            return new CustomApiException("등록된 유저정보가 없습니다.");
+        });
+
+        Comment commentEntity = commentRepository.findById(commentId).orElseThrow(()->{
+            return new CustomApiException("등록된 댓글정보가 없습니다.");
+        });
+
+        if(userEntity.getId() != commentEntity.getUser().getId()){
+            throw new CustomApiException("댓글을 삭제할 권한이 없습니다.");
+        }
+
+        // 1. reportComment 테이블에서 commentId 삭제 후
+        // 2. commentRepository에서 commentId 삭제
+        // 3. view의 modal에서 댓글 삭제, index page라면 story 댓글 list에서도 댓글 삭제(존재한다면,보인다면)
+
+//        reportCommentRepository.deleteAllByCommentId(commentId);
+//        commentRepository.delete(commentEntity);
+    }
 }

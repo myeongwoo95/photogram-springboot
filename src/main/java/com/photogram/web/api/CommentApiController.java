@@ -23,6 +23,18 @@ import java.util.List;
 public class CommentApiController {
     private final CommentService commentService;
 
+    @PostMapping("/api/v1/comments/{commentId}/report")
+    public ResponseEntity<?> commentReport(@PathVariable Long commentId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        commentService.댓글_신고(commentId, principalDetails.getUser().getId());
+        return new ResponseEntity<>(new CMRespDto<>(1, "댓글 신고 성공", null), HttpStatus.OK);
+    }
+
+    @DeleteMapping("api/v1/comments/{commentId}")
+    public ResponseEntity<?> commentDelete(@PathVariable Long commentId, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        commentService.댓글_삭제(commentId, principalDetails.getUser().getId());
+        return new ResponseEntity<>(new CMRespDto<>(1, "댓글 삭제 성공", null), HttpStatus.OK);
+    }
+
     @PostMapping("/api/v1/comments/{commentId}/likes")
     public ResponseEntity<?> likes(@PathVariable Long commentId, @AuthenticationPrincipal PrincipalDetails principalDetails){
         commentService.댓글_좋아요(commentId, principalDetails.getUser().getId());
@@ -40,11 +52,6 @@ public class CommentApiController {
                                          @PageableDefault(size=5, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         Page<Comment> comments = commentService.댓글쓰기(requestDto.getContent(), requestDto.getImageId(), principalDetails.getUser().getId(), pageable);
         return new ResponseEntity<>(new CMRespDto<>(1, "댓글쓰기 성공", comments), HttpStatus.CREATED);
-    }
-
-    @DeleteMapping("api/v1/comment/{id}")
-    public ResponseEntity<?> commentDelete(@PathVariable Long id){
-        return null;
     }
 
     @GetMapping("api/v1/comments/images/{imageId}/users/{userId}")
