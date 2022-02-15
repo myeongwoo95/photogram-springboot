@@ -2,7 +2,7 @@ package com.photogram.domain.report;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.photogram.domain.BaseTimeEntity;
-import com.photogram.domain.comment.Comment;
+import com.photogram.domain.image.Image;
 import com.photogram.domain.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,14 +18,13 @@ import javax.persistence.*;
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(
-                        name="report_comment_uk", // 복합키 이름
-                        columnNames= {"userId", "commentId"}
+                        name="report_content_uk", // 복합키 이름
+                        columnNames= {"userId", "imageId"}
                 )
         }
 )
 @Entity
-public class ReportComment extends BaseTimeEntity {
-
+public class ReportContent extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,8 +35,12 @@ public class ReportComment extends BaseTimeEntity {
     @ManyToOne
     private User user;
 
-    @JsonIgnoreProperties({"commentLikes", "image"})
-    @JoinColumn(name = "commentId")
+    @JsonIgnoreProperties({"files", "likes", "comments"})
+    @JoinColumn(name = "imageId")
     @ManyToOne
-    private Comment comment;
+    private Image image;
+
+    @Column(nullable = false)
+    private String message;
+
 }

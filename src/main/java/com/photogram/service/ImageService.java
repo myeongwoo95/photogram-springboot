@@ -6,8 +6,13 @@ import com.photogram.domain.file.File;
 import com.photogram.domain.file.FileRepository;
 import com.photogram.domain.image.Image;
 import com.photogram.domain.image.ImageRepository;
+import com.photogram.domain.report.ReportContent;
+import com.photogram.domain.report.ReportContentRepository;
+import com.photogram.domain.user.User;
+import com.photogram.domain.user.UserRepository;
 import com.photogram.handler.ex.CustomApiException;
 import com.photogram.web.dto.image.ImageUploadRequestDto;
+import com.photogram.web.dto.report.ReportContentPostRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +34,35 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final FileRepository fileRepository;
     private final BookmarkRepository bookmarkRepository;
+    private final ReportContentRepository reportContentRepository;
+    private final UserRepository userRepository;
 
     @Value("${file.path.image}")
     private String uploadFolder;
+
+    @Transactional
+    public ReportContent 컨텐츠_신고(Long imageId, Long userId, ReportContentPostRequestDto requestDto) {
+        User userEntity = userRepository.findById(userId).orElseThrow(()->{
+            return new CustomApiException("등록된 유저정보가 없습니다.");
+        });
+
+        Image ImageEntity = imageRepository.findById(imageId).orElseThrow(()->{
+            return new CustomApiException("등록된 컨텐츠가 없습니다.");
+        });
+
+        int result = reportContentRepository.mDuplicateCheck(imageId, userId);
+
+        if(result == 1){
+            throw new CustomApiException("이미 신고하신 게시물입니다.");
+        }
+
+        ReportContent reportContentEntity = new ReportContent();
+        reportContentEntity.setUser(userEntity);
+        reportContentEntity.setImage(ImageEntity);
+        reportContentEntity.setMessage(requestDto.getMessage());
+
+        return reportContentRepository.save(reportContentEntity);
+    }
 
     @Transactional(readOnly = true)
     public List<Image> 인기사진(Pageable pageable) {
@@ -145,6 +176,7 @@ public class ImageService {
 
         return image;
     }
+
 }
 
 

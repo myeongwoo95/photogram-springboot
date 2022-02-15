@@ -13,4 +13,10 @@ public interface LikeCommentRespository extends JpaRepository<LikeComment, Long>
     @Modifying
     @Query(value="delete from likeComment where commentId = :commentId and userId = :principalId", nativeQuery = true)
     int mUnLikes(Long commentId, Long principalId);
+
+    @Modifying
+    @Query(value = "delete from likeComment where commentId = :commentId", nativeQuery = true)
+    int deleteAllByCommentId(Long commentId);
+
+
 }

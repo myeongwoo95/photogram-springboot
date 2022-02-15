@@ -112,6 +112,12 @@ public class CommentService {
         reportCommentEntity.setUser(userEntity);
         reportCommentEntity.setComment(commentEntity);
 
+        int result = reportCommentRepository.mDuplicateCheck(commentId, userId);
+
+        if(result == 1){
+            throw new CustomApiException("이미 신고하신 댓글입니다.");
+        }
+
         reportCommentRepository.save(reportCommentEntity);
     }
 
@@ -129,11 +135,8 @@ public class CommentService {
             throw new CustomApiException("댓글을 삭제할 권한이 없습니다.");
         }
 
-        // 1. reportComment 테이블에서 commentId 삭제 후
-        // 2. commentRepository에서 commentId 삭제
-        // 3. view의 modal에서 댓글 삭제, index page라면 story 댓글 list에서도 댓글 삭제(존재한다면,보인다면)
-
-//        reportCommentRepository.deleteAllByCommentId(commentId);
-//        commentRepository.delete(commentEntity);
+        reportCommentRepository.deleteAllByCommentId(commentId);
+        likeCommentRespository.deleteAllByCommentId(commentId);
+        commentRepository.delete(commentEntity);
     }
 }

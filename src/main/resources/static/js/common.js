@@ -35,20 +35,6 @@ $(document).ready(function(){
         //로직추가
     });
 
-    // 이미지 상세보기 -> 신고 -> (차단) 및 팔로우 취소
-    $(".modal-reported__btn-block-user").on("click", function(e){
-        e.preventDefault();
-        alert("차단 API로직")
-        $(".modal-reported-wrapper").hide();
-    })
-
-    // 이미지 상세보기 -> 신고 -> 차단 및 (팔로우 취소) 다른 btn이랑 로직이 겹치니까 그거사용
-    $(".modal-reported__btn-cancel-following").on("click", function(e){
-        e.preventDefault();
-        alert("팔로우취소 API로직")
-        $(".modal-reported-wrapper").hide();
-    })
-
     // 헤더 프로필 클릭
     $(".header__profile-picture").on("click", function(){
         if( $(".header__dropdown").css("display") == "none"){
@@ -120,6 +106,10 @@ $(document).ready(function(){
             // 프로파일 변경
             $(".comment-modal-view__comment-list__header img").attr("src", "/upload/" + res.data.user.profileImageUrl);
             $(".comment-modal-view__comment-list__header span").text(res.data.user.username);
+
+            // btn-content-option 값 설정 (신고 및 팔로우 취소등에 사용)
+            $(".comment-modal-view__comment-list__header .btn-content-option").data("id", res.data.id);
+            $(".comment-modal-view__comment-list__header .btn-content-option").data("userid", res.data.user.id);
 
             // description 프로파일 변경
             $(".comment-modal-view__comment-list__body__user img").attr("src", "/upload/" + res.data.user.profileImageUrl);
@@ -654,6 +644,148 @@ $(document).ready(function(){
         }
     });
 
+    // 콘텐츠 dotdotdot 옵션 모달 켜기 (지금은 나의 게시물 안나와서 수정하면 버그 생길수 있음)
+    $(document).on("click", ".btn-content-option", function(e){
+        e.preventDefault();
+
+        const imageId = $(this).data("id");
+        const userId = $(this).data("userid");
+
+        if(principalId == userId){
+            $(".modal-content-option .btn-delete-content").parent().remove();
+            let item = `<li><button class="btn-delete-content">삭제</button></li>`;
+            $(".modal-content-option ul").prepend(item);
+
+            $(".modal-content-option .report").parent().remove();
+            $(".modal-content-option .cancel-following").parent().remove();
+        }else{
+            $(".modal-content-option .btn-delete-content").parent().remove();
+
+            $(".modal-content-option .cancel-following").parent().remove();
+            let item2 = `<li><button class="cancel-following">팔로우 취소</button></li>`;
+            $(".modal-content-option ul").prepend(item2);
+
+            $(".modal-content-option .report").parent().remove();
+            let item1 = `<li><button class="report">신고</button></li>`;
+            $(".modal-content-option ul").prepend(item1);
+            $(".modal-content-option .report").data("id", imageId);
+        }
+        $(".modal-content-option-wrapper").css("display", "flex");
+    });
+
+    // 콘텐츠 dotdotdot 모달 닫기
+    $(document).on("click", ".cancel-content-option", function(e){
+        e.preventDefault();
+        $(".modal-content-option-wrapper").hide();
+    });
+
+    // 콘텐츠 삭제
+    $(document).on("click", ".btn-delete-content", function(e){
+        e.preventDefault();
+        alert("삭제 로직 ㄱㄱ")
+    });
+
+    // 콘텐츠 신고1
+    $(document).on("click", ".modal-content-option .report", function(e){
+        e.preventDefault();
+
+        const imageId = $(this).data("id");
+
+        $(".modal-content-option-wrapper").hide();
+        $(".modal-reportList-wrapper modal-reportList")
+        $(".modal-reportList-wrapper").css("display", "flex");
+        $(".modal-reportList-wrapper").data("id", imageId);
+    });
+
+    // 신고 사유 선택
+    $(document).on("click", ".modal-reportList ul li button", function(e){
+        e.preventDefault();
+
+        const imageId = $(this).parent().parent().parent().parent().data("id");
+        const text = $(this).text();
+
+        let data = {message: text};
+
+        $.ajax({
+            type: "post",
+            url: `/api/v1/images/${imageId}/report`,
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json"
+        }).done(res => {
+           console.log("컨텐츠 신고 성공", res);
+
+           $(".modal-reportList-wrapper").hide();
+
+           $(".modal-reported-wrapper").data("username", res.data.image.user.username);
+           $(".modal-reported-wrapper").data("userid", res.data.image.user.id);
+           $(".modal-reported__btn-cancel-following").text(res.data.image.user.username+"님 팔로우 취소");
+
+           $(".modal-reported-wrapper").css("display", "flex");
+
+        }).fail(error => {
+            console.log("컨첸츠 신고 실패", error);
+            alert(error.responseJSON.message);
+        });
+
+    })
+
+    // 신고 사유 선택 닫기
+    $(".cancel-reportList").on("click", function(e){
+        e.preventDefault();
+        $(".modal-reportList-wrapper").hide();
+    });
+
+    // 신고 완료3 -> 팔로우 취소 클릭
+    $(".modal-reported__btn-block-user").on("click", function(e){
+        e.preventDefault();
+
+        alert("차단 API로직")
+        $(".modal-reported-wrapper").hide();
+    });
+
+    // 신고 완료3 - 모달 닫기
+    $(".btn-close-reported").on("click", function(e){
+        e.preventDefault();
+        $(".modal-reported-wrapper").hide();
+    });
+
+    // 신고이후 -> 팔로우 취소
+    $(document).on("click", ".btn-cancel-following", function(e){
+        e.preventDefault();
+
+        //로직
+        alert("팔로우 취소 api 실행");
+        $(".modal-requestCancelFollowing-wrapper").hide();
+        $("body").removeClass("stopScroll");
+    })
+
+    // 콘텐츠 dotdotdot 에서 팔로우 취소 모달 열기
+    $(document).on("click", ".cancel-following", function(e){
+        e.preventDefault();
+        $(".modal-content-option-wrapper").hide();
+        $(".modal-requestCancelFollowing-wrapper").css("display", "flex");
+    })
+
+    // 팔로우 취소 모달 닫기
+    $(document).on("click", ".btn-close-requestCancelFollowing", function(e){
+        e.preventDefault();
+        $(".modal-requestCancelFollowing-wrapper").hide();
+        $("body").removeClass("stopScroll");
+    })
+
+
+
+    // 콘텐츠 옵션에서 링크 복사 눌렀을때 보여주는 (모달)
+    $(document).on("click", ".btn-link-copy", function(e){
+        e.preventDefault();
+
+        //로직
+        alert("링크가 복사되었습니다.")
+        $(".modal-content-option-wrapper").hide();
+        $("body").removeClass("stopScroll");
+    })
+
     // 댓글 신고 -- 스토리 모달 댓글 dotdotdot 클릭 시
     $(document).on("click", ".report-modal-comment-btn", function(e){
         e.preventDefault();
@@ -665,12 +797,12 @@ $(document).ready(function(){
             url: `/api/v1/comments/${commentId}/report`,
             dataType: "json"
         }).done(res => {
-           console.log("댓글 신고 성공", res);
-           alert("정상적으로 신고되었습니다 감사합니다.");
-
-
+            console.log("댓글 신고 성공", res);
+            alert("정상적으로 신고되었습니다.");
+            $(".modal-comment-dotdotdot-wrapper").hide();
         }).fail(error => {
             console.log("댓글 신고  실패", error);
+            alert(error.responseJSON.message);
         });
 
     })
@@ -686,16 +818,26 @@ $(document).ready(function(){
             url: `/api/v1/comments/${commentId}`,
             dataType: "json"
         }).done(res => {
-           console.log("댓글 삭제 성공", res);
+            console.log("댓글 삭제 성공", res);
 
-           alert("정상적으로 댓글이 삭제되었습니다.");
+            // 모달에서 댓글삭제
+            $(`.content-comment-like-modal[data-id="${commentId}"]`).parent().remove();
+
+            // index page 일 경우
+            if($(document).find("title").text() == "Photogram"){
+                if($(`.content-comment-like[data-id="${commentId}"]`)){
+                    $(`.content-comment-like[data-id="${commentId}"]`).parent().remove();
+                }
+            }
 
         }).fail(error => {
             console.log("댓글 삭제  실패", error);
+            alert("댓글 삭제 에러");
+        }).always(() => {
+            $(".modal-comment-dotdotdot-wrapper").hide();
         });
 
-    })
-
+    });
 
     // 스토리 모달 댓글 dotdotdot 클릭 시
     $(document).on("click", ".modal-comment-dotdotdot", function(e){
@@ -1395,67 +1537,6 @@ $(document).ready(function(){
 //        $(this).parent().parent().parent().next().val(dataTextArea+data);
         alert("인코딩 문제로 현재 사용 불가능합니다.");
         $(this).parent().parent().remove();
-    })
-
-    // 콘텐츠 dotdotdot 옵션 모달 켜기
-    $(document).on("click", ".btn-content-option", function(){
-        $("body").addClass("stopScroll");
-        $(".modal-content-option-wrapper").css("display", "flex");
     });
 
-    $(".cancle-content-option").on("click", function(){
-        $(".modal-content-option-wrapper").hide();
-        $("body").removeClass("stopScroll");
-    });
-
-    // 콘텐츠 dotdotdot 옵션 모달 닫기
-    $(".modal-content-option .report").on("click", function(){
-        $(".modal-content-option-wrapper").hide();
-        $(".modal-reportList-wrapper").css("display", "flex");
-    });
-
-    // 신고 사유 선택
-    $(".cancel-reportList").on("click", function(){
-        $(".modal-reportList-wrapper").hide();
-    });
-
-    // 신고 완료
-    $(".modal-reportList ul li button").on("click", function(){
-        $(".modal-reportList-wrapper").hide();
-        $(".modal-reported-wrapper").css("display", "flex");
-    })
-
-    $(".btn-close-reported").on("click", function(){
-        $(".modal-reported-wrapper").hide();
-        $("body").removeClass("stopScroll");
-    })
-
-    // 콘텐츠 옵션에서 팔로우 취소 눌렀을때 보여주는 (모달)
-    $(".cancel-following").on("click", function(){
-        $(".modal-content-option-wrapper").hide();
-        $(".modal-requestCancelFollowing-wrapper").css("display", "flex");
-    })
-
-    // 팔로우 취소 모달 닫기 
-    $(".btn-close-requestCancelFollowing").on("click", function(){
-        $(".modal-requestCancelFollowing-wrapper").hide();
-        $("body").removeClass("stopScroll");
-    })
-
-    // 팔로우 취소API
-    $(".btn-cancel-following").on("click", function(){
-        //로직
-        alert("팔로우 취소 api 실행");
-        $(".modal-requestCancelFollowing-wrapper").hide();
-        $("body").removeClass("stopScroll");
-    })
-
-    // 콘텐츠 옵션에서 링크 복사 눌렀을때 보여주는 (모달)
-    $(".btn-link-copy").on("click", function(){
-        
-        //로직
-        alert("링크가 복사되었습니다.")
-        $(".modal-content-option-wrapper").hide();
-        $("body").removeClass("stopScroll");
-    })
 });

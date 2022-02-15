@@ -2,12 +2,14 @@ package com.photogram.web.api;
 
 import com.photogram.config.auth.PrincipalDetails;
 import com.photogram.domain.image.Image;
+import com.photogram.domain.report.ReportContent;
 import com.photogram.handler.ex.CustomValidationException;
 import com.photogram.service.BookmarkService;
 import com.photogram.service.ImageService;
 import com.photogram.service.LikeService;
 import com.photogram.web.dto.CMRespDto;
 import com.photogram.web.dto.image.ImageUploadRequestDto;
+import com.photogram.web.dto.report.ReportContentPostRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -26,6 +29,12 @@ public class ImageApiController {
     private final ImageService imageService;
     private final LikeService likeService;
     private final BookmarkService bookmarkService;
+
+    @PostMapping("/api/v1/images/{imageId}/report")
+    public ResponseEntity<?> commentReport(@PathVariable Long imageId, @Valid @RequestBody ReportContentPostRequestDto requestDto, @AuthenticationPrincipal PrincipalDetails principalDetails){
+        ReportContent reportContentEnityty = imageService.컨텐츠_신고(imageId, principalDetails.getUser().getId(), requestDto);
+        return new ResponseEntity<>(new CMRespDto<>(1, "컨텐츠 신고 성공", reportContentEnityty), HttpStatus.OK);
+    }
 
     @PostMapping("/api/v1/images/{imageId}/bookmarks")
     public ResponseEntity<?> bookmarks(@PathVariable Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails){

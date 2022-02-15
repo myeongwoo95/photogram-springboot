@@ -65,7 +65,7 @@ $(document).ready(function(){
                         <div class="item-list__image-item__header">
                             <img src="/upload/${image.user.profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" onclick="location.href='/user/${image.user.id}/profile';" alt="user">
                             <span onclick="location.href='/user/${image.user.id}/profile';">${image.user.username}</span>
-                            <i class="fas fa-ellipsis-h btn-content-option" onclick="btnContentOption(${image.id})"></i>
+                            <i class="fas fa-ellipsis-h btn-content-option" data-id="${image.id}" data-userid="${image.user.id}"></i>
                         </div>
 
                         <!-- body(image) -->

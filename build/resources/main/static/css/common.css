@@ -663,6 +663,11 @@ input:checked + .slider:before {
     cursor: pointer;
 }
 
+.modal-content-option-wrapper .modal-content-option ul li button.btn-delete-content{
+    color: #ED4956;
+    font-weight: bold;
+}
+
 .modal-content-option-wrapper .modal-content-option ul li button.report{
     color: #ED4956;
     font-weight: bold;
