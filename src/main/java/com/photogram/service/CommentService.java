@@ -136,7 +136,7 @@ public class CommentService {
         }
 
         reportCommentRepository.deleteAllByCommentId(commentId);
-        likeCommentRespository.deleteAllByCommentId(commentId);
+        likeCommentRespository.deleteByCommentId(commentId);
         commentRepository.delete(commentEntity);
     }
 }

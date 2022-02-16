@@ -2,10 +2,14 @@ package com.photogram.service;
 
 import com.photogram.config.auth.PrincipalDetails;
 import com.photogram.domain.bookmark.BookmarkRepository;
+import com.photogram.domain.comment.CommentRepository;
 import com.photogram.domain.file.File;
 import com.photogram.domain.file.FileRepository;
 import com.photogram.domain.image.Image;
 import com.photogram.domain.image.ImageRepository;
+import com.photogram.domain.like.LikeCommentRespository;
+import com.photogram.domain.like.LikesRespository;
+import com.photogram.domain.report.ReportCommentRepository;
 import com.photogram.domain.report.ReportContent;
 import com.photogram.domain.report.ReportContentRepository;
 import com.photogram.domain.user.User;
@@ -35,10 +39,60 @@ public class ImageService {
     private final FileRepository fileRepository;
     private final BookmarkRepository bookmarkRepository;
     private final ReportContentRepository reportContentRepository;
+    private final ReportCommentRepository reportCommentRepository;
     private final UserRepository userRepository;
+    private final LikesRespository likesRespository;
+    private final LikeCommentRespository likeCommentRespository;
+    private final CommentRepository commentRepository;
+
 
     @Value("${file.path.image}")
     private String uploadFolder;
+
+    @Transactional
+    public void 이미지_삭제(Long imageId, Long userId) {
+        User userEntity = userRepository.findById(userId).orElseThrow(()->{
+            return new CustomApiException("등록된 유저정보가 없습니다.");
+        });
+
+        Image imageEntity = imageRepository.findById(imageId).orElseThrow(()->{
+            return new CustomApiException("등록된 컨텐츠가 없습니다.");
+        });
+
+        if(imageEntity.getUser().getId() != userId){
+            throw new CustomApiException("컨텐츠를 삭제할 권한이 없습니다.");
+        }
+
+        List<File> files = fileRepository.findAllByImageId(imageId);
+
+        files.forEach((file)->{
+            Path imageFilePath = Paths.get(uploadFolder + file.getFileUrl());
+
+            try {
+                boolean result = Files.deleteIfExists(imageFilePath);
+
+                if(result == true){
+                    fileRepository.delete(file);
+                }
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        bookmarkRepository.deleteByImageId(imageId);
+        likesRespository.deleteByImageId(imageId);
+
+        commentRepository.findAllByImageId(imageId).forEach((comment)->{
+            likeCommentRespository.deleteByCommentId(comment.getId());
+            reportCommentRepository.deleteAllByCommentId(comment.getId());
+            commentRepository.delete(comment);
+        });
+
+        reportContentRepository.deleteByImageId(imageId);
+        imageRepository.delete(imageEntity);
+    }
 
     @Transactional
     public ReportContent 컨텐츠_신고(Long imageId, Long userId, ReportContentPostRequestDto requestDto) {
@@ -134,14 +188,11 @@ public class ImageService {
                     if(commentLike.getUser().getId() == principalId){
                         comment.setLikeCommentState(true);
                     }
-
                 });
-
 
             });
 
         });
-
         return images;
     }
 

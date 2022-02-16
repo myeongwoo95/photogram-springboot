@@ -110,6 +110,8 @@ $(document).ready(function(){
             // btn-content-option 값 설정 (신고 및 팔로우 취소등에 사용)
             $(".comment-modal-view__comment-list__header .btn-content-option").data("id", res.data.id);
             $(".comment-modal-view__comment-list__header .btn-content-option").data("userid", res.data.user.id);
+            $(".comment-modal-view__comment-list__header .btn-content-option").data("url", res.data.user.profileImageUrl);
+            $(".comment-modal-view__comment-list__header .btn-content-option").data("username", res.data.user.username);
 
             // description 프로파일 변경
             $(".comment-modal-view__comment-list__body__user img").attr("src", "/upload/" + res.data.user.profileImageUrl);
@@ -644,17 +646,20 @@ $(document).ready(function(){
         }
     });
 
-    // 콘텐츠 dotdotdot 옵션 모달 켜기 (지금은 나의 게시물 안나와서 수정하면 버그 생길수 있음)
+    // 콘텐츠 dotdotdot 옵션 모달 켜기
     $(document).on("click", ".btn-content-option", function(e){
         e.preventDefault();
 
         const imageId = $(this).data("id");
         const userId = $(this).data("userid");
+        const url = $(this).data("url");
+        const username = $(this).data("username");
 
         if(principalId == userId){
             $(".modal-content-option .btn-delete-content").parent().remove();
             let item = `<li><button class="btn-delete-content">삭제</button></li>`;
             $(".modal-content-option ul").prepend(item);
+            $(".modal-content-option .btn-delete-content").data("id", imageId);
 
             $(".modal-content-option .report").parent().remove();
             $(".modal-content-option .cancel-following").parent().remove();
@@ -664,12 +669,17 @@ $(document).ready(function(){
             $(".modal-content-option .cancel-following").parent().remove();
             let item2 = `<li><button class="cancel-following">팔로우 취소</button></li>`;
             $(".modal-content-option ul").prepend(item2);
+            $(".modal-content-option .cancel-following").data("userid", userId);
+            $(".modal-content-option .cancel-following").data("url", url);
+            $(".modal-content-option .cancel-following").data("username", username);
 
             $(".modal-content-option .report").parent().remove();
             let item1 = `<li><button class="report">신고</button></li>`;
             $(".modal-content-option ul").prepend(item1);
             $(".modal-content-option .report").data("id", imageId);
         }
+
+        $(".modal-content-option .btn-link-copy").data("userid", userId);
         $(".modal-content-option-wrapper").css("display", "flex");
     });
 
@@ -682,7 +692,21 @@ $(document).ready(function(){
     // 콘텐츠 삭제
     $(document).on("click", ".btn-delete-content", function(e){
         e.preventDefault();
-        alert("삭제 로직 ㄱㄱ")
+
+        const imageId = $(this).data("id");
+
+        $.ajax({
+            type: "delete",
+            url: "/api/v1/images/" + imageId,
+            dataType: "json"
+        }).done(res => {
+            console.log("컨텐츠 삭제 성공", res);
+            location.reload();
+        }).fail(error => {
+            console.log("컨텐츠 삭제 실패", error);
+            alert("삭제 실패");
+        });
+
     });
 
     // 콘텐츠 신고1
@@ -720,6 +744,7 @@ $(document).ready(function(){
            $(".modal-reported-wrapper").data("username", res.data.image.user.username);
            $(".modal-reported-wrapper").data("userid", res.data.image.user.id);
            $(".modal-reported__btn-cancel-following").text(res.data.image.user.username+"님 팔로우 취소");
+           $(".modal-reported__btn-cancel-following").data("userid", res.data.image.user.id);
 
            $(".modal-reported-wrapper").css("display", "flex");
 
@@ -750,19 +775,37 @@ $(document).ready(function(){
         $(".modal-reported-wrapper").hide();
     });
 
-    // 신고이후 -> 팔로우 취소
-    $(document).on("click", ".btn-cancel-following", function(e){
+    // 신고이전 - 팔로우 취소
+    $(document).on("click", ".btn-cancel-following, .modal-reported__btn-cancel-following", function(e){
         e.preventDefault();
 
-        //로직
-        alert("팔로우 취소 api 실행");
-        $(".modal-requestCancelFollowing-wrapper").hide();
-        $("body").removeClass("stopScroll");
-    })
+        const toUserId = $(this).data("userid");
+
+        $.ajax({
+            type: "delete",
+            url: "/api/v1/unsubscribe/" + toUserId,
+            dataType: "json"
+        }).done(res => {
+            console.log("팔로우 취소 성공", res);
+            location.reload();
+        }).fail(error => {
+            console.log("팔로우 취소 실패", error);
+        });
+
+    });
 
     // 콘텐츠 dotdotdot 에서 팔로우 취소 모달 열기
     $(document).on("click", ".cancel-following", function(e){
         e.preventDefault();
+
+        const userId = $(this).data("userid");
+        const userProfileUrl = $(this).data("url");
+        const username = $(this).data("username");
+
+        $(".modal-requestCancelFollowing img").attr("src", "/upload/" + userProfileUrl);
+        $(".modal-requestCancelFollowing p").text(`${username}님의 팔로우를 취소하시겠습니까?`);
+        $(".modal-requestCancelFollowing .btn-cancel-following").data("userid", userId);
+
         $(".modal-content-option-wrapper").hide();
         $(".modal-requestCancelFollowing-wrapper").css("display", "flex");
     })
@@ -771,20 +814,33 @@ $(document).ready(function(){
     $(document).on("click", ".btn-close-requestCancelFollowing", function(e){
         e.preventDefault();
         $(".modal-requestCancelFollowing-wrapper").hide();
-        $("body").removeClass("stopScroll");
-    })
-
-
+    });
 
     // 콘텐츠 옵션에서 링크 복사 눌렀을때 보여주는 (모달)
     $(document).on("click", ".btn-link-copy", function(e){
         e.preventDefault();
 
-        //로직
-        alert("링크가 복사되었습니다.")
+        const userId = $(this).data("userid");
+
+        // 서버 호스팅시 수정필요!
+        $('#clip_target').val("http://localhost:8080/user/" + userId + "/profile");
+        $('#clip_target').select();
+
+        try {
+            var successful = document.execCommand('copy');
+
+            if(successful){
+                alert("주소가 복사되었습니다");
+            }else {
+                alert("복사 실패");
+            }
+
+         } catch (err) {
+           alert('이 브라우저는 지원하지 않습니다.')
+         }
+
         $(".modal-content-option-wrapper").hide();
-        $("body").removeClass("stopScroll");
-    })
+    });
 
     // 댓글 신고 -- 스토리 모달 댓글 dotdotdot 클릭 시
     $(document).on("click", ".report-modal-comment-btn", function(e){
@@ -805,7 +861,7 @@ $(document).ready(function(){
             alert(error.responseJSON.message);
         });
 
-    })
+    });
 
     // 댓글 삭제 -- 스토리 모달 댓글 dotdotdot 클릭 시
     $(document).on("click", ".cancel-modal-comment-delete-btn", function(e){
@@ -1009,8 +1065,6 @@ $(document).ready(function(){
         formData.append("caption", location);
         formData.append("location", caption);
         formData.append("isCommentActive", isCommentActive);
-
-        console.log(description, location, caption, isCommentActive);
 
         $.ajax({
             type: "post",

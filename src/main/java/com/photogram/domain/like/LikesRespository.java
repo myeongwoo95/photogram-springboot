@@ -14,4 +14,7 @@ public interface LikesRespository extends JpaRepository<Likes, Long> {
     @Query(value="delete from likes where imageId = :imageId and userId = :principalId", nativeQuery = true)
     int mUnLikes(Long imageId, Long principalId);
 
+    @Modifying
+    @Query(value = "DELETE FROM likes where imageId = :imageId", nativeQuery = true)
+    int deleteByImageId(Long imageId);
 }

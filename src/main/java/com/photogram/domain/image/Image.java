@@ -24,7 +24,7 @@ public class Image extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "image")
+    @OneToMany(mappedBy = "image", cascade = { CascadeType.REMOVE })
     @Column(nullable = false)
     private List<File> files;
 

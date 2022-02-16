@@ -24,6 +24,13 @@ public class UserApiController {
     private final UserService userService;
     private final SubscribeService subscribeService;
 
+    @GetMapping("/api/v1/users/{id}")
+    public ResponseEntity<?> getUser(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody UserUpdateRequestDto requestDto) {
+        User userEntity = userService.유저정보(id);
+        return new ResponseEntity<>
+                (new CMRespDto<>(1, "유저정보 가져오기 성공", userEntity), HttpStatus.OK);
+    }
+
     @PutMapping("/api/v1/users/{id}")
     public ResponseEntity<?> UpdateUser(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody UserUpdateRequestDto requestDto) {
         User userEntity = userService.회원정보_수정(id, requestDto);

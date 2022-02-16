@@ -65,6 +65,13 @@ public class ImageApiController {
         return new ResponseEntity<>(new CMRespDto<>(1, "이미지 업로드 성공", null), HttpStatus.OK);
     }
 
+    @DeleteMapping("/api/v1/images/{imageId}")
+    public ResponseEntity<?> imageUpload(@PathVariable Long imageId, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+
+        imageService.이미지_삭제(imageId, principalDetails.getUser().getId());
+        return new ResponseEntity<>(new CMRespDto<>(1, "이미지 삭제 성공", null), HttpStatus.OK);
+    }
+
     @GetMapping("/api/v1/images")
     public ResponseEntity<?> imageStory(@AuthenticationPrincipal PrincipalDetails principalDetails,
                                         @PageableDefault(size=3, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){

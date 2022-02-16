@@ -35,6 +35,13 @@ public class UserService {
     @Value("${file.path.profile}")
     private String uploadFolder;
 
+    @Transactional(readOnly = true)
+    public User 유저정보(Long id) {
+        return userRepository.findById(id).orElseThrow(()->{
+            return new CustomValidationApiException("존재하지 않는 사용자입니다.");
+        });
+    }
+
     @Transactional
     public User 회원정보_수정(Long id, UserUpdateRequestDto requestDto) {
 
@@ -117,6 +124,7 @@ public class UserService {
         return userEntity;
     }
 
+    @Transactional
     public UserProfilePageResponseDto 회원프로필(Long pageUserId, Long principalId) {
         UserProfilePageResponseDto responseDto = new UserProfilePageResponseDto();
 
@@ -148,4 +156,6 @@ public class UserService {
 
         return responseDto;
     }
+
+
 }

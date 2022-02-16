@@ -23,4 +23,9 @@ public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     // 북마크 여부 (로그인한 유저가 이미지를 북마크했는가?)
     @Query(value = "SELECT COUNT(*) FROM bookmark WHERE userId = :principalId AND imageId = :imageId", nativeQuery = true)
     int mBookmarkState(Long principalId, Long imageId);
+
+    @Modifying
+    @Query(value = "DELETE FROM bookmark where imageId = :imageId", nativeQuery = true)
+    int deleteByImageId(Long imageId);
+
 }
