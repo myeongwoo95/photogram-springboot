@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -34,6 +35,11 @@ public class UserService {
 
     @Value("${file.path.profile}")
     private String uploadFolder;
+
+    @Transactional(readOnly = true)
+    public List<User> 유저검색(String keyword, Long principalId) {
+        return userRepository.mGetUsersByKeyword(keyword, principalId);
+    }
 
     @Transactional(readOnly = true)
     public User 유저정보(Long id) {
@@ -156,6 +162,4 @@ public class UserService {
 
         return responseDto;
     }
-
-
 }

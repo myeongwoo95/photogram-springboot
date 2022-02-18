@@ -1,17 +1,22 @@
-let scrollTop;
-function saveScroll(){
-    scrollTop = $(document).scrollTop();
-}
+//let scrollTop;
+//function saveScroll(){
+//    scrollTop = $(document).scrollTop();
+//}
+//
+//function scroll(){
+//    $(document).scrollTop(scrollTop);
+//}
 
-function scroll(){
-    $(document).scrollTop(scrollTop);
-}
 
-const principalId = $("#principalId").val();
-
-let pageNumOfStoryModalComment = 0;
 
 $(document).ready(function(){
+    // paging
+    const principalId = $("#principalId").val();
+    let pageNumOfStoryModalComment = 0;
+
+    // 검색할때 ajax 딜레이용
+    var checkAjaxSetTimeout;
+
     // 파일 업로드 swiper
     var mySwiper = new Swiper ('.file-upload-swiper', {
         pagination: {
@@ -55,9 +60,22 @@ $(document).ready(function(){
     })
 
     // 헤더 검색
-    $(".header__search-input").on("change keyup paste focus", function(e){
-        e.preventDefault();
-        
+    $(".header__search-input").on("keyup", function(){
+
+        const keyword = $(this).val();
+
+        $.ajax({
+            type: "get",
+            url: `/api/v1/users/keyword/${keyword}`,
+            dataType: "json"
+        }).done(res => {
+            console.log("검색 ajax 성공", res)
+
+        }).fail(error => {
+            console.log("검색 ajax 실패", error);
+        });
+
+
         if(!$(this).val()){
             $(".search-list").hide();
         }else{
@@ -66,7 +84,7 @@ $(document).ready(function(){
             $(".header__dropdown").css("display", "none");
             $(".header__notice-box").css("display", "none");
         }
-    })
+    });
 
     //스토리 게시글 (모달) 켜기
     $(document).on("click", ".content-class, .comment-count", function(e){

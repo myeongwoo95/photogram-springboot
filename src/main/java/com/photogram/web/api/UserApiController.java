@@ -24,6 +24,13 @@ public class UserApiController {
     private final UserService userService;
     private final SubscribeService subscribeService;
 
+    @GetMapping("/api/v1/users/keyword/{keyword}")
+    public ResponseEntity<?> getUsersByKeyword(@PathVariable String keyword, @AuthenticationPrincipal PrincipalDetails principalDetails) {
+        List<User> users = userService.유저검색(keyword, principalDetails.getUser().getId());
+        return new ResponseEntity<>
+                (new CMRespDto<>(1, "검색 ajax 성공", users), HttpStatus.OK);
+    }
+
     @GetMapping("/api/v1/users/{id}")
     public ResponseEntity<?> getUser(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody UserUpdateRequestDto requestDto) {
         User userEntity = userService.유저정보(id);
