@@ -38,7 +38,12 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<User> 유저검색(String keyword, Long principalId) {
-        return userRepository.mGetUsersByKeyword(keyword, principalId);
+        List<User> users = userRepository.mGetUsersByKeyword(keyword, principalId);
+        if(users.size() == 0 ){
+            throw new CustomApiException("존재하지 않은 유저입니다");
+        }
+
+        return users;
     }
 
     @Transactional(readOnly = true)

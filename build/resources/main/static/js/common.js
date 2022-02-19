@@ -7,8 +7,6 @@
 //    $(document).scrollTop(scrollTop);
 //}
 
-
-
 $(document).ready(function(){
     // paging
     const principalId = $("#principalId").val();
@@ -61,29 +59,48 @@ $(document).ready(function(){
 
     // 헤더 검색
     $(".header__search-input").on("keyup", function(){
-
         const keyword = $(this).val();
 
-        $.ajax({
-            type: "get",
-            url: `/api/v1/users/keyword/${keyword}`,
-            dataType: "json"
-        }).done(res => {
-            console.log("검색 ajax 성공", res)
+        $(".search-list").empty();
+        $(".search-list").show();
+        $(".header__dropdown").css("display", "none");
+        $(".header__notice-box").css("display", "none");
 
-        }).fail(error => {
-            console.log("검색 ajax 실패", error);
-        });
+        clearTimeout(checkAjaxSetTimeout);
+        checkAjaxSetTimeout = setTimeout(function(){
+            if(keyword != ""){
+                $.ajax({
+                    type: "get",
+                    url: "/api/v1/users/keyword/" + keyword,
+                    dataType: "json"
+                }).done(res => {
+                    console.log("검색 ajax 성공", res);
+
+                    res.data.forEach((user)=>{
+                        item = `<div class="search-item" onclick="location.href" = '/user/${user.id}/profile'>
+                                    <img src="/upload/s_${user.profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="profile">
+                                    <div class="search-item__info">
+                                        <span class="mb-5">${user.username}</span>
+                                        <span>${user.name}</span>
+                                    </div>
+                                </div>`;
+
+                        $(".search-list").append(item);
+                    });
 
 
-        if(!$(this).val()){
-            $(".search-list").hide();
-        }else{
-            //api 로직
-            $(".search-list").show();
-            $(".header__dropdown").css("display", "none");
-            $(".header__notice-box").css("display", "none");
-        }
+
+
+                    $(".search-list").show();
+                }).fail(error => {
+                    console.log("검색 ajax 에러", error);
+                });
+
+            }
+        }, 500);
+
+
+
     });
 
     //스토리 게시글 (모달) 켜기
