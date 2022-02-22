@@ -32,7 +32,7 @@ public class UserApiController {
     }
 
     @GetMapping("/api/v1/users/{id}")
-    public ResponseEntity<?> getUser(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails principalDetails, @RequestBody UserUpdateRequestDto requestDto) {
+    public ResponseEntity<?> getUser(@PathVariable Long id, @AuthenticationPrincipal PrincipalDetails principalDetails) {
         User userEntity = userService.유저정보(id);
         return new ResponseEntity<>
                 (new CMRespDto<>(1, "유저정보 가져오기 성공", userEntity), HttpStatus.OK);

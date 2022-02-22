@@ -8,6 +8,9 @@
 //}
 
 $(document).ready(function(){
+
+
+
     // paging
     const principalId = $("#principalId").val();
     let pageNumOfStoryModalComment = 0;
@@ -60,8 +63,11 @@ $(document).ready(function(){
     // 헤더 검색
     $(".header__search-input").on("keyup", function(){
         const keyword = $(this).val();
+        let item = `<img src="/images/loading-spinner.gif"
+        style="width: 50%; height: 50%; object-fit: cover; transform: translate(50%, 40%);">`
 
         $(".search-list").empty();
+        $(".search-list").append(item);
         $(".search-list").show();
         $(".header__dropdown").css("display", "none");
         $(".header__notice-box").css("display", "none");
@@ -76,8 +82,9 @@ $(document).ready(function(){
                 }).done(res => {
                     console.log("검색 ajax 성공", res);
 
+                    $(".search-list").empty();
                     res.data.forEach((user)=>{
-                        item = `<div class="search-item" onclick="location.href" = '/user/${user.id}/profile'>
+                        item = `<div class="search-item" onclick="location.href = '/user/${user.id}/profile'">
                                     <img src="/upload/s_${user.profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="profile">
                                     <div class="search-item__info">
                                         <span class="mb-5">${user.username}</span>
@@ -88,19 +95,20 @@ $(document).ready(function(){
                         $(".search-list").append(item);
                     });
 
-
-
-
                     $(".search-list").show();
                 }).fail(error => {
                     console.log("검색 ajax 에러", error);
+                    $(".search-list").empty();
+                    let item = `<p style="color:#8E8E8E; text-align:center; height: 100%; padding-top: 40%;">검색 결과가 없습니다.</p>`;
+                    $(".search-list").append(item);
                 });
 
             }
-        }, 500);
+        }, 1500);
+    });
 
-
-
+    $(document).on("click", ".header__search-btn", function(e){
+        e.preventDefault();
     });
 
     //스토리 게시글 (모달) 켜기

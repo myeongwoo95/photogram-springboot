@@ -1,5 +1,137 @@
-
 $(document).ready(function(){
+
+    let ProfileImageUrl;
+
+    function getUserProfile(){
+        const userId = $("#principalId").val();
+        $.ajax({
+            type: "get",
+            url: "/api/v1/users/" + userId,
+            dataType: "json"
+        }).done(res => {
+            console.log("유저정보 불러오기 성공", res);
+            ProfileImageUrl = res.data.profileImageUrl;
+        }).fail(error => {
+            console.log("유저정보 불러오기 에러", error);
+        });
+    }getUserProfile();
+
+    const websocket = new WebSocket("ws://localhost:8080/ws/chat");
+
+    websocket.onmessage = onMessage;
+    websocket.onopen = onOpen;
+    websocket.onclose = onClose;
+
+    // 메세지 전송
+    $(".btn-sending-message").on("click", function(e){
+        e.preventDefault();
+
+        let data = $(".text-box__textarea").val();
+        let userId = $("#principalId").val();
+
+        send(userId + ":" + ProfileImageUrl + ":" + data);
+
+        // 뒤처리 작업
+        $(".text-box__textarea").val("");
+        $(".emoji-heart").show();
+        $(".emoji-image").show();
+        $(".btn-sending-message").hide();
+        $(".emoticon-wrapper").remove();
+    });
+
+    $(document).on("click", "#disconn", function(e){
+        disconnect();
+    });
+
+    function send(msg){
+        console.log(msg);
+        websocket.send(msg);
+    }
+
+    //채팅창에서 나갔을 때
+    function onClose(evt) {
+//        websocket.send();
+    }
+
+    //채팅창에 들어왔을 때
+    function onOpen(evt) {
+//        websocket.send();
+    }
+
+    function onMessage(msg) {
+
+        console.log(msg);
+
+        var data = msg.data;
+        var arr = data.split(":");
+
+        for(var i=0; i<arr.length; i++){
+            console.log('arr[' + i + ']: ' + arr[i]);
+        }
+
+        // 현재 세션에 로그인 한 사람
+        var cur_session = $("#principalId").val();
+
+        // 메세지에서 정보 뽑기
+        var sessionId = arr[0];
+        var profileImageUrl = arr[1];
+        var message = arr[2];
+
+        if(sessionId == cur_session){
+            if($(".chat-box > div").last().hasClass("my-message")){
+                $(".chat-box > div").last().children("img").remove();
+                $(".chat-box > div").last().css("margin-right", "24px");
+            }
+
+            let item = `<div class="chat-item-box chat-box__my-chat my-message">
+                                <img src="/upload/s_${profileImageUrl}" alt="profile" onerror="this.src='/images/Avatar.jpg'">
+                                <span>${message}</span>
+
+                                <div class="content-option-box-wrapper">
+                                    <i class="fas fa-ellipsis-h btn-content-options"></i>
+
+                                    <div class="content-option-box">
+                                        <span class="btn-message-like">좋아요</span>
+                                        <span class="btn-message-copy">복사</span>
+                                        <span class="btn-message-report">신고</span>
+                                    </div>
+                                </div>
+                            </div>`;
+
+            $(".chat-box").append(item);
+
+            //스크롤 맨 아래로 내리기
+            $('.chat-box').scrollTop($('.chat-box')[0].scrollHeight);
+
+        }
+        else{
+
+            if($(".chat-box > div").last().hasClass(`${sessionId}`)){
+                $(".chat-box > div").last().children("img").remove();
+                $(".chat-box > div").last().css("margin-left", "24px");
+            }
+
+            let item = `<div class="chat-item-box chat-box__opponent-chat ${sessionId}">
+                <img src="/upload/s_${profileImageUrl}" alt="profile" onerror="this.src='/images/Avatar.jpg'">
+                <span>${message}</span>
+
+                <div class="content-option-box-wrapper">
+                    <i class="fas fa-ellipsis-h btn-content-options"></i>
+
+                    <div class="content-option-box">
+                        <span class="btn-message-like">좋아요</span>
+                        <span class="btn-message-copy">복사</span>
+                        <span class="btn-message-report">신고</span>
+                    </div>
+                </div>
+            </div>`;
+
+            $(".chat-box").append(item);
+
+            //스크롤 맨 아래로 내리기
+            $('.chat-box').scrollTop($('.chat-box')[0].scrollHeight);
+        }
+    }
 
     // 이모지 클릭 시 해당 이모지 textarea에 삽입
     $(document).on("click", ".emoticon-item", function(){
@@ -13,7 +145,6 @@ $(document).ready(function(){
     $(".text-box__textarea").on("focus", function(){
         $(".emoticon-wrapper").remove();
     })
-
 
     // 메세지 hover, leave 했을때 option dotdotdot 보여주고 숨기기
     $(document).on("mouseover", ".chat-item-box",function () {
@@ -37,46 +168,6 @@ $(document).ready(function(){
             $(this).css("color", "#dbdbdb")
             $(this).next().css("display", "none");
         }
-    });
-
-    // 메세지 전송
-    $(".btn-sending-message").on("click", function(e){
-        e.preventDefault();
-        
-        if($(".chat-box > div").last().hasClass("last-my-message")){
-            $(".chat-box > div").last().children("img").remove();
-            $(".chat-box > div").last().css("margin-right", "24px");
-        }
-
-        let data = $(".text-box__textarea").val();
-        let message = `<div class="chat-item-box chat-box__my-chat last-my-message">
-                            <img src="/images/insta2.jpg" alt="profile">
-                            <span>${data}</span>
-
-                            <div class="content-option-box-wrapper">
-                                <i class="fas fa-ellipsis-h btn-content-options"></i>
-
-                                <div class="content-option-box">
-                                    <span class="btn-message-like">좋아요</span>
-                                    <span class="btn-message-copy">복사</span>
-                                    <span class="btn-message-report">신고</span>
-                                </div>
-                            </div>
-                        </div>`;
-        
-        $(".chat-box").append(message);
-
-        $(".text-box__textarea").val("");
-        $(".emoji-heart").show();
-        $(".emoji-image").show();
-        $(".btn-sending-message").hide();
-
-        //이모지 닫기   
-        $(".emoticon-wrapper").remove();
-
-        //스크롤 맨 아래로 내리기
-        $('.chat-box').scrollTop($('.chat-box')[0].scrollHeight);
-        
     });
 
     // 파일 전송
@@ -128,9 +219,6 @@ $(document).ready(function(){
         //스크롤 맨 아래로 내리기
         $('.chat-box').scrollTop($('.chat-box')[0].scrollHeight);
     })
-
-    // 메세지 수신
-    
 
     //textarea에 글자를 입력했을 경우 button 보내기 보이기
     $(".text-box__textarea").on("change keyup paste", function(){
@@ -212,7 +300,7 @@ $(document).ready(function(){
     // new make chat room
     $(".btn-make-newMessage").on("click", function(){
 
-        왜 안되지...
+
         // if($(".invite-member-list").children(".invite-member-item")){
         //     alert("존재함")
         // }else{

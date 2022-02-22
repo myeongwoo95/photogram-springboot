@@ -34,7 +34,9 @@
 <body>
 <div class="body__container">
 
-   {{>layout/header}}
+    <input type="hidden" id="principalId" value="{{#user.id}}{{user.id}}{{/user.id}}">
+    {{>layout/header}}
+
 
     <div class="section">
         <div class="inner">
@@ -84,18 +86,22 @@
                     <!-- exist-message -->
                     <div class="chat-wrapper__right__exist-message" style="display: none;">
 
+                        <!-- header -->
                         <div class="chat-target-profile">
                             <img src="/images/insta2.jpg" alt="profile">
                             <span>Euria chealsid 님</span>
                             <i class="fas fa-exclamation-circle btn-change-details-info"></i>
                         </div>
 
+                        <!-- body(본문) -->
                         <div class="chat-box">
 
+                            <!-- 시간 -->
                             <div class="chat-box__timeline">
                                 <span>1일전 오전 1:05</span>
                             </div>
 
+                            <!-- 상대방 메세지 -->
                             <div class="chat-item-box chat-box__opponent-chat">
                                 <img src="/images/insta1.jpg" alt="profile">
                                 <span>상대방 메세지</span>
@@ -109,10 +115,10 @@
                                         <span class="btn-message-report">신고</span>
                                     </div>
                                 </div>
-
                             </div>
 
-                            <div class="chat-item-box chat-box__my-chat last-my-message">
+                            <!-- 나의 메세지 -->
+                            <div class="chat-item-box chat-box__my-chat my-message">
                                 <img src="/images/insta2.jpg" alt="profile">
                                 <span>나의 메세지</span>
 
@@ -129,6 +135,7 @@
 
                         </div>
 
+                        <!-- 메세지 입력 -->
                         <div class="text-box">
                             <div>
                                 <div class="emoticon-container">
@@ -142,6 +149,7 @@
                                 <input class="text-box__input-file" type="file">
                             </div>
                         </div>
+
                     </div>
 
                     <!-- chat-info -->
