@@ -1,5 +1,8 @@
 $(document).ready(function(){
 
+    // 검색할때 ajax 딜레이용
+    var checkAjaxSetTimeout2;
+
     let ProfileImageUrl;
 
     function getUserProfile(){
@@ -234,19 +237,27 @@ $(document).ready(function(){
     })
 
     // 채팅 유저 추천 선택 추가
-    $(".red-friend-item").change(function(){
-       
+    $(document).on("click", ".red-friend-item", function(e){
+
         if($(this).is(":checked")){
-            let data = $(this).prev().children(".user-item__id").text();
-            let div = `<div class="invite-member-item ${data}">
-                            <span>${data}</span>
-                            <i data-id="${data}" class="btn-cancel-chat-member fas fa-times"></i>
-                        </div>`;
-            
-            $(".invite-member-list").append(div);
-            $(".search-friend-input").val("");
-            $(".rec-users").show();
-            $(".searched-users").hide();
+            let username = $(this).data("username");
+            let userId = $(this).data("id");
+
+            if($(".invite-member-list").children(`.${userId}`).length){
+                alert("이미 추가된 유저입니다.")
+                e.preventDefault();
+            }else{
+
+                let div = `<div class="invite-member-item ${userId}">
+                                <span>${username}</span>
+                                <i data-username="${username}" data-id="${userId}" class="btn-cancel-chat-member fas fa-times"></i>
+                            </div>`;
+                $(".invite-member-list").append(div);
+
+                $(".search-friend-input").val("");
+                $(".rec-users").show();
+                $(".searched-users").hide();
+            }
 
         }else{
             let dataId = $(this).attr("data-id");
@@ -256,9 +267,8 @@ $(document).ready(function(){
 
     // 채팅 유저 선택 삭제
     $(document).on("click",".btn-cancel-chat-member",function(){
-        $(this).parent().remove();
         let data = $(this).attr("data-id");
-
+        $(this).parent().remove();
         $(`.red-friend-item[data-id=${data}]`).prop("checked", false);
     })
 
@@ -278,37 +288,112 @@ $(document).ready(function(){
         $(".details-info").hide();
     })
 
-    // 1초뒤에 실행되어야함.
-    $(".search-friend-input").on("change keyup paste", function(){
-        //api 로직
+    // new message 유저 검색
+    $(".search-friend-input").on("keyup", function(){
+        const keyword = $(this).val();
+
+        let item = `<img src="/images/loading-spinner.gif"
+        style="width: 50%; height: 50%; object-fit: cover; transform: translate(50%, 40%);">`;
+
+        $(".searched-users").empty();
 
         if($(this).val()){
             $(".rec-users").hide();
+            $(".searched-users").append(item);
             $(".searched-users").show();
-            
         }else{
             $(".rec-users").show();
             $(".searched-users").hide();
+            return;
         }
-    })
+
+         clearTimeout(checkAjaxSetTimeout2);
+         checkAjaxSetTimeout2 = setTimeout(function(){
+            if(keyword != ""){
+                $.ajax({
+                    type: "get",
+                    url: "/api/v1/users/keyword/" + keyword,
+                    dataType: "json"
+                }).done(res => {
+                    console.log("검색 ajax 성공", res);
+                    $(".searched-users").empty();
+
+                    res.data.forEach(user=>{
+                        item = `<div class="user-item">
+                                    <img src="/upload/s_${user.profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="profile">
+                                    <div>
+                                        <span class="user-item__id">${user.username}</span>
+                                        <span>${user.name}</span>
+                                    </div>
+                                    <input data-username="${user.username}" data-id="${user.id}" class="red-friend-item" type="checkbox">
+                                </div>`;
+
+                        $(".searched-users").append(item);
+                    });
+
+                }).fail(error => {
+                    console.log("검색 ajax 에러", error);
+                    $(".searched-users").empty();
+                    let item = `<p style="color:#8E8E8E; text-align:center; height: 100%; padding-top: 50%;">검색 결과가 없습니다.</p>`;
+                    $(".searched-users").append(item);
+                });
+            }
+         }, 1500);
+    });
 
     // new Message 모달 켜기
     $(".btn-newMessage").on("click", function(){
+        $.ajax({
+            type: "get",
+            url: "/api/v1/subscribe/" + $("#principalId").val(),
+            dataType: "json"
+        }).done(res => {
+            console.log("성공", res);
+
+            $(".rec-users").empty();
+            $(".rec-users").append("<h3>추천</h3>")
+
+            res.data.forEach((friend)=>{
+                item = `<div class="user-item">
+                            <img src="/upload/s_${friend.profileImageUrl}" onerror="this.src='/images/Avatar.jpg'" alt="profile">
+                            <div>
+                                <span class="user-item__id">${friend.username}</span>
+                                <span>${friend.name}</span>
+                            </div>
+                            <input data-username="${friend.username}" data-id="${friend.id}" class="red-friend-item" type="checkbox">
+                        </div>`;
+
+                $(".rec-users").append(item);
+            });
+
+        }).fail(error => {
+            console.log("에러", error);
+
+            $(".rec-users").empty();
+            $(".rec-users").append("<h3>추천</h3>")
+        });
+
         $(".modal-newMessage-wrapper").css("display", "flex");
     })
 
     // new make chat room
     $(".btn-make-newMessage").on("click", function(){
 
+         if(!$(".invite-member-list").children(".invite-member-item").length){
+             alert("유저를 선택해주세요.");
+             return;
+         }
 
-        // if($(".invite-member-list").children(".invite-member-item")){
-        //     alert("존재함")
-        // }else{
-        //     alert("존재안함")
-        // }
+        $.ajax({
+            type: "post",
+            url: `/api/v1/chat`,
+            dataType: "json"
+        }).done(res => {
+            console.log("채팅방 생성 성공", res);
+        }).fail(error => {
+            console.log("채팅방 생성 에러", error);
+        });
 
-        alert("api 로직 및 대화방 만들기")
-        // 추천목록에서 체크한거 해제, rec-users div 안에 user-item들의 input!
         $(".modal-newMessage-wrapper").hide();
 
         $(".chat-wrapper__right__new-message").hide();

@@ -6,10 +6,7 @@ import com.photogram.domain.comment.Comment;
 import com.photogram.domain.file.File;
 import com.photogram.domain.like.Likes;
 import com.photogram.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -17,7 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter @Setter
 @Entity
 public class Image extends BaseTimeEntity {
     @Id

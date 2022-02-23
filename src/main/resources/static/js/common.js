@@ -9,8 +9,6 @@
 
 $(document).ready(function(){
 
-
-
     // paging
     const principalId = $("#principalId").val();
     let pageNumOfStoryModalComment = 0;

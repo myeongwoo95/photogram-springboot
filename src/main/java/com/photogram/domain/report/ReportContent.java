@@ -4,17 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.photogram.domain.BaseTimeEntity;
 import com.photogram.domain.image.Image;
 import com.photogram.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter @Setter
 @Table(
         uniqueConstraints = {
                 @UniqueConstraint(

@@ -30,7 +30,6 @@ public class LikeComment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
     @JsonIgnoreProperties({"commentLikes", "image"})
     @JoinColumn(name = "commentId")
     @ManyToOne

@@ -2,6 +2,7 @@ package com.photogram.service;
 
 import com.photogram.domain.subscribe.SubscribeRepository;
 import com.photogram.handler.ex.CustomApiException;
+import com.photogram.web.dto.subscribe.SubscribeFriendsResponseDto;
 import com.photogram.web.dto.subscribe.subscribeResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.qlrm.mapper.JpaResultMapper;
@@ -18,6 +19,36 @@ public class SubscribeService {
 
     private final SubscribeRepository subscribeRepository;
     private final EntityManager em;
+
+    @Transactional(readOnly = true)
+    public List<SubscribeFriendsResponseDto> 친구리스트_불러오기(Long userId) {
+
+        // 쿼리준비
+        StringBuffer sb = new StringBuffer();
+        sb.append("SELECT u.id, u.username, u.name, u.profileImageUrl ");
+        sb.append("FROM user u INNER JOIN subscribe s ");
+        sb.append("ON u.id = s.fromUserId ");
+        sb.append("WHERE s.toUserId = ? ");
+        sb.append("UNION ");
+        sb.append("SELECT u.id, u.username, u.name, u.profileImageUrl ");
+        sb.append("FROM user u INNER JOIN subscribe s ");
+        sb.append("ON u.id = s.toUserId ");
+        sb.append("WHERE s.fromUserId = ? ");
+
+        // 쿼리완성 (java.persistence.Query)
+        Query query = em.createNativeQuery(sb.toString())
+                .setParameter(1, userId)
+                .setParameter(2, userId);
+
+        JpaResultMapper result = new JpaResultMapper();
+        List<SubscribeFriendsResponseDto> list = result.list(query, SubscribeFriendsResponseDto.class);
+
+        if(list.size() == 0){
+            throw new CustomApiException("친구가 아직 없습니다.");
+        }
+
+        return list;
+    }
 
     @Transactional
     public void 구독하기(Long fromUserid, Long toUserId) {
@@ -57,6 +88,8 @@ public class SubscribeService {
 
         JpaResultMapper result = new JpaResultMapper();
         List<subscribeResponseDto> subscribeDtos = result.list(query, subscribeResponseDto.class);
+
+
 
         return subscribeDtos;
     }

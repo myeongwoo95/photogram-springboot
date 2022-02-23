@@ -3,19 +3,25 @@ package com.photogram.web.api;
 import com.photogram.config.auth.PrincipalDetails;
 import com.photogram.service.SubscribeService;
 import com.photogram.web.dto.CMRespDto;
+import com.photogram.web.dto.subscribe.SubscribeFriendsResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
 public class SubscribeApiController {
     private final SubscribeService subscribeService;
+
+    @GetMapping("/api/v1/subscribe/{toUserId}")
+    public ResponseEntity<?> getFriendsList(@AuthenticationPrincipal PrincipalDetails principalDetails, @PathVariable Long toUserId){
+        List<SubscribeFriendsResponseDto> list = subscribeService.친구리스트_불러오기(principalDetails.getUser().getId());
+        return new ResponseEntity<>(new CMRespDto<>(1, "친구리스트_불러오기 성공", list), HttpStatus.OK);
+    }
 
     // 구독
     @PostMapping("/api/v1/subscribe/{toUserId}")
