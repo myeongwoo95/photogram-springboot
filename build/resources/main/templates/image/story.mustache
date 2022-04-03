@@ -171,22 +171,22 @@
                                         <div class="modal-item-list">
                                             <div class="modal-item">
                                                 <img src="/images/item.jpg">
-                                                <p class="name mt-15">JISOO</p>
-                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <p class="name mt-15">Miso</p>
+                                                <p class="who-following mt-15">takyon20님이 팔로우 합니다.</p>
                                                 <button class="btn-blue">팔로우</button>
                                             </div>
 
                                             <div class="modal-item">
-                                                <img src="/images/item.jpg">
-                                                <p class="name mt-15">JISOO</p>
-                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <img src="/images/insta1.jpg">
+                                                <p class="name mt-15">a_a55a</p>
+                                                <p class="who-following mt-15">minzi님이 팔로우 합니다.</p>
                                                 <button class="btn-blue">팔로우</button>
                                             </div>
 
                                             <div class="modal-item">
-                                                <img src="/images/item.jpg">
-                                                <p class="name mt-15">JISOO</p>
-                                                <p class="who-following mt-15">tilltof님이 팔로우 합니다.</p>
+                                                <img src="/images/insta2.jpg">
+                                                <p class="name mt-15">tkkskd123</p>
+                                                <p class="who-following mt-15">wall3님이 팔로우 합니다.</p>
                                                 <button class="btn-blue">팔로우</button>
                                             </div>
                                         </div>
@@ -231,6 +231,7 @@
 
                 </div>
 
+
                 <!-- 스토리 오른쪽에 친구추천 -->
                 <div class="visual__friend-rec ml-30">
 
@@ -255,8 +256,30 @@
                             <div class="rec-item mb-15">
                                 <img src="/images/Avatar.png" alt="recommentation-item">
                                 <div>
-                                    <span>songkang_b</span>
-                                    <span>차영준</span>
+                                    <span>gildong_b</span>
+                                    <span>홍길동</span>
+                                </div>
+                                <span class="btn-friend-rec-following float--right false">팔로우</span>
+                            </div>
+                            <!-- item -->
+
+                            <!-- item -->
+                            <div class="rec-item mb-15">
+                                <img src="/images/insta1.jpg" alt="recommentation-item">
+                                <div>
+                                    <span>dbwotjr78</span>
+                                    <span>유재석</span>
+                                </div>
+                                <span class="btn-friend-rec-following float--right false">팔로우</span>
+                            </div>
+                            <!-- item -->
+
+                            <!-- item -->
+                            <div class="rec-item mb-15">
+                                <img src="/images/insta2.jpg" alt="recommentation-item">
+                                <div>
+                                    <span>junha_kk</span>
+                                    <span>정준하</span>
                                 </div>
                                 <span class="btn-friend-rec-following float--right false">팔로우</span>
                             </div>
@@ -266,30 +289,8 @@
                             <div class="rec-item mb-15">
                                 <img src="/images/Avatar.png" alt="recommentation-item">
                                 <div>
-                                    <span>songkang_b</span>
-                                    <span>차영준</span>
-                                </div>
-                                <span class="btn-friend-rec-following float--right false">팔로우</span>
-                            </div>
-                            <!-- item -->
-
-                            <!-- item -->
-                            <div class="rec-item mb-15">
-                                <img src="/images/Avatar.png" alt="recommentation-item">
-                                <div>
-                                    <span>songkang_b</span>
-                                    <span>차영준</span>
-                                </div>
-                                <span class="btn-friend-rec-following float--right false">팔로우</span>
-                            </div>
-                            <!-- item -->
-
-                            <!-- item -->
-                            <div class="rec-item mb-15">
-                                <img src="/images/Avatar.png" alt="recommentation-item">
-                                <div>
-                                    <span>songkang_b</span>
-                                    <span>차영준</span>
+                                    <span>haha_123</span>
+                                    <span>하하</span>
                                 </div>
                                 <span class="btn-friend-rec-following float--right false">팔로우</span>
                             </div>
@@ -297,6 +298,7 @@
                         </div>
                     </div>
                 </div>
+
 
             </div>
 
@@ -347,15 +349,15 @@
                     <div class="file-upload-options">
 
                         <div class="file-upload-options__profile">
-                            <img src="/images/Avatar.png" alt="profile">
-                            <span>a_a33a</span>
+                            <img src="/upload/s_{{#user.profileImageUrl}}{{user.profileImageUrl}}{{/user.profileImageUrl}}" onerror="this.src='/images/Avatar.jpg'">
+                            <span>{{#user.username}}{{user.username}}{{/user.username}}</span>
                         </div>
 
                         <textarea class="file-upload-options__input-caption" name="description" placeholder="문구 입력..."></textarea>
 
                         <div class="file-upload-options__letter-count-box">
                             <i class="far fa-smile-wink"></i>
-                            <span>0/2,000</span>
+                            <!-- <span>0/2,000</span>-->
                         </div>
 
                         <div class="file-upload-options_location">

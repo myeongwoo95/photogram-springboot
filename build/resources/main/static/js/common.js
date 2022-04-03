@@ -70,6 +70,8 @@ $(document).ready(function(){
         $(".header__dropdown").css("display", "none");
         $(".header__notice-box").css("display", "none");
 
+        console.log("테스트")
+
         clearTimeout(checkAjaxSetTimeout);
         checkAjaxSetTimeout = setTimeout(function(){
             if(keyword != ""){
